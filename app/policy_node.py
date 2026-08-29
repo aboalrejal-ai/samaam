@@ -104,6 +104,26 @@ NEPHROTOXIC = {
 
 
 @dataclass
+class Reading:
+    """قياس واحد وحدُّه — كلاهما مستشهَد به، لا محسوب في الواجهة."""
+
+    name: str
+    measured: float
+    unit: str
+    limit: float | None = None
+    """الحد المستشهد به. None حين لا ينشر نصٌّ حداً لهذه الحالة."""
+
+    alternative: float | None = None
+    """البديل الأدنى جرعةً إن اقترحه السيناريو."""
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "name": self.name, "measured": self.measured, "unit": self.unit,
+            "limit": self.limit, "alternative": self.alternative,
+        }
+
+
+@dataclass
 class Check:
     rule: str
     status: Status
@@ -112,6 +132,19 @@ class Check:
     basis: Basis | None = None
     action: Action = Action.PROCEED
     """ماذا يلزم لتجاوز هذا الفحص تحديداً."""
+
+    # ── حقول وصفية بحتة ──────────────────────────────────────────────
+    # تُخرج الأرقام التي بُني عليها الفحص إلى السلك بدل تركها مدفونة في
+    # نص إنجليزي تضطر الواجهة إلى كشطه. لا يُقرأ أي منها في أي شرط:
+    # القرار قد اتُّخذ قبل أن تُملأ.
+    #
+    # قائمة لا حقلاً مفرداً، لأن فحص الجرعة يحمل قياسين (CTDIvol و DLP)
+    # بوحدتين مختلفتين. الشكل موحَّد فيقرأه المستهلك بطريقة واحدة.
+    readings: list[Reading] = field(default_factory=list)
+    """القياسات التي فُحصت، ولكل منها حدّه المستشهد به إن وُجد."""
+
+    band: str | None = None
+    """نطاق الخطورة كما تسمّيه الوثيقة، مثل "≈30%"."""
 
     @property
     def blocking(self) -> bool:
@@ -148,6 +181,8 @@ class Decision:
                     "rule": c.rule, "status": c.status.value, "detail": c.detail,
                     "basis": c.basis.value if c.basis else None,
                     "action": c.action.value, "cites": c.cites,
+                    "readings": [r.to_dict() for r in c.readings],
+                    "band": c.band,
                 }
                 for c in self.checks
             ],
@@ -205,6 +240,17 @@ class PolicyNode:
                 cites, None, Action.AUTHORISE,
             )
 
+        # تُبنى بعد أن تُقرَّر النتيجة، فهي وصف لها لا مدخل إليها.
+        readings = [
+            Reading("ctdivol", float(ctdi), "mGy", limits["ctdivol"]),
+            Reading("dlp", float(dlp), "mGy-cm", limits["dlp"]),
+        ]
+        alt = req.get("_safe_alternative") or {}
+        if alt.get("ctdivol_mgy") is not None:
+            readings[0].alternative = float(alt["ctdivol_mgy"])
+        if alt.get("dlp_mgy_cm") is not None:
+            readings[1].alternative = float(alt["dlp_mgy_cm"])
+
         over = []
         if ctdi > limits["ctdivol"]:
             over.append(f"CTDIvol {ctdi} mGy exceeds the national level of {limits['ctdivol']} mGy")
@@ -221,12 +267,12 @@ class PolicyNode:
                 "compliance with them is binding on healthcare providers under Royal "
                 "Decree 60057 approving Saudi Health Council Resolution 3/88. Exceeding "
                 "one requires documented justification before the exposure.",
-                cites, Basis.STATUTORY, Action.AUTHORISE,
+                cites, Basis.STATUTORY, Action.AUTHORISE, readings,
             )
         return Check(
             "national_drl", Status.PASS,
             f"CTDIvol {ctdi} <= {limits['ctdivol']} and DLP {dlp} <= {limits['dlp']}.",
-            cites, Basis.STATUTORY, Action.PROCEED,
+            cites, Basis.STATUTORY, Action.PROCEED, readings,
         )
 
     def _check_prophylaxis(self, req: dict[str, Any], patient: dict[str, Any]) -> Check:
@@ -246,25 +292,27 @@ class PolicyNode:
             )
 
         risk = ca_aki_risk(egfr)
+        egfr_reading = [Reading("egfr", round(float(egfr), 1),
+                                "mL/min/1.73m2", EGFR_PROPHYLAXIS_THRESHOLD)]
         if egfr >= EGFR_PROPHYLAXIS_THRESHOLD:
             return Check(
                 "renal_prophylaxis", Status.PASS,
                 f"eGFR {egfr:.1f} >= {EGFR_PROPHYLAXIS_THRESHOLD}. Prophylaxis is not "
                 f"indicated for stable renal function. CA-AKI risk in this band {risk}.",
-                cites, Basis.NATIONAL_PROTOCOL,
+                cites, Basis.NATIONAL_PROTOCOL, Action.PROCEED, egfr_reading, risk,
             )
         if patient.get("maintenance_dialysis"):
             return Check(
                 "renal_prophylaxis", Status.NOT_APPLICABLE,
                 f"eGFR {egfr:.1f} but patient is on maintenance dialysis; the protocol "
                 "excludes this group from prophylaxis eligibility.",
-                cites, Basis.NATIONAL_PROTOCOL,
+                cites, Basis.NATIONAL_PROTOCOL, Action.PROCEED, egfr_reading, risk,
             )
         if req.get("prophylaxis_ordered"):
             return Check(
                 "renal_prophylaxis", Status.PASS,
                 f"eGFR {egfr:.1f} < {EGFR_PROPHYLAXIS_THRESHOLD} and prophylaxis is ordered.",
-                cites, Basis.NATIONAL_PROTOCOL,
+                cites, Basis.NATIONAL_PROTOCOL, Action.PROCEED, egfr_reading, risk,
             )
         # لا توجد عتبة يُمنع عندها التباين مطلقاً. المراجع تصنّف ما دون 30
         # كفئة عالية الخطورة تستوجب قراراً فردياً — لا حظراً آلياً. فالنظام
@@ -277,6 +325,7 @@ class PolicyNode:
             f"This is not a prohibition — contrast may still be indicated, and the "
             f"decision belongs to the radiologist.",
             cites + ["CAR-2022-INDIVIDUAL"], Basis.NATIONAL_PROTOCOL, Action.AUTHORISE,
+            egfr_reading, risk,
         )
 
     def _check_metformin(self, req: dict[str, Any], patient: dict[str, Any]) -> Check:

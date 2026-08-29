@@ -51,7 +51,7 @@
       "rule": "renal_prophylaxis",
       "status": "FAIL",
       "severity": "NATIONAL_PROTOCOL",
-      "detail": "eGFR 27.7 < 30 and not on maintenance dialysis. Patient is eligible for prophylaxis, none ordered. CA-AKI risk in this band is approximately 30%.",
+      "detail": "eGFR 19.1 < 30 and not on maintenance dialysis. Patient is eligible for prophylaxis, none ordered. CA-AKI risk in this band is approximately 30%.",
       "cites": [
         "MOH-CM-PROPHYLAXIS",
         "MOH-CM-RISK-BANDS"
@@ -93,5 +93,6 @@
     "consider": "Non-contrast CT or MRI if the clinical question permits",
     "provenance": "No single contrast volume is correct for every patient — volume and rate follow the study, the patient's weight, the agent and the scanner protocol. Samaam therefore never blocks on volume. It holds on dose above the national investigation level and on the renal risk category, both of which are cited."
   },
-  "expected_action_note": "Held for authorisation, not prohibited. Contrast may still be indicated in metastatic disease; the radiologist decides. Samaam stops the protocol from executing unreviewed."
+  "expected_action_note": "Held for authorisation, not prohibited. Contrast may still be indicated in metastatic disease; the radiologist decides. Samaam stops the protocol from executing unreviewed.",
+  "expected_checks_note": "Illustrative narrative. The live response is the source of truth for every number; never chart from this block."
 }

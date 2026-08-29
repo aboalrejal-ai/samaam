@@ -85,7 +85,12 @@
     "STATUTORY": "Statutory violation",
     "NATIONAL_PROTOCOL": "National protocol departure",
     "CLINICAL_GUIDANCE": "Professional guidance",
-    "legend": "Basis"
+    "legend": "Basis",
+    "satisfied": {
+      "STATUTORY": "Statutory",
+      "NATIONAL_PROTOCOL": "National protocol",
+      "CLINICAL_GUIDANCE": "Professional guidance"
+    }
   },
   "verdict": {
     "COMPLIANT": "Released to the device",
@@ -261,5 +266,58 @@
     "CONFIRM_lead": "A risk factor needs acknowledging before the scan proceeds.",
     "AUTHORISE_lead": "Held for review. Not a prohibition — a radiologist decides.",
     "PROHIBITED_lead": "No override path exists."
+  },
+  "viz": {
+    "risk": {
+      "label": "Kidney function",
+      "chance": "{{pct}} risk of kidney injury",
+      "pending": "Computed by the service from creatinine"
+    },
+    "dose": {
+      "requested": "Requested",
+      "limit": "National level",
+      "alternative": "Safer option",
+      "excess": "+{{pct}}%",
+      "title": "Radiation dose"
+    },
+    "timeline": {
+      "lead": "Nothing presents during the scan. This is when it would appear.",
+      "scan": {
+        "when": "0 h",
+        "what": "Scan completes. No sign."
+      },
+      "rise": {
+        "when": "24–48 h",
+        "what": "Creatinine begins to rise."
+      },
+      "peak": {
+        "when": "48–72 h",
+        "what": "Clearest. Nephrology review may be needed."
+      },
+      "title": "If this proceeds unchanged"
+    },
+    "device": {
+      "injector": "Contrast injector",
+      "patient": "Patient",
+      "kidney": "Kidney",
+      "scanner": "CT scanner",
+      "aria": "Equipment path: injector to patient to kidney, with the CT scanner",
+      "ariaHeld": "Equipment path broken at the injector. Contrast did not reach the patient.",
+      "tone": {
+        "idle": "IDLE",
+        "armed": "ARMED",
+        "live": "EXECUTED",
+        "held": "WITHHELD",
+        "unreached": "NOT REACHED"
+      }
+    },
+    "exposure": {
+      "requested": "Records requested",
+      "permitted": "Permitted",
+      "destination": "Destination",
+      "outside": "Outside the Kingdom",
+      "inside": "Inside the Kingdom",
+      "none": "None"
+    }
   }
 }

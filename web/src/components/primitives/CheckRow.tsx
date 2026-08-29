@@ -51,7 +51,9 @@ export function CheckRow({ check, className, ...props }: CheckRowProps) {
 
         <span className="ms-auto flex items-center gap-2">
           {check.action !== 'PROCEED' && <ActionChip action={check.action} />}
-          {check.basis !== null && <BasisBadge basis={check.basis} />}
+          {check.basis !== null && (
+            <BasisBadge basis={check.basis} breached={check.status === 'FAIL'} />
+          )}
         </span>
       </div>
 

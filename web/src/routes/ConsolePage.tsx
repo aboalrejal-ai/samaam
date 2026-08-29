@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PageHeader } from '@/components/PageHeader'
 import { PipelineRail, usePipelineTransit } from '@/components/pipeline'
+import { DeviceSchematic } from '@/components/viz'
 import { DecisionPanel } from '@/components/console/DecisionPanel'
 import { OverrideDialog } from '@/components/console/OverrideDialog'
 import { RequestForm } from '@/components/console/RequestForm'
@@ -41,6 +42,7 @@ export default function ConsolePage() {
   const [patient, setPatient] = useState<Patient>(EMPTY_PATIENT)
   const [requested, setRequested] = useState<Requested>(EMPTY_REQUEST)
   const [loaded, setLoaded] = useState<string | null>(null)
+  const [alternative, setAlternative] = useState<ClinicalScenario['safe_alternative']>(undefined)
   const [result, setResult] = useState<EvaluationResponse | null>(null)
   const [explanation, setExplanation] = useState<string | null>(null)
   const [explaining, setExplaining] = useState(false)
@@ -63,6 +65,7 @@ export default function ConsolePage() {
   function loadScenario(scenario: ClinicalScenario) {
     setPatient({ ...scenario.patient })
     setRequested({ ...scenario.requested })
+    setAlternative(scenario.safe_alternative)
     setLoaded(scenario.id)
     setResult(null)
     setExplanation(null)
@@ -80,6 +83,13 @@ export default function ConsolePage() {
       const { result: response } = await execute.mutateAsync({
         worklist_id: loaded ? `MWL-${loaded}` : null,
         patient, requested,
+        // Display context for the dose panel. No rule reads it.
+        safe_alternative: alternative
+          ? {
+              ctdivol_mgy: Number(alternative.ctdivol_mgy) || null,
+              dlp_mgy_cm: Number(alternative.dlp_mgy_cm) || null,
+            }
+          : null,
         override_by: overrideBy ?? null,
         explain: false,
       })
@@ -91,13 +101,12 @@ export default function ConsolePage() {
         .then(setExplanation)
         .catch(() => setExplanation(null))
         .finally(() => setExplaining(false))
-      // The server is the only source of eGFR. Reflect what it computed.
-      const echoed = response.policy.checks.length ? response : null
-      if (echoed && patient.egfr == null && patient.serum_creatinine_umol_l) {
-        const detail = response.policy.checks.find((c) => c.detail.includes('eGFR'))?.detail
-        const match = detail?.match(/eGFR\s+([\d.]+)/)
-        if (match) setPatient((prev) => ({ ...prev, egfr: Number(match[1]) }))
-      }
+      // The server is the only source of eGFR, and it now reports it as a
+      // number. This used to scrape it out of an English sentence with a
+      // regex — one reworded detail string away from breaking silently.
+      const renal = response.policy.checks.find((c) => c.rule === 'renal_prophylaxis')
+      const egfr = renal?.readings.find((r) => r.name === 'egfr')
+      if (egfr) setPatient((prev) => ({ ...prev, egfr: egfr.measured }))
     } catch (error) {
       if (error instanceof SamaamOfflineError) {
         setOffline(true)
@@ -133,11 +142,19 @@ export default function ConsolePage() {
         ))}
       </div>
 
+      <DeviceSchematic
+        state={result?.device_response.device_state ?? null}
+        className="mb-6"
+      />
+
       <div className="grid gap-6 xl:grid-cols-[minmax(340px,380px)_120px_minmax(0,1fr)]">
         <div className="space-y-4">
           <RequestForm
             patient={patient}
             requested={requested}
+            riskBand={
+              result?.policy.checks.find((c) => c.rule === 'renal_prophylaxis')?.band ?? null
+            }
             disabled={pending}
             onPatientChange={(patch) => setPatient((prev) => ({ ...prev, ...patch }))}
             onRequestedChange={(patch) => setRequested((prev) => ({ ...prev, ...patch }))}

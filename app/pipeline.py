@@ -120,6 +120,10 @@ class Samaam:
         except DevicePolicyViolation as exc:
             device = {
                 "status": exc.http_status,
+                # The device reports its state on a refusal too. Without it the
+                # console cannot show that the scanner is locked — which is the
+                # whole point of the refusal.
+                "device_state": self.device.state.value,
                 "error": "Policy Violation",
                 "message": str(exc),
                 "decision": exc.decision,

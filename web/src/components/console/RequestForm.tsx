@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
-import { Measured } from '@/components/primitives'
+import { RiskScale } from '@/components/viz'
 import type { Patient, Requested } from '@/types/api'
 
 /**
@@ -18,6 +18,8 @@ import type { Patient, Requested } from '@/types/api'
 export interface RequestFormProps {
   patient: Patient
   requested: Requested
+  /** The band the server returned for this eGFR, e.g. "≈30%". */
+  riskBand?: string | null
   disabled?: boolean
   onPatientChange: (patch: Partial<Patient>) => void
   onRequestedChange: (patch: Partial<Requested>) => void
@@ -33,7 +35,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 export function RequestForm({
-  patient, requested, disabled, onPatientChange, onRequestedChange,
+  patient, requested, riskBand, disabled, onPatientChange, onRequestedChange,
 }: RequestFormProps) {
   const { t } = useTranslation()
   const num = (value: string) => (value === '' ? null : Number(value))
@@ -84,14 +86,13 @@ export function RequestForm({
             <Input type="number" value={patient.serum_creatinine_umol_l ?? ''} disabled={disabled}
               onChange={(e) => onPatientChange({ serum_creatinine_umol_l: num(e.target.value) })} />
           </Field>
-          <div className="rounded-md border border-border bg-accent px-3 py-2.5">
-            <p className="text-xs text-muted-foreground">{t('console.egfr')}</p>
-            {patient.egfr == null ? (
-              <p className="pt-1 text-sm text-muted-foreground">{t('console.egfrPending')}</p>
-            ) : (
-              <Measured value={patient.egfr} unit="mL/min/1.73m²" size="lg" />
-            )}
-            <p className="pt-1 text-xs text-muted-foreground">{t('console.egfrProvenance')}</p>
+          <div className="rounded-md border border-border bg-accent px-3 py-3">
+            <RiskScale
+              value={patient.egfr ?? null}
+              band={riskBand ?? null}
+              threshold={30}
+              provenance={t('console.egfrProvenance')}
+            />
           </div>
           <div className="flex items-center justify-between">
             <Label className="text-sm">{t('console.onMetformin')}</Label>

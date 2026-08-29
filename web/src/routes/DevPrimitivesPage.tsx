@@ -1,6 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { PageHeader } from '@/components/PageHeader'
 import {
+  DeviceSchematic, DoseComparison, HarmTimeline, RiskScale,
+} from '@/components/viz'
+import {
   BasisBadge,
   CheckRow,
   CitationCard,
@@ -38,6 +41,8 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
       'CTDIvol 18.0 mGy exceeds the national level of 14.0 mGy; DLP 900 mGy-cm exceeds the national level of 706 mGy-cm. Compliance is binding on healthcare providers under Royal Decree 60057 approving Saudi Health Council Resolution 3/88.',
     basis: 'STATUTORY',
     cites: ['SFDA-MDS-G008-DRL', 'SFDA-DRL-BINDING'],
+    readings: [],
+    band: null,
   },
   WARN: {
     rule: 'nephrotoxic_meds',
@@ -47,6 +52,8 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
       'Nephrotoxic agents present at eGFR < 30.0: oxaliplatin (active FOLFOX regimen), ibuprofen PRN. The protocol advises withholding non-essential agents 24-48 hours before and 48 hours after exposure where clinically feasible.',
     basis: 'NATIONAL_PROTOCOL',
     cites: ['MOH-CM-NEPHROTOXIC'],
+    readings: [],
+    band: null,
   },
   PASS: {
     rule: 'renal_prophylaxis',
@@ -56,6 +63,8 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
       'eGFR 81.4 >= 30.0. Prophylaxis is not indicated for stable renal function. CA-AKI risk in this band ≈5%.',
     basis: 'NATIONAL_PROTOCOL',
     cites: ['MOH-CM-PROPHYLAXIS', 'MOH-CM-RISK-BANDS'],
+    readings: [],
+    band: null,
   },
   NO_EVIDENCE: {
     rule: 'renal_prophylaxis',
@@ -65,6 +74,8 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
       'No eGFR available. The MOH protocol requires eGFR-based screening before contrast administration; the decision cannot be made without it.',
     basis: null,
     cites: ['MOH-CM-PROPHYLAXIS', 'MOH-CM-SCREENING'],
+    readings: [],
+    band: null,
   },
   NOT_APPLICABLE: {
     rule: 'metformin',
@@ -73,6 +84,8 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
     detail: 'Patient is not on metformin, or no contrast requested.',
     basis: null,
     cites: ['MOH-CM-METFORMIN'],
+    readings: [],
+    band: null,
   },
 }
 
@@ -162,7 +175,7 @@ export default function DevPrimitivesPage() {
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-xs text-muted-foreground">lg — the eGFR slot</span>
-                <Measured value="27.7" unit="mL/min/1.73m²" size="lg" state="over" />
+                <Measured value="19.1" unit="mL/min/1.73m²" size="lg" state="over" />
               </div>
               <div className="flex flex-col gap-1">
                 <span className="text-xs text-muted-foreground">alignment check</span>
@@ -278,6 +291,70 @@ export default function DevPrimitivesPage() {
           </Card>
         </Section>
       </div>
+
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">Visualisations</h2>
+        <p className="text-sm text-muted-foreground">
+          Each renders a number the policy node cited. Print this in greyscale:
+          every band, bar and stop carries its own label, so nothing depends on
+          colour alone.
+        </p>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          <Card>
+            <CardHeader className="pb-3"><CardTitle className="text-base">RiskScale — high</CardTitle></CardHeader>
+            <CardContent>
+              <RiskScale value={19.1} band="≈30%" threshold={30}
+                provenance="CKD-EPI, as the MOH protocol prescribes (p. 21)" />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3"><CardTitle className="text-base">RiskScale — low</CardTitle></CardHeader>
+            <CardContent>
+              <RiskScale value={81.4} band="≈5%" threshold={30} />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3"><CardTitle className="text-base">RiskScale — pending</CardTitle></CardHeader>
+            <CardContent><RiskScale value={null} /></CardContent>
+          </Card>
+          <Card>
+            <CardHeader className="pb-3"><CardTitle className="text-base">HarmTimeline</CardTitle></CardHeader>
+            <CardContent><HarmTimeline /></CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader className="pb-3"><CardTitle className="text-base">DoseComparison — breached, with alternative</CardTitle></CardHeader>
+          <CardContent>
+            <DoseComparison breached readings={[
+              { name: 'ctdivol', measured: 18, unit: 'mGy', limit: 14, alternative: 13 },
+              { name: 'dlp', measured: 900, unit: 'mGy-cm', limit: 706, alternative: 660 },
+            ]} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3"><CardTitle className="text-base">DoseComparison — within</CardTitle></CardHeader>
+          <CardContent>
+            <DoseComparison breached={false} readings={[
+              { name: 'ctdivol', measured: 9.5, unit: 'mGy', limit: 12, alternative: null },
+              { name: 'dlp', measured: 365, unit: 'mGy-cm', limit: 430, alternative: null },
+            ]} />
+          </CardContent>
+        </Card>
+
+        <div className="space-y-3">
+          {(['LOCKED', 'EXECUTED', 'ARMED', null] as const).map((s) => (
+            <div key={String(s)} className="space-y-1">
+              <p className="font-mono text-xs text-muted-foreground">
+                DeviceSchematic — {s ?? 'no request yet'}
+              </p>
+              <DeviceSchematic state={s} />
+            </div>
+          ))}
+        </div>
+      </section>
     </>
   )
 }

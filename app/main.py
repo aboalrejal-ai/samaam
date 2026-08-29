@@ -73,10 +73,17 @@ class Requested(BaseModel):
     metformin_held: bool = False
 
 
+class SafeAlternative(BaseModel):
+    """بديل أدنى جرعةً يقترحه السيناريو. عرضٌ محض — لا تقرأه أي قاعدة."""
+    ctdivol_mgy: float | None = None
+    dlp_mgy_cm: float | None = None
+
+
 class EvaluationRequest(BaseModel):
     worklist_id: str | None = None
     patient: Patient
     requested: Requested
+    safe_alternative: SafeAlternative | None = None
     override_by: str | None = None
     explain: bool = True
 
@@ -114,7 +121,12 @@ def evaluate(body: EvaluationRequest) -> dict[str, Any]:
         {
             "worklist_id": body.worklist_id,
             "patient": body.patient.model_dump(exclude_none=False),
-            "requested": body.requested.model_dump(exclude_none=False),
+            "requested": {
+                **body.requested.model_dump(exclude_none=False),
+                "_safe_alternative": (
+                    body.safe_alternative.model_dump() if body.safe_alternative else None
+                ),
+            },
         },
         override_by=body.override_by,
         explain=body.explain,

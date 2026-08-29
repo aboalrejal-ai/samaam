@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CheckRow, CitationCard, VerdictBanner } from '@/components/primitives'
+import { DoseComparison, HarmTimeline } from '@/components/viz'
 import type { EvaluationResponse } from '@/types/api'
 
 /**
@@ -21,6 +22,12 @@ export function DecisionPanel({ result, explanation, explaining }: DecisionPanel
   const { t } = useTranslation()
   const { policy, device_response: device, privacy } = result
 
+  // Both panels render only what a rule actually reported. No finding, no panel.
+  const dose = policy.checks.find((c) => c.rule === 'national_drl')
+  const renalFailed = policy.checks.some(
+    (c) => c.rule === 'renal_prophylaxis' && c.status === 'FAIL',
+  )
+
   return (
     <div className="space-y-4">
       <VerdictBanner
@@ -38,6 +45,28 @@ export function DecisionPanel({ result, explanation, explaining }: DecisionPanel
         <p className="rounded-md border border-warn-strong bg-warn/10 px-3 py-2 text-sm text-warn-strong">
           {t('console.overrideRecorded', { name: device.overridden_by })}
         </p>
+      )}
+
+      {dose && dose.readings.length > 0 && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">{t('viz.dose.title')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <DoseComparison readings={dose.readings} breached={dose.status === 'FAIL'} />
+          </CardContent>
+        </Card>
+      )}
+
+      {renalFailed && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">{t('viz.timeline.title')}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <HarmTimeline />
+          </CardContent>
+        </Card>
       )}
 
       <Card>

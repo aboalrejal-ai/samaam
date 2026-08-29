@@ -173,16 +173,38 @@ export interface Requested {
   metformin_held?: boolean
 }
 
+/** Display context for the dose panel. No rule reads it. */
+export interface SafeAlternativeInput {
+  ctdivol_mgy?: number | null
+  dlp_mgy_cm?: number | null
+}
+
 export interface EvaluationRequest {
   worklist_id?: string | null
   patient: Patient
   requested: Requested
+  safe_alternative?: SafeAlternativeInput | null
   /** Name of the consultant accepting the risk. Refused when not overridable. */
   override_by?: string | null
   explain?: boolean
 }
 
 /* ── Policy decision (app/policy_node.py :: Decision.to_dict) ───────── */
+
+/**
+ * One measurement and the limit it was checked against. Both come from the
+ * server — the browser never derives a threshold, and a chart drawn from these
+ * shows what the policy node actually cited rather than re-deriving it.
+ */
+export interface Reading {
+  name: string
+  measured: number
+  unit: string
+  /** Null where no published text sets a limit for this case. */
+  limit: number | null
+  /** A lower-dose option the scenario proposes. Display only. */
+  alternative: number | null
+}
 
 export interface PolicyCheck {
   rule: string
@@ -192,6 +214,10 @@ export interface PolicyCheck {
   /** What clearing this particular finding requires. */
   action: Action
   cites: string[]
+  /** Descriptive only. Populated after the rule has already decided. */
+  readings: Reading[]
+  /** The risk band as the source document names it, e.g. "≈30%". */
+  band: string | null
 }
 
 export interface PolicyPayload {

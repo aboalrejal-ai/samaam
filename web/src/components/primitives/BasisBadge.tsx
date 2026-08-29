@@ -8,35 +8,54 @@ import type { Basis } from '@/types/api'
  * project rests on. A protocol departure is not a statutory violation and must
  * never be dressed as one.
  *
- * Colour is not the only channel. Per FRONTEND-PLAN §1.4 the three bases differ
- * by SHAPE as well: a filled 4px-cornered chip, an outlined pill, and bare
- * text. That survives colour blindness, a bad projector, and greyscale print.
+ * The label depends on the outcome, not only the basis. A check that passed has
+ * violated nothing, and a badge reading "Statutory violation" beside a green
+ * tick is simply a false statement. Passing shows the authority; failing shows
+ * the breach.
+ *
+ * Colour is not the only channel. Per FRONTEND-PLAN §1.4 the bases differ by
+ * SHAPE: a square-cornered chip for statute, a pill for protocol, bare text for
+ * guidance. That survives colour blindness — measured, our red and amber sit
+ * ΔE 3.7 apart under deuteranopia — and it survives greyscale print. The shape
+ * holds whether the check passed or failed; only the fill and the wording move.
  */
-const BASIS_CLASS: Record<Basis, string> = {
-  // Filled, hard 4px corners. The token radius scale starts at 8px, so the
-  // 4px the plan specifies is written as a length.
-  STATUTORY: 'rounded-[4px] border-transparent bg-danger-strong text-card font-semibold',
-  // Outlined, 1px edge, fully round.
-  NATIONAL_PROTOCOL: 'rounded-pill border border-warn-strong bg-transparent text-warn-strong',
-  // No background, no edge. Guidance, not an instrument of enforcement.
-  CLINICAL_GUIDANCE: 'rounded-none border-transparent bg-transparent px-0 text-muted-foreground',
+const SHAPE: Record<Basis, string> = {
+  STATUTORY: 'rounded-[4px]',
+  NATIONAL_PROTOCOL: 'rounded-pill',
+  CLINICAL_GUIDANCE: 'rounded-none px-0',
+}
+
+const BREACHED: Record<Basis, string> = {
+  STATUTORY: 'border-transparent bg-danger-strong text-card font-semibold',
+  NATIONAL_PROTOCOL: 'border border-warn-strong bg-transparent text-warn-strong',
+  CLINICAL_GUIDANCE: 'border-transparent bg-transparent text-muted-foreground',
+}
+
+/** Quiet when nothing was breached: the basis is context, not an alarm. */
+const SATISFIED: Record<Basis, string> = {
+  STATUTORY: 'border border-border bg-transparent text-muted-foreground',
+  NATIONAL_PROTOCOL: 'border border-border bg-transparent text-muted-foreground',
+  CLINICAL_GUIDANCE: 'border-transparent bg-transparent text-muted-foreground',
 }
 
 export interface BasisBadgeProps extends Omit<React.ComponentProps<typeof Badge>, 'variant'> {
   basis: Basis
+  /** Whether this check actually failed. Drives the wording and the fill. */
+  breached?: boolean
 }
 
-export function BasisBadge({ basis, className, ...props }: BasisBadgeProps) {
+export function BasisBadge({ basis, breached = true, className, ...props }: BasisBadgeProps) {
   const { t } = useTranslation()
 
   return (
     <Badge
       data-basis={basis}
-      className={cn(BASIS_CLASS[basis], className)}
+      data-breached={breached}
+      className={cn(SHAPE[basis], breached ? BREACHED[basis] : SATISFIED[basis], className)}
       title={basis}
       {...props}
     >
-      {t(`basis.${basis}`)}
+      {t(breached ? `basis.${basis}` : `basis.satisfied.${basis}`)}
     </Badge>
   )
 }
