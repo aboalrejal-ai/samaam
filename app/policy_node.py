@@ -329,6 +329,75 @@ class PolicyNode:
             )
         return decision
 
+    # ── مسار البيانات (السيناريو الثالث) ──────────────────────
+    def evaluate_data_request(self, request: dict[str, Any]) -> Decision:
+        """يقيّم طلب وصول أو تصدير لبيانات صحية.
+
+        مسار منفصل عن مسار الجهاز عمداً: انتهاك الخصوصية لا يقبل تجاوزاً
+        إكلينيكياً. لا يوجد استشاري يملك صلاحية الإذن بتصدير سجلات مرضى
+        لغرض تجاري — بخلاف الحجب الإكلينيكي الذي يجب أن يبقى قابلاً للتجاوز.
+        """
+        checks: list[Check] = []
+        purpose = (request.get("stated_purpose") or "").lower()
+        action = (request.get("action") or "").lower()
+        n = request.get("record_count", 0)
+
+        commercial = any(w in purpose for w in
+                         ("marketing", "campaign", "outreach", "advertis", "commercial", "sell"))
+        bulk = n > 1 or any(w in action for w in ("bulk", "export", "dump", "all records"))
+        outbound = request.get("destination_outside_kingdom", False) or "external" in action
+
+        if bulk and not request.get("care_purpose"):
+            checks.append(Check(
+                "health_data_minimisation", Status.FAIL,
+                f"Bulk access to Health Data ({n or 'multiple'} records) without a care "
+                "purpose. Access must be restricted to the minimum number of employees and "
+                "the minimum extent necessary to provide Health Services.",
+                ["PDPL-ART23"], Basis.STATUTORY,
+            ))
+        else:
+            checks.append(Check("health_data_minimisation", Status.PASS,
+                                "Access is scoped to the delivery of health services.",
+                                ["PDPL-ART23"], Basis.STATUTORY))
+
+        if commercial:
+            checks.append(Check(
+                "lawful_basis", Status.FAIL,
+                "Health Data is Sensitive Data. Commercial outreach is not a lawful basis "
+                "for processing it.",
+                ["PDPL-ART1-11", "PDPL-ART1-13", "PDPL-ART1-13-AR"], Basis.STATUTORY,
+            ))
+        else:
+            checks.append(Check("lawful_basis", Status.PASS,
+                                "No commercial exploitation indicated.",
+                                ["PDPL-ART1-11"], Basis.STATUTORY))
+
+        if outbound:
+            checks.append(Check(
+                "cross_border", Status.FAIL,
+                "Transfer outside the Kingdom requires an adequate level of protection and "
+                "must be limited to the minimum amount of Personal Data needed.",
+                ["PDPL-ART29"], Basis.STATUTORY,
+            ))
+        else:
+            checks.append(Check("cross_border", Status.NOT_APPLICABLE,
+                                "No cross-border transfer requested.", ["PDPL-ART29"]))
+
+        blocked = any(c.blocking for c in checks)
+        decision = Decision(
+            verdict=Verdict.VIOLATION if blocked else Verdict.COMPLIANT,
+            checks=checks,
+        )
+        decision.citations = self._resolve(checks)
+        if blocked:
+            decision.overridable = False
+            decision.override_reason = (
+                "No clinical override path exists. A consultant may accept clinical risk "
+                "for a patient in their care; no clinician holds authority to authorise "
+                "processing that the PDPL forbids."
+            )
+        return decision
+
     def _resolve(self, checks: list[Check]) -> list[dict[str, Any]]:
         """يجلب نص كل سجل مُستشهَد به من قاعدة المعرفة، بالمعرّف لا بالبحث."""
         seen, out = set(), []
