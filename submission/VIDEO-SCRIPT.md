@@ -1,3 +1,9 @@
+> **Superseded.** The primary script is [`VIDEO-SCRIPT.md`](../VIDEO-SCRIPT.md)
+> at the project root — 5:15, read by the reviewing physician, covering the
+> architecture, readiness dimensions and gap matrix the organisers' storyboard
+> requires. Keep this 4-minute version only as the fallback for a non-clinical
+> narrator. Its `27.7` below is stale; the system computes **19.1**.
+
 # Samaam — 4-Minute Demo Script
 
 **Read at a calm pace.** **557 spoken words — 3:50 at a normal pace, 4:17 if you read slowly.**

@@ -185,7 +185,7 @@ list with dimensions we cannot demonstrate would weaken the three we can.
 | # | Scenario | Verdict | Device |
 | :--- | :--- | :--- | :--- |
 | **1** | Chest CT, eGFR 81.4, dose within national levels | `COMPLIANT` | **200** — released |
-| **2** | Abdomen/pelvis, **eGFR 27.7**, DLP 900, metformin not held | `VIOLATION` | **403** — withheld |
+| **2** | Abdomen/pelvis, **eGFR 19.1**, DLP 900, metformin not held | `VIOLATION` | **403** — withheld |
 | **3** | Bulk export of oncology records abroad for marketing | `VIOLATION` | **403** — session terminated |
 
 **Scenario 2 in detail**, written by the reviewing radiologist. Female, 62,
