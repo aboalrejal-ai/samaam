@@ -7,13 +7,14 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # نموذج الاستدلال (M) — أي مزوّد متوافق مع OpenAI
-    llm_base_url: str = "https://api.z.ai/api/paas/v4"
+    llm_base_url: str = "https://api.z.ai/api/paas/v4/"
     llm_api_key: str = ""
     llm_model: str = "glm-4.6"
     llm_temperature: float = 0.1
 
-    # التضمين (PP) — محلي داخل ChromaDB، بلا مفتاح
-    embed_model: str = "all-MiniLM-L6-v2"
+    # التضمين (PP) — محلي، بلا مفتاح. لا بد أن يكون متعدد اللغات:
+    # قاعدة المعرفة عربية وإنجليزية، والعرض سيكون بالعربية.
+    embed_model: str = "intfloat/multilingual-e5-small"
 
     # المسارات
     base_dir: Path = Path(__file__).resolve().parent.parent

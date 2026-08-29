@@ -1,9 +1,15 @@
+# عقدة النموذج (M) — أي مزوّد متوافق مع OpenAI (Z.AI افتراضياً)
+openai==1.59.6
+
+# قاعدة المعرفة والتضمين المحلي (PP + استرجاع)
+chromadb==1.5.9
+sentence-transformers==6.0.0
+
+# قراءة الوثائق الأصلية (SRC)
+pypdf==6.1.1
+
+# الخدمة (C + SINK)
 fastapi==0.115.6
 uvicorn[standard]==0.34.0
 pydantic==2.10.4
 pydantic-settings==2.7.1
-chromadb==0.6.3
-openai==1.59.6
-pypdf==5.1.0
-python-dotenv==1.0.1
-httpx==0.28.1
