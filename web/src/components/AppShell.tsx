@@ -6,6 +6,7 @@ import { SyntheticNotice } from '@/components/SyntheticNotice'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Separator } from '@/components/ui/separator'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
+import { KbSearchProvider } from '@/lib/kb-search'
 
 /**
  * The shell from the `sidebar-07` block. Its collapse-to-icon rail and header
@@ -16,7 +17,8 @@ export function AppShell() {
   const { t } = useTranslation()
 
   return (
-    <SidebarProvider>
+    <KbSearchProvider>
+      <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="min-w-0">
         <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/85 px-4 backdrop-blur-sm transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
@@ -35,6 +37,7 @@ export function AppShell() {
           <Outlet />
         </div>
       </SidebarInset>
-    </SidebarProvider>
+      </SidebarProvider>
+    </KbSearchProvider>
   )
 }

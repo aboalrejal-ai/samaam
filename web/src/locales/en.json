@@ -211,7 +211,7 @@
     "awaiting": "No request submitted yet."
   },
   "kb": {
-    "placeholder": "Ask in Arabic or English — try: when is metformin held?",
+    "placeholder": "Ask about Saudi regulation — in Arabic or English",
     "collection": "Search in",
     "collections": {
       "policies": "Regulatory records",
@@ -223,7 +223,22 @@
     "empty": "Nothing matched. The corpus holds only what has been verified — an empty result is an answer.",
     "prompt": "Type a question. Retrieval is semantic, so phrasing need not match the text.",
     "similarity": "match",
-    "hint": "Retrieval, not conversation. No context is carried between queries."
+    "hint": "Retrieval, not conversation. No context is carried between queries.",
+    "ariaField": "Search the knowledge base",
+    "suggestions": "Suggested questions",
+    "resultCount": "{{count}} results",
+    "allRecords": "All records",
+    "verifiedNote": "Unverified records exist but are never cited in a block.",
+    "submit": "Search",
+    "errorOffline": "Could not reach the Samaam service on port 8000.",
+    "errorService": "The service could not complete this search.",
+    "sidebar": {
+      "back": "Back to navigation",
+      "new": "New search",
+      "history": "Search history",
+      "empty": "Nothing searched yet.",
+      "forget": "Remove from history"
+    }
   },
   "gaps": {
     "finding": "What was found",

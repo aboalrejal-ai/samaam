@@ -1,8 +1,10 @@
+import { useEffect, useState } from 'react'
 import { Direction } from 'radix-ui'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import { ConnectionIndicator } from '@/components/ConnectionIndicator'
 import { NavMain } from '@/components/nav-main'
+import { KbSidebar } from '@/components/kb/KbSidebar'
 import {
   Sidebar,
   SidebarContent,
@@ -25,6 +27,12 @@ import { DEV_ROUTE, NAV_ROUTES } from '@/lib/routes'
  * group is gone.
  */
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { pathname } = useLocation()
+  const onKb = pathname.startsWith('/kb')
+  // Back swaps the panel for the nav without navigating, so the rest of the
+  // system stays reachable without losing the search. Leaving /kb resets it.
+  const [navShown, setNavShown] = useState(false)
+  useEffect(() => { if (!onKb) setNavShown(false) }, [onKb])
   const { t } = useTranslation()
   const direction = Direction.useDirection()
 
@@ -78,7 +86,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <NavMain label={t('nav.group')} items={NAV_ROUTES} />
+        {onKb && !navShown ? (
+          <KbSidebar onBack={() => setNavShown(true)} />
+        ) : (
+          <NavMain label={t('nav.group')} items={NAV_ROUTES} />
+        )}
       </SidebarContent>
 
       <SidebarFooter>
