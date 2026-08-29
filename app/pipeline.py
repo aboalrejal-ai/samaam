@@ -138,11 +138,17 @@ class Samaam:
         }
 
     def run_data_request(self, request: dict[str, Any], *,
-                         override_by: str | None = None) -> dict[str, Any]:
-        """مسار الخصوصية — السيناريو الثالث."""
+                         override_by: str | None = None,
+                         explain: bool = True) -> dict[str, Any]:
+        """مسار الخصوصية — السيناريو الثالث.
+
+        explain=False يعيد القرار وحده. الشرح يُطلب بعده من /explain، فالحظر
+        يظهر فوراً بدل أن ينتظر النموذج عشرات الثواني.
+        """
         decision = self.policy.evaluate_data_request(request)
         payload = decision.to_dict()
-        payload["explanation"] = self.explain(decision)
+        if explain:
+            payload["explanation"] = self.explain(decision)
 
         wid = request.get("request_id", "DATA-REQ")
         if decision.blocked:

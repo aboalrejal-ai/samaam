@@ -71,7 +71,7 @@ def run_one(s: Samaam, sc: dict, override: str | None) -> bool:
 
     result = s.run(
         {"worklist_id": f"MWL-{sc['id']}", "patient": sc["patient"],
-         "requested": {**sc["requested"], "body_region": _region(sc)}},
+         "requested": sc["requested"]},
         override_by=override,
     )
     pol, dev = result["policy"], result["device_response"]
@@ -118,17 +118,6 @@ def run_one(s: Samaam, sc: dict, override: str | None) -> bool:
            f"{C['r']}✗ توقعنا {sc['expected_verdict']}{C['0']}"
     print(f"\n  {mark}")
     return ok
-
-
-def _region(sc: dict) -> str:
-    study = sc["requested"]["study"].lower()
-    if "abdomen" in study:
-        return "abdomen_pelvis"
-    if "chest" in study:
-        return "chest"
-    if "brain" in study or "head" in study:
-        return "head"
-    return "unknown"
 
 
 def _wrap(text: str, width: int) -> list[str]:

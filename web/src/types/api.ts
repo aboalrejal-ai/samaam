@@ -218,6 +218,8 @@ export interface DataRequestBody {
   record_count?: number
   destination_outside_kingdom?: boolean
   care_purpose?: boolean
+  /** False returns the decision alone; the prose is fetched from /explain. */
+  explain?: boolean
   /** Passed deliberately in scenario 3 to demonstrate that it is refused. */
   override_by?: string | null
 }

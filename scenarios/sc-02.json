@@ -23,6 +23,7 @@
   },
   "requested": {
     "study": "CT Abdomen & Pelvis with contrast",
+    "body_region": "abdomen_pelvis",
     "kvp": 120,
     "mas": 260,
     "ctdivol_mgy": 18.0,
@@ -77,6 +78,7 @@
   "expected_action": "Withhold the Modality Worklist entry; the device API returns 403 Policy Violation. Present the corrected protocol below. Release requires a named consultant override, recorded in the audit trail. Override remains available because MOH-CM-CKD45 makes stage 4-5 CKD a relative, not absolute, contraindication.",
   "safe_alternative": {
     "study": "CT Abdomen & Pelvis, dose-optimised",
+    "body_region": "abdomen_pelvis",
     "kvp": 100,
     "mas": 170,
     "ctdivol_mgy": 13.0,

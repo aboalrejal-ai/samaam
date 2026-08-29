@@ -24,6 +24,7 @@ import type {
   KbRecord,
   KbSearchResponse,
   Scenario,
+  PolicyPayload,
 } from '@/types/api'
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'
@@ -173,6 +174,27 @@ export function executeOnDevice(
   options?: RequestOptions,
 ): Promise<GatedOutcome<EvaluationResponse>> {
   return postGated<EvaluationRequest, EvaluationResponse>('/device/execute', body, options)
+}
+
+/**
+ * Puts a decision that has already been taken into words.
+ *
+ * Deliberately a second call. The policy node decides in milliseconds and the
+ * model takes tens of seconds; binding them would make a refusal look slow,
+ * and a refusal has to land the instant the button is pressed.
+ */
+export async function explainDecision(
+  policy: PolicyPayload,
+  options?: RequestOptions,
+): Promise<string> {
+  const response = await send('/explain', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ policy }),
+    signal: options?.signal,
+  })
+  const payload = (await readJson(response)) as { explanation?: string } | null
+  return payload?.explanation ?? ''
 }
 
 /** The privacy path. Admits no clinical override. */

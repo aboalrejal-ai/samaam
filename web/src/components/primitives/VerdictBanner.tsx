@@ -39,6 +39,9 @@ export function VerdictBanner({
   blocked,
   httpStatus,
   className,
+  // Explicit, because spreading it onto Card is silently dropped: JSX children
+  // win over a children prop, so the caller's message would vanish.
+  children,
   ...props
 }: VerdictBannerProps) {
   const { t } = useTranslation()
@@ -78,11 +81,20 @@ export function VerdictBanner({
         </span>
       </div>
 
-      <p className="text-sm text-fg-2">{t(`verdict.${verdict}`)}</p>
+      {/* The verdict stands even when a consultant released the acquisition,
+          so the headline keeps saying VIOLATION — but the subtitle must not
+          claim the execution was withheld when the device returned 200. */}
+      <p className="text-sm text-fg-2">
+        {blocked && status === 200
+          ? t('verdict.releasedUnderOverride')
+          : t(`verdict.${verdict}`)}
+      </p>
 
       {referred && (
         <p className="text-xs text-muted-foreground">{t('verdict.humanInTheLoop')}</p>
       )}
+
+      {children}
     </Card>
   )
 }

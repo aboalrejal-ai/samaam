@@ -20,6 +20,7 @@
   },
   "requested": {
     "study": "CT Chest with contrast",
+    "body_region": "chest",
     "kvp": 120,
     "mas": 180,
     "ctdivol_mgy": 9.5,

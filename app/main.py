@@ -6,6 +6,7 @@
     POST /evaluate            تقييم طلب تصوير عبر خط الأنابيب كاملاً
     POST /device/execute      تسليم للجهاز — يرد 403 عند الحجب
     POST /data/request        مسار الخصوصية — حظر صارم بلا تجاوز
+    POST /explain             صياغة شرح لقرار اتُّخذ — منفصل عمداً عن القرار
     GET  /kb/search           بحث في قاعدة المعرفة
     GET  /kb/record/{id}      سجل بعينه
     GET  /kb/gaps             الثغرات التنظيمية
@@ -130,6 +131,48 @@ def device_execute(body: EvaluationRequest) -> dict[str, Any]:
     return result
 
 
+class ExplainRequest(BaseModel):
+    """A decision already made, to be put into words."""
+    policy: dict[str, Any]
+
+
+@app.post("/explain")
+def explain(body: ExplainRequest) -> dict[str, Any]:
+    """Drafts the prose for a decision that has already been taken.
+
+    Separate from /evaluate on purpose. The policy node reaches a verdict in
+    milliseconds and the model takes tens of seconds, so binding them into one
+    request would make a refusal look slow — and a refusal has to land the
+    instant the technologist presses the button. Splitting them also makes the
+    architecture visible: the block arrives with its citations before the model
+    has said anything at all.
+    """
+    import json as _json
+
+    payload = {
+        "verdict": body.policy.get("verdict"),
+        "checks": [
+            c for c in body.policy.get("checks", [])
+            if c.get("status") in ("FAIL", "WARN", "NO_EVIDENCE")
+        ],
+        "citations": body.policy.get("citations", []),
+    }
+    try:
+        from app.llm import complete
+        from app.pipeline import EXPLAIN_SYSTEM
+
+        text = complete(EXPLAIN_SYSTEM, _json.dumps(payload, ensure_ascii=False)).strip()
+        return {"explanation": text, "source": "model"}
+    except Exception as exc:
+        # The decision stands without it. Say plainly that the prose is missing
+        # rather than implying the verdict is incomplete.
+        return {
+            "explanation": "",
+            "source": "unavailable",
+            "detail": f"{type(exc).__name__}: {exc}",
+        }
+
+
 class DataRequest(BaseModel):
     request_id: str | None = None
     actor: str
@@ -139,13 +182,16 @@ class DataRequest(BaseModel):
     destination_outside_kingdom: bool = False
     care_purpose: bool = False
     override_by: str | None = None
+    explain: bool = True
 
 
 @app.post("/data/request")
 def data_request(body: DataRequest) -> dict[str, Any]:
     """مسار الخصوصية — السيناريو الثالث. لا يقبل تجاوزاً إكلينيكياً."""
     result = samaam.run_data_request(
-        body.model_dump(exclude={"override_by"}), override_by=body.override_by
+        body.model_dump(exclude={"override_by", "explain"}),
+        override_by=body.override_by,
+        explain=body.explain,
     )
     if result["device_response"]["status"] != 200:
         raise HTTPException(status_code=403, detail=result)
