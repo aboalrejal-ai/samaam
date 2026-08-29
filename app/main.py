@@ -5,6 +5,7 @@
     GET  /scenarios           السيناريوهات الثلاثة المعدّة
     POST /evaluate            تقييم طلب تصوير عبر خط الأنابيب كاملاً
     POST /device/execute      تسليم للجهاز — يرد 403 عند الحجب
+    POST /data/request        مسار الخصوصية — حظر صارم بلا تجاوز
     GET  /kb/search           بحث في قاعدة المعرفة
     GET  /kb/record/{id}      سجل بعينه
     GET  /kb/gaps             الثغرات التنظيمية
@@ -126,6 +127,28 @@ def device_execute(body: EvaluationRequest) -> dict[str, Any]:
     status = result["device_response"]["status"]
     if status != 200:
         raise HTTPException(status_code=status, detail=result)
+    return result
+
+
+class DataRequest(BaseModel):
+    request_id: str | None = None
+    actor: str
+    action: str
+    stated_purpose: str
+    record_count: int = 0
+    destination_outside_kingdom: bool = False
+    care_purpose: bool = False
+    override_by: str | None = None
+
+
+@app.post("/data/request")
+def data_request(body: DataRequest) -> dict[str, Any]:
+    """مسار الخصوصية — السيناريو الثالث. لا يقبل تجاوزاً إكلينيكياً."""
+    result = samaam.run_data_request(
+        body.model_dump(exclude={"override_by"}), override_by=body.override_by
+    )
+    if result["device_response"]["status"] != 200:
+        raise HTTPException(status_code=403, detail=result)
     return result
 
 
