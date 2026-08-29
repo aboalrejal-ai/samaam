@@ -60,7 +60,7 @@ export function ConnectionIndicator() {
             <span
               className={cn(
                 'truncate text-xs font-medium',
-                status === 'offline' ? 'text-danger-strong' : 'text-fg-2',
+                status === 'offline' ? 'text-danger-strong' : 'text-foreground/80',
               )}
             >
               {label}

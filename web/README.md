@@ -53,10 +53,10 @@ src/
 ## Things worth knowing before editing
 
 **Colour comes from tokens, never from literals.** `src/index.css` imports
-`design/dashboard/tokens.css` and bridges it into Tailwind. Two shadcn role names collide with
-token names of the same spelling, and the mapping block in that file resolves both: the sky
-accent is reachable as `primary` (`text-primary`, `bg-primary`), and the grey body text as
-`muted-foreground`. `accent` and `muted` keep their shadcn meanings — subtle surfaces — because
+`src/index.css` carries the shadcn `radix-maia` preset palette verbatim, plus three
+status tokens the preset has no vocabulary for — success, warn and danger — each built
+in OKLCH at the preset's own destructive lightness so the three read as one family.
+One typeface throughout: IBM Plex Sans Arabic, seven weights, Latin and Arabic.
 repointing them would turn every hover state solid blue.
 
 Status hues carry text and 1px edges through `success-strong` / `warn-strong` /

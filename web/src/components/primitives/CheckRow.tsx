@@ -10,7 +10,7 @@ const STATUS_EDGE: Record<PolicyCheck['status'], string> = {
   PASS: 'border-s-success',
   FAIL: 'border-s-danger',
   WARN: 'border-s-warn',
-  NO_EVIDENCE: 'border-s-fg-2',
+  NO_EVIDENCE: 'border-s-foreground/80',
   NOT_APPLICABLE: 'border-s-border',
 }
 
@@ -41,7 +41,7 @@ export function CheckRow({ check, className, ...props }: CheckRowProps) {
         <StatusIcon status={check.status} />
 
         {/* Rule identifiers come from the server and stay as issued. */}
-        <code dir="ltr" className="font-mono text-sm font-medium text-fg">
+        <code dir="ltr" className="font-mono text-sm font-medium text-foreground">
           {check.rule}
         </code>
 
@@ -55,7 +55,7 @@ export function CheckRow({ check, className, ...props }: CheckRowProps) {
         </span>
       </div>
 
-      <p className="px-3 text-sm text-fg-2">{check.detail}</p>
+      <p className="px-3 text-sm text-foreground/80">{check.detail}</p>
 
       {check.cites.length > 0 && (
         <p className="flex flex-wrap items-baseline gap-x-2 gap-y-1 px-3 text-xs text-muted-foreground">

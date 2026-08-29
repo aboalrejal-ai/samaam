@@ -54,7 +54,7 @@ export function CitationCard({ citation, className, ...props }: CitationCardProp
       {...props}
     >
       <CardHeader className="gap-1 px-3">
-        <p className="text-xs font-medium text-accent-strong">{citation.authority}</p>
+        <p className="text-xs font-medium text-primary-strong">{citation.authority}</p>
         <CardTitle className="text-sm">{citation.title}</CardTitle>
         <p className="text-xs text-muted-foreground">{citation.section}</p>
       </CardHeader>
@@ -64,7 +64,7 @@ export function CitationCard({ citation, className, ...props }: CitationCardProp
           /* Quoted as issued: source language, source direction, own edge rule. */
           <blockquote
             dir={quoteDir}
-            className="border-s-2 border-s-border ps-3 text-start text-sm leading-body text-fg-2"
+            className="border-s-2 border-s-border ps-3 text-start text-sm text-foreground/80"
           >
             {citation.content}
           </blockquote>
@@ -77,7 +77,7 @@ export function CitationCard({ citation, className, ...props }: CitationCardProp
             href={citation.url}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-1.5 rounded-sm text-xs font-medium text-accent-strong underline underline-offset-4 hover:text-accent-active"
+            className="inline-flex items-center gap-1.5 rounded-sm text-xs font-medium text-primary-strong underline underline-offset-4 hover:text-primary-strong"
           >
             <ExternalLink aria-hidden className="size-3.5" />
             {t('citation.open')}

@@ -117,7 +117,7 @@ function Section({ title, note, children }: { title: string; note?: string; chil
   return (
     <section className="flex flex-col gap-3">
       <div className="flex flex-col gap-0.5">
-        <h2 className="font-display text-lg font-semibold text-fg">{title}</h2>
+        <h2 className="font-display text-lg font-semibold text-foreground">{title}</h2>
         {note !== undefined && <p className="max-w-prose text-xs text-muted-foreground">{note}</p>}
       </div>
       <Separator />

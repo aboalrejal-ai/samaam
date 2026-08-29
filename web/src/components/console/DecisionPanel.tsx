@@ -30,7 +30,7 @@ export function DecisionPanel({ result, explanation, explaining }: DecisionPanel
         httpStatus={device.status}
       >
         {(device.message ?? device.error) && (
-          <p className="text-sm text-fg-2">{device.message ?? device.error}</p>
+          <p className="text-sm text-foreground/80">{device.message ?? device.error}</p>
         )}
       </VerdictBanner>
 
@@ -64,7 +64,7 @@ export function DecisionPanel({ result, explanation, explaining }: DecisionPanel
                 <Skeleton className="h-4 w-4/5" />
               </div>
             ) : (
-              <p className="text-sm leading-body text-fg-2">
+              <p className="text-sm text-foreground/80">
                 {explanation ?? policy.explanation}
               </p>
             )}

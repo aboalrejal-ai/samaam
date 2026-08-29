@@ -60,13 +60,13 @@ export function RequestForm({
             </Field>
           </div>
           {patient.diagnosis && (
-            <p className="text-sm text-fg-2">{patient.diagnosis}</p>
+            <p className="text-sm text-foreground/80">{patient.diagnosis}</p>
           )}
           {!!patient.medications?.length && (
             <div className="flex flex-wrap gap-1.5">
               {patient.medications.map((drug) => (
                 <span key={drug}
-                  className="rounded-pill border border-border bg-surface-warm px-2 py-0.5 text-xs text-fg-2">
+                  className="rounded-pill border border-border bg-accent px-2 py-0.5 text-xs text-foreground/80">
                   {drug}
                 </span>
               ))}
@@ -84,7 +84,7 @@ export function RequestForm({
             <Input type="number" value={patient.serum_creatinine_umol_l ?? ''} disabled={disabled}
               onChange={(e) => onPatientChange({ serum_creatinine_umol_l: num(e.target.value) })} />
           </Field>
-          <div className="rounded-md border border-border bg-surface-warm px-3 py-2.5">
+          <div className="rounded-md border border-border bg-accent px-3 py-2.5">
             <p className="text-xs text-muted-foreground">{t('console.egfr')}</p>
             {patient.egfr == null ? (
               <p className="pt-1 text-sm text-muted-foreground">{t('console.egfrPending')}</p>

@@ -258,9 +258,9 @@ React 19 · TypeScript 5.7 · Vite 6 · Tailwind v4 · shadcn/ui · TanStack Que
 ```css
 /* src/index.css */
 @import "tailwindcss";
-@import "../design/dashboard/tokens.css";
+/* الألوان كلها من preset الـ shadcn — لا نظام تصميم خارجي */
 ```
-ثم انسخ كتلة `@theme` من `design/dashboard/tailwind-v4.css`.
+يطبَّق بـ `npx shadcn@latest apply --preset b1ZOMFw80`.
 
 **تعيين shadcn:**
 ```

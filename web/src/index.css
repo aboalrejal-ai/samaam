@@ -1,243 +1,237 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Samaam — theme
+
+   Colour comes wholly from the shadcn `radix-maia` preset. The project
+   keeps no private colour vocabulary: a translation layer between our
+   names and shadcn's is what made the last palette drift, and it would
+   drift again on the next preset.
+
+   Four tokens are added, because shadcn has no vocabulary for them:
+   success, warn and danger, plus a stronger variant of each for text.
+   They are not borrowed from elsewhere — each is built in OKLCH at the
+   preset's own destructive lightness, so the three read as siblings.
+   ═══════════════════════════════════════════════════════════════════════ */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* Fonts are bundled, not fetched. The venue wifi is not a dependency. */
-@import "@fontsource-variable/inter";
-@import "@fontsource/ibm-plex-mono/400.css";
-@import "@fontsource/ibm-plex-mono/500.css";
-@import "@fontsource/ibm-plex-mono/600.css";
+/* One family, seven weights, Latin and Arabic. Bundled rather than fetched:
+   the venue's network is not a dependency of the interface. */
+@import "@fontsource/ibm-plex-sans-arabic/100.css";
+@import "@fontsource/ibm-plex-sans-arabic/200.css";
+@import "@fontsource/ibm-plex-sans-arabic/300.css";
+@import "@fontsource/ibm-plex-sans-arabic/400.css";
+@import "@fontsource/ibm-plex-sans-arabic/500.css";
+@import "@fontsource/ibm-plex-sans-arabic/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/700.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-100.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-200.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-300.css";
 @import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
 @import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
 @import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
-
-/* The token contract. Source of truth for every colour in this app.
-   Unlayered on purpose: its :root wins over Tailwind's @layer theme, so
-   token names shared with @theme keys (--radius-md, --text-sm, --font-mono)
-   resolve to the token value rather than to a self-reference. */
-@import "../../design/dashboard/tokens.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
 
 @custom-variant dark (&:is(.dark *));
 
-/* ── Design token bridge — copied from design/dashboard/tailwind-v4.css ── */
-@theme {
-  --color-bg: var(--bg);
-  --color-surface: var(--surface);
-  --color-surface-warm: var(--surface-warm);
-  --color-fg: var(--fg);
-  --color-fg-2: var(--fg-2);
-  --color-muted: var(--muted);
-  --color-meta: var(--meta);
-  --color-border: var(--border);
-  --color-border-soft: var(--border-soft);
-  --color-accent: var(--accent);
-  --color-accent-on: var(--accent-on);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-active: var(--accent-active);
-  --color-success: var(--success);
-  --color-warn: var(--warn);
-  --color-danger: var(--danger);
-  --font-display: var(--font-display);
-  --font-body: var(--font-body);
-  --font-sans: var(--font-body);
-  --font-mono: var(--font-mono);
-  --text-xs: var(--text-xs);
-  --text-sm: var(--text-sm);
-  --text-base: var(--text-base);
-  --text-lg: var(--text-lg);
-  --text-xl: var(--text-xl);
-  --text-2xl: var(--text-2xl);
-  --text-3xl: var(--text-3xl);
-  --text-4xl: var(--text-4xl);
-  --leading-body: var(--leading-body);
-  --leading-tight: var(--leading-tight);
-  --tracking-display: var(--tracking-display);
-  --spacing-1: var(--space-1);
-  --spacing-2: var(--space-2);
-  --spacing-3: var(--space-3);
-  --spacing-4: var(--space-4);
-  --spacing-5: var(--space-5);
-  --spacing-6: var(--space-6);
-  --spacing-8: var(--space-8);
-  --spacing-12: var(--space-12);
-  --spacing-section-desktop: var(--section-y-desktop);
-  --spacing-section-tablet: var(--section-y-tablet);
-  --spacing-section-phone: var(--section-y-phone);
-  --radius-sm: var(--radius-sm);
-  --radius-md: var(--radius-md);
-  --radius-lg: var(--radius-lg);
-  --radius-pill: var(--radius-pill);
-  --shadow-flat: var(--elev-flat);
-  --shadow-ring: var(--elev-ring);
-  --shadow-raised: var(--elev-raised);
-  --shadow-focus-ring: var(--focus-ring);
-  --duration-fast: var(--motion-fast);
-  --duration-base: var(--motion-base);
-  --ease-standard: var(--ease-standard);
-  --container-max: var(--container-max);
-  --spacing-container-desktop: var(--container-gutter-desktop);
-  --spacing-container-tablet: var(--container-gutter-tablet);
-  --spacing-container-phone: var(--container-gutter-phone);
-}
-
-/* ── shadcn role mapping ────────────────────────────────────────────────
-   Per FRONTEND-PLAN Part 2. shadcn names roles, the tokens name colours;
-   this block is the only place the two vocabularies meet.
-
-   Two role names collide, and the plan's mapping table resolves both:
-     · shadcn `primary` carries the sky --accent. Reach the sky as
-       text-primary / bg-primary / ring-primary — never text-accent, which
-       in shadcn's vocabulary means the subtle hover surface.
-     · shadcn `muted` is a surface; the token --muted is body-grey text,
-       so it lands on `muted-foreground`.
-   Repointing shadcn `accent` at the sky would turn every hover state solid
-   blue, which DESIGN §1.4 forbids: blue is interaction only, never the hero. */
-@theme {
-  --color-background: var(--bg);
-  --color-foreground: var(--fg);
-  --color-card: var(--surface);
-  --color-card-foreground: var(--fg);
-  --color-popover: var(--surface);
-  --color-popover-foreground: var(--fg);
-  --color-primary: var(--accent);
-  --color-primary-foreground: var(--accent-on);
-  --color-secondary: var(--surface-warm);
-  --color-secondary-foreground: var(--fg-2);
-  --color-muted: var(--border-soft);
-  --color-muted-foreground: var(--muted);
-  --color-accent: var(--surface-warm);
-  --color-accent-foreground: var(--fg);
-  --color-destructive: var(--danger);
-  --color-destructive-foreground: var(--surface);
-  --color-border: var(--border);
-  --color-input: var(--border);
-  --color-ring: var(--accent);
-
-  --color-sidebar: var(--surface);
-  --color-sidebar-foreground: var(--fg);
-  --color-sidebar-primary: var(--accent);
-  --color-sidebar-primary-foreground: var(--accent-on);
-  --color-sidebar-accent: var(--surface-warm);
-  --color-sidebar-accent-foreground: var(--fg);
-  --color-sidebar-border: var(--border);
-  --color-sidebar-ring: var(--accent);
-
-  --color-chart-1: var(--accent);
-  --color-chart-2: var(--success);
-  --color-chart-3: var(--warn);
-  --color-chart-4: var(--danger);
-  --color-chart-5: var(--muted);
-
-  /* Status colours as TEXT and BORDERS on --surface.
-     The token status hues are tuned as fills: on white, --warn measures about
-     2.2:1 and --success about 2.6:1, so neither clears the 4.5:1 that
-     FRONTEND-PLAN §6.4 requires — §6.4 singles out --warn on white by name.
-     These are darkened shades of the same tokens, not new colours: no hue is
-     introduced and no literal is written. Use *-strong wherever a status hue
-     carries text or a 1px edge; use the plain token for fills. */
-  --color-success-strong: color-mix(in oklab, var(--success), black 35%);
-  --color-warn-strong: color-mix(in oklab, var(--warn), black 40%);
-  --color-danger-strong: color-mix(in oklab, var(--danger), black 25%);
-  /* The sky measures 2.77:1 on white — fine as a fill behind accent-on,
-     failing as body text. Links and inline emphasis use this instead. */
-  --color-accent-strong: color-mix(in oklab, var(--accent), black 30%);
-
-  /* shadcn components reach for rounded-xl and above; the token scale stops
-     at lg, so the larger steps hold at lg rather than inventing a radius. */
-  --radius-xl: var(--radius-lg);
-  --radius-2xl: var(--radius-lg);
-  --radius-3xl: var(--radius-lg);
-  --radius-4xl: var(--radius-pill);
-}
+/* ── The preset's palette, untouched ──────────────────────────────── */
 
 :root {
-  --radius: var(--radius-md);
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── Ours. Three states shadcn does not name. ──────────────────────
+
+     Built at the preset's own destructive lightness (L 0.577) with only
+     the hue changed, so red, amber and green look like one family rather
+     than three borrowed colours. Chroma is the most each hue can hold
+     in sRGB at that lightness.
+
+     The plain token fills and outlines. The -strong variant carries text
+     and 1px edges: at L 0.577 green measures 4.04:1 on white and amber
+     4.43:1, both short of the 4.5 minimum, so text uses a darker sibling
+     measured to 5:1. Every value here was computed, not chosen by eye. */
+  --success: oklch(0.577 0.159 150);
+  --warn: oklch(0.577 0.121 75);
+  --danger: oklch(0.577 0.235 27.325);
+  --success-strong: oklch(0.527 0.146 150);
+  --warn-strong: oklch(0.547 0.116 75);
+  --danger-strong: oklch(0.571 0.232 27.325);
+
+  /* The preset's --primary is a button fill meant to sit under
+     --primary-foreground. As text it measures 6.83:1 on white here but only
+     2.03:1 on the dark card, so links and inline emphasis use this instead.
+     Same hue, lightness raised only as far as 5:1 requires. */
+  --primary-strong: var(--primary);
+
+  /* The preset's radius scale is multiplicative and has no pill stop. */
+  --radius-pill: 9999px;
 }
 
-/* Phase 6.9 — the dark token layer redefines the token names under .dark.
-   The toggle and the class are wired; the second palette is not this phase. */
 .dark {
   color-scheme: dark;
 
-  /* The design package ships light only, so the dark palette is a second
-     token layer that redefines the same names — every component keeps
-     reading `bg-surface` and `text-fg` and needs no dark: variant.
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.424 0.199 265.638);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 
-     The sky is lightened: #0ea5e9 measures under 3:1 on a dark ground, and
-     the status hues would fail the same way, so they lighten too. Contrast
-     has to hold in both themes, not just the one that gets screenshotted. */
-  --bg: #0b1220;
-  --surface: #131c2b;
-  --surface-warm: #18243a;
-  --fg: #e8eef7;
-  --fg-2: #b8c4d4;
-  --muted: #8b9bb0;
-  --meta: #e8eef7;
-  --border: #24334a;
-  --border-soft: #1a2536;
-
-  --accent: #38bdf8;
-  --accent-on: #04131d;
-
-  --success: #34d399;
-  --warn: #fbbf24;
-  --danger: #f87171;
+  /* Lightened, not darkened. A darker sibling vanishes on a dark ground —
+     measured to 5:1 against the card, which is where these mostly sit. */
+  --success-strong: oklch(0.606 0.166 150);
+  --warn-strong: oklch(0.63 0.132 75);
+  --danger-strong: oklch(0.652 0.234 27.325);
+  --primary-strong: oklch(0.633 0.196 265.638);
 }
 
-/* On a dark ground the darkened mixes disappear. Lighten instead, keeping
-   the same token names so nothing downstream changes. */
-.dark {
-  --color-success-strong: color-mix(in oklab, var(--success), white 12%);
-  --color-warn-strong: color-mix(in oklab, var(--warn), white 8%);
-  --color-danger-strong: color-mix(in oklab, var(--danger), white 10%);
-  --color-accent-strong: var(--accent);
+/* ── Tailwind bindings ────────────────────────────────────────────── */
+
+@theme inline {
+  /* One family for everything: display, body, and the class still called
+     font-mono. Nothing else may render. */
+  --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-display: var(--font-sans);
+  --font-body: var(--font-sans);
+  --font-mono: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --color-success-strong: var(--success-strong);
+  --color-warn-strong: var(--warn-strong);
+  --color-danger-strong: var(--danger-strong);
+  --color-primary-strong: var(--primary-strong);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-pill: var(--radius-pill);
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
 
   html {
-    @apply font-body;
-  }
-
-  /* Inter carries no Arabic. Keep the token stack for Latin and add a
-     matching Arabic face rather than falling through to whatever the
-     judge's operating system happens to ship. */
-  :lang(ar) {
-    font-family: "IBM Plex Sans Arabic", var(--font-body);
+    @apply font-sans;
   }
 
   body {
-    @apply bg-bg text-fg leading-body;
-    font-size: var(--text-base);
+    @apply bg-background text-foreground;
     -webkit-font-smoothing: antialiased;
   }
 
-  :focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-  }
-
-  /* Every measured quantity compares by eye, not by arithmetic. */
+  /* The class is kept as a marker for measured values and identifiers,
+     not as a claim about the family — there is only one family now. What
+     it still carries is the part that mattered: digits of equal width, so
+     18.0 above 14.0 is compared by eye rather than by arithmetic. */
   .font-mono {
     font-variant-numeric: tabular-nums;
+    font-weight: 500;
+    letter-spacing: 0.01em;
   }
 }
 
-/* Unlayered on purpose, like tokens.css above.
-   Every focusable thing must show where focus is. Inside @layer base this rule
-   lost to the `outline-hidden` utility the generated components carry, so the
-   shell's links took focus invisibly and a keyboard user could not tell where
-   they were. Unlayered, it beats every layer and gives one consistent ring
-   across generated and hand-written controls alike. */
+/* Unlayered on purpose: inside @layer base this loses to the
+   `outline-hidden` utility the generated components carry, and focus lands
+   invisibly. The one !important in the project, and this is why. */
 :focus-visible {
-  /* !important is deliberate and confined to this one rule. The generated
-     components each ship their own focus treatment, so without it the ring
-     differs control to control and some fall back to the browser's thin
-     default. A keyboard user needs one unmistakable indicator everywhere,
-     and this is the only declaration in the project that forces anything. */
-  outline: 2px solid var(--accent) !important;
+  outline: 2px solid var(--ring) !important;
   outline-offset: 2px !important;
 }

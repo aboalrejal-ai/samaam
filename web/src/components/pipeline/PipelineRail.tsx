@@ -30,10 +30,10 @@ function offsetFor(index: number): string {
 }
 
 const NODE_CLASS: Record<NodeState, string> = {
-  idle: 'border-border bg-surface',
-  active: 'border-primary bg-primary/15 animate-pulse',
-  passed: 'border-primary bg-primary',
-  sealed: 'border-danger-strong bg-surface ring-4 ring-danger/25',
+  idle: 'border-border bg-card',
+  active: 'border-primary-strong bg-primary/15 animate-pulse',
+  passed: 'border-primary-strong bg-primary',
+  sealed: 'border-danger-strong bg-card ring-4 ring-danger/25',
   unreached: 'border-dashed border-border bg-transparent opacity-45',
 }
 
@@ -124,7 +124,7 @@ export function PipelineRail({
                 className={cn(
                   'font-mono text-xs tracking-wide',
                   state === 'unreached' ? 'text-muted-foreground/50' : 'text-muted-foreground',
-                  isGate && 'font-semibold text-fg',
+                  isGate && 'font-semibold text-foreground',
                 )}
               >
                 {node}

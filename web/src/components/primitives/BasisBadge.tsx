@@ -15,7 +15,7 @@ import type { Basis } from '@/types/api'
 const BASIS_CLASS: Record<Basis, string> = {
   // Filled, hard 4px corners. The token radius scale starts at 8px, so the
   // 4px the plan specifies is written as a length.
-  STATUTORY: 'rounded-[4px] border-transparent bg-danger-strong text-surface font-semibold',
+  STATUTORY: 'rounded-[4px] border-transparent bg-danger-strong text-card font-semibold',
   // Outlined, 1px edge, fully round.
   NATIONAL_PROTOCOL: 'rounded-pill border border-warn-strong bg-transparent text-warn-strong',
   // No background, no edge. Guidance, not an instrument of enforcement.

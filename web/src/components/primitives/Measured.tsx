@@ -55,7 +55,7 @@ export function Measured({
       className={cn(
         'inline-flex items-baseline gap-1 font-mono tabular-nums',
         SIZE_CLASS[size],
-        resolved === 'over' ? 'text-danger-strong' : 'text-fg',
+        resolved === 'over' ? 'text-danger-strong' : 'text-foreground',
         className,
       )}
       {...props}

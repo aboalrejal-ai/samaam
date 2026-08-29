@@ -25,7 +25,7 @@ const STATUS_COLOUR: Record<CheckStatus, string> = {
   PASS: 'text-success-strong',
   FAIL: 'text-danger-strong',
   WARN: 'text-warn-strong',
-  NO_EVIDENCE: 'text-fg-2',
+  NO_EVIDENCE: 'text-foreground/80',
   NOT_APPLICABLE: 'text-muted-foreground',
 }
 

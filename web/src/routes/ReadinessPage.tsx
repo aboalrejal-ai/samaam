@@ -53,8 +53,8 @@ export default function ReadinessPage() {
             {data.factors.map((factor) => (
               <Card key={factor.id}>
                 <CardContent className="py-3">
-                  <p className="text-sm font-medium text-fg">{factor.name}</p>
-                  <p className="pt-0.5 text-xs leading-body text-muted-foreground">
+                  <p className="text-sm font-medium text-foreground">{factor.name}</p>
+                  <p className="pt-0.5 text-xs text-muted-foreground">
                     {factor.description}
                   </p>
                 </CardContent>
@@ -67,7 +67,7 @@ export default function ReadinessPage() {
               const ours = OURS.has(dimension.id)
               return (
                 <Collapsible key={dimension.id} asChild>
-                  <Card className={cn('py-0', ours && 'border-primary')}>
+                  <Card className={cn('py-0', ours && 'border-primary-strong')}>
                     <CollapsibleTrigger className="w-full text-start">
                       <CardHeader className="gap-1 py-4">
                         <div className="flex flex-wrap items-center gap-2">
@@ -76,7 +76,7 @@ export default function ReadinessPage() {
                           </span>
                           <CardTitle className="text-base">{dimension.name}</CardTitle>
                           {ours && (
-                            <Badge className="rounded-pill border-accent-strong bg-transparent text-accent-strong">
+                            <Badge className="rounded-pill border-primary-strong bg-transparent text-primary-strong">
                               {t('readiness.ours')}
                             </Badge>
                           )}
@@ -84,20 +84,20 @@ export default function ReadinessPage() {
                             {dimension.metrics.length} {t('readiness.metrics')}
                           </span>
                         </div>
-                        <p className="text-sm leading-body text-muted-foreground">
+                        <p className="text-sm text-muted-foreground">
                           {dimension.description}
                         </p>
                       </CardHeader>
                     </CollapsibleTrigger>
                     <CollapsibleContent>
-                      <CardContent className="border-t border-border-soft py-3">
+                      <CardContent className="border-t border-border/60 py-3">
                         <ul className="space-y-1.5">
                           {dimension.metrics.map((metric) => (
                             <li key={metric.id} className="text-sm">
                               <span dir="ltr" className="font-mono text-xs text-muted-foreground">
                                 {metric.id}
                               </span>{' '}
-                              <span className="font-medium text-fg">{metric.name}</span>
+                              <span className="font-medium text-foreground">{metric.name}</span>
                               <span className="text-muted-foreground"> — {metric.description}</span>
                             </li>
                           ))}

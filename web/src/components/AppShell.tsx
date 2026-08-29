@@ -19,7 +19,7 @@ export function AppShell() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset className="min-w-0">
-        <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-surface/85 px-4 backdrop-blur-sm transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+        <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/85 px-4 backdrop-blur-sm transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <SidebarTrigger className="-ms-1" aria-label={t('shell.toggleSidebar')} />
           <Separator
             orientation="vertical"

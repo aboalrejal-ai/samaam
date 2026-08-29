@@ -14,8 +14,8 @@ import type { Action } from '@/types/api'
 const TONE: Record<Action, string> = {
   PROCEED: 'border-success-strong text-success-strong',
   CONFIRM: 'border-warn-strong text-warn-strong',
-  AUTHORISE: 'border-danger-strong bg-danger-strong text-surface',
-  PROHIBITED: 'border-fg bg-fg text-surface',
+  AUTHORISE: 'border-danger-strong bg-danger-strong text-card',
+  PROHIBITED: 'border-foreground bg-foreground text-card',
 }
 const DOT: Record<Action, string> = {
   PROCEED: '🟢', CONFIRM: '🟡', AUTHORISE: '🔴', PROHIBITED: '⛔',

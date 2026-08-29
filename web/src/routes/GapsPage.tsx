@@ -41,17 +41,17 @@ export default function GapsPage() {
             <CardContent className="space-y-3 text-sm">
               <div>
                 <p className="text-xs font-medium text-muted-foreground">{t('gaps.finding')}</p>
-                <p className="pt-0.5 leading-body text-fg-2">{gap.finding}</p>
+                <p className="pt-0.5 text-foreground/80">{gap.finding}</p>
               </div>
               <div>
                 <p className="text-xs font-medium text-muted-foreground">{t('gaps.implication')}</p>
-                <p className="pt-0.5 leading-body text-fg-2">{gap.implication}</p>
+                <p className="pt-0.5 text-foreground/80">{gap.implication}</p>
               </div>
-              <div className="rounded-md border-s-2 border-primary bg-surface-warm px-3 py-2">
+              <div className="rounded-md border-s-2 border-primary-strong bg-accent px-3 py-2">
                 <p className="text-xs font-medium text-muted-foreground">
                   {t('gaps.recommendation')}
                 </p>
-                <p className="pt-0.5 leading-body text-fg">{gap.recommendation}</p>
+                <p className="pt-0.5 text-foreground">{gap.recommendation}</p>
               </div>
             </CardContent>
           </Card>

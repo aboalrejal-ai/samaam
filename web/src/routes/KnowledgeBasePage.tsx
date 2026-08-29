@@ -111,7 +111,7 @@ export default function KnowledgeBasePage() {
           <Card key={`${hit.record_id}-${hit.section}`}>
             <CardContent className="space-y-2 py-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span dir="ltr" className="font-mono text-xs font-semibold text-fg">
+                <span dir="ltr" className="font-mono text-xs font-semibold text-foreground">
                   {hit.record_id}
                 </span>
                 <div className="flex items-center gap-2">
@@ -121,18 +121,18 @@ export default function KnowledgeBasePage() {
                   <VerificationChip verification={hit.verification} />
                 </div>
               </div>
-              <p className="text-sm font-medium text-fg">{hit.title}</p>
+              <p className="text-sm font-medium text-foreground">{hit.title}</p>
               <p className="text-xs text-muted-foreground">
                 {hit.authority} · {hit.section}
               </p>
-              <p className="text-sm leading-body text-fg-2">{hit.content}</p>
+              <p className="text-sm text-foreground/80">{hit.content}</p>
               {hit.url && (
                 <a
                   href={hit.url}
                   target="_blank"
                   rel="noreferrer"
                   dir="ltr"
-                  className="inline-block break-all font-mono text-xs text-accent-strong underline underline-offset-2"
+                  className="inline-block break-all font-mono text-xs text-primary-strong underline underline-offset-2"
                 >
                   {hit.url}
                 </a>

@@ -162,7 +162,7 @@ export default function DataRequestPage() {
                 httpStatus={result.device_response.status}
               >
                 {(result.device_response.message ?? result.device_response.error) && (
-                  <p className="text-sm text-fg-2">
+                  <p className="text-sm text-foreground/80">
                     {result.device_response.message ?? result.device_response.error}
                   </p>
                 )}
@@ -170,7 +170,7 @@ export default function DataRequestPage() {
               {result.policy.blocked && !result.policy.overridable && (
                 <div className="rounded-md border-2 border-danger-strong bg-danger/5 p-4">
                   <p className="font-semibold text-danger-strong">{t('data.noOverride')}</p>
-                  <p className="pt-1 text-sm text-fg-2">{result.policy.override_reason}</p>
+                  <p className="pt-1 text-sm text-foreground/80">{result.policy.override_reason}</p>
                 </div>
               )}
               {result.device_response.session_terminated && (
@@ -182,7 +182,7 @@ export default function DataRequestPage() {
                     <CardTitle className="text-base">{t('console.explanation')}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm leading-body text-fg-2">{explanation}</p>
+                    <p className="text-sm text-foreground/80">{explanation}</p>
                   </CardContent>
                 </Card>
               )}

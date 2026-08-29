@@ -25,7 +25,7 @@ const TONE_CLASS: Record<Tone, string> = {
   released: 'border-s-success bg-success/8 text-success-strong',
   withheld: 'border-s-danger bg-danger/8 text-danger-strong',
   unsettled: 'border-s-warn bg-warn/8 text-warn-strong',
-  abstained: 'border-s-muted-foreground bg-surface-warm text-fg',
+  abstained: 'border-s-muted-foreground bg-accent text-foreground',
 }
 
 export interface VerdictBannerProps extends React.ComponentProps<typeof Card> {
@@ -92,13 +92,13 @@ export function VerdictBanner({
       {/* The verdict stands even when a consultant released the acquisition,
           so the headline keeps saying VIOLATION — but the subtitle must not
           claim the execution was withheld when the device returned 200. */}
-      <p className="text-sm text-fg-2">
+      <p className="text-sm text-foreground/80">
         {blocked && status === 200
           ? t('verdict.releasedUnderOverride')
           : t(`verdict.${verdict}`)}
       </p>
       {action && action !== 'PROCEED' && (
-        <p className="text-sm font-medium text-fg">{t(`action.${action}_lead`)}</p>
+        <p className="text-sm font-medium text-foreground">{t(`action.${action}_lead`)}</p>
       )}
 
       {referred && (
