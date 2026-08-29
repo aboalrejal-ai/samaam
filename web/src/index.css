@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Fonts are bundled, not fetched. The venue wifi is not a dependency. */
+@import "@fontsource-variable/inter";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
+
+/* The token contract. Source of truth for every colour in this app.
+   Unlayered on purpose: its :root wins over Tailwind's @layer theme, so
+   token names shared with @theme keys (--radius-md, --text-sm, --font-mono)
+   resolve to the token value rather than to a self-reference. */
+@import "../../design/dashboard/tokens.css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Design token bridge — copied from design/dashboard/tailwind-v4.css ── */
+@theme {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-warm: var(--surface-warm);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-muted: var(--muted);
+  --color-meta: var(--meta);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-accent: var(--accent);
+  --color-accent-on: var(--accent-on);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-active: var(--accent-active);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+  --text-xs: var(--text-xs);
+  --text-sm: var(--text-sm);
+  --text-base: var(--text-base);
+  --text-lg: var(--text-lg);
+  --text-xl: var(--text-xl);
+  --text-2xl: var(--text-2xl);
+  --text-3xl: var(--text-3xl);
+  --text-4xl: var(--text-4xl);
+  --leading-body: var(--leading-body);
+  --leading-tight: var(--leading-tight);
+  --tracking-display: var(--tracking-display);
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-5: var(--space-5);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-12: var(--space-12);
+  --spacing-section-desktop: var(--section-y-desktop);
+  --spacing-section-tablet: var(--section-y-tablet);
+  --spacing-section-phone: var(--section-y-phone);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-pill: var(--radius-pill);
+  --shadow-flat: var(--elev-flat);
+  --shadow-ring: var(--elev-ring);
+  --shadow-raised: var(--elev-raised);
+  --shadow-focus-ring: var(--focus-ring);
+  --duration-fast: var(--motion-fast);
+  --duration-base: var(--motion-base);
+  --ease-standard: var(--ease-standard);
+  --container-max: var(--container-max);
+  --spacing-container-desktop: var(--container-gutter-desktop);
+  --spacing-container-tablet: var(--container-gutter-tablet);
+  --spacing-container-phone: var(--container-gutter-phone);
+}
+
+/* ── shadcn role mapping ────────────────────────────────────────────────
+   Per FRONTEND-PLAN Part 2. shadcn names roles, the tokens name colours;
+   this block is the only place the two vocabularies meet.
+
+   Two role names collide, and the plan's mapping table resolves both:
+     · shadcn `primary` carries the sky --accent. Reach the sky as
+       text-primary / bg-primary / ring-primary — never text-accent, which
+       in shadcn's vocabulary means the subtle hover surface.
+     · shadcn `muted` is a surface; the token --muted is body-grey text,
+       so it lands on `muted-foreground`.
+   Repointing shadcn `accent` at the sky would turn every hover state solid
+   blue, which DESIGN §1.4 forbids: blue is interaction only, never the hero. */
+@theme {
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--fg);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--fg);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--accent-on);
+  --color-secondary: var(--surface-warm);
+  --color-secondary-foreground: var(--fg-2);
+  --color-muted: var(--border-soft);
+  --color-muted-foreground: var(--muted);
+  --color-accent: var(--surface-warm);
+  --color-accent-foreground: var(--fg);
+  --color-destructive: var(--danger);
+  --color-destructive-foreground: var(--surface);
+  --color-border: var(--border);
+  --color-input: var(--border);
+  --color-ring: var(--accent);
+
+  --color-sidebar: var(--surface);
+  --color-sidebar-foreground: var(--fg);
+  --color-sidebar-primary: var(--accent);
+  --color-sidebar-primary-foreground: var(--accent-on);
+  --color-sidebar-accent: var(--surface-warm);
+  --color-sidebar-accent-foreground: var(--fg);
+  --color-sidebar-border: var(--border);
+  --color-sidebar-ring: var(--accent);
+
+  --color-chart-1: var(--accent);
+  --color-chart-2: var(--success);
+  --color-chart-3: var(--warn);
+  --color-chart-4: var(--danger);
+  --color-chart-5: var(--muted);
+
+  /* Status colours as TEXT and BORDERS on --surface.
+     The token status hues are tuned as fills: on white, --warn measures about
+     2.2:1 and --success about 2.6:1, so neither clears the 4.5:1 that
+     FRONTEND-PLAN §6.4 requires — §6.4 singles out --warn on white by name.
+     These are darkened shades of the same tokens, not new colours: no hue is
+     introduced and no literal is written. Use *-strong wherever a status hue
+     carries text or a 1px edge; use the plain token for fills. */
+  --color-success-strong: color-mix(in oklab, var(--success), black 35%);
+  --color-warn-strong: color-mix(in oklab, var(--warn), black 40%);
+  --color-danger-strong: color-mix(in oklab, var(--danger), black 25%);
+
+  /* shadcn components reach for rounded-xl and above; the token scale stops
+     at lg, so the larger steps hold at lg rather than inventing a radius. */
+  --radius-xl: var(--radius-lg);
+  --radius-2xl: var(--radius-lg);
+  --radius-3xl: var(--radius-lg);
+  --radius-4xl: var(--radius-pill);
+}
+
+:root {
+  --radius: var(--radius-md);
+}
+
+/* Phase 6.9 — the dark token layer redefines the token names under .dark.
+   The toggle and the class are wired; the second palette is not this phase. */
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply font-body;
+  }
+
+  /* Inter carries no Arabic. Keep the token stack for Latin and add a
+     matching Arabic face rather than falling through to whatever the
+     judge's operating system happens to ship. */
+  :lang(ar) {
+    font-family: "IBM Plex Sans Arabic", var(--font-body);
+  }
+
+  body {
+    @apply bg-bg text-fg leading-body;
+    font-size: var(--text-base);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Every measured quantity compares by eye, not by arithmetic. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+}

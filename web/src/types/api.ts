@@ -1,0 +1,322 @@
+/**
+ * Wire types for the Samaam FastAPI service on :8000.
+ *
+ * Mirrors app/main.py, app/policy_node.py and app/device_api.py. Every field
+ * here exists on the wire; nothing is inferred or convenient. The frontend
+ * never recomputes a threshold or a verdict — it renders what arrived.
+ */
+
+/* ── ITU-T Y.3172 nodes ──────────────────────────────────────────────── */
+
+export const PIPELINE_NODES = ['SRC', 'C', 'PP', 'M', 'P', 'D', 'SINK'] as const
+export type PipelineNode = (typeof PIPELINE_NODES)[number]
+
+/* ── The six verdicts (app/policy_node.py :: Verdict) ────────────────── */
+
+export const VERDICTS = [
+  'COMPLIANT',
+  'VIOLATION',
+  'AMBIGUITY',
+  'CONFLICT',
+  'POTENTIAL_GAP',
+  'INSUFFICIENT_EVIDENCE',
+] as const
+export type Verdict = (typeof VERDICTS)[number]
+
+/** Verdicts the plan forbids auto-approving; they route to a human. */
+export const HUMAN_IN_THE_LOOP_VERDICTS = [
+  'POTENTIAL_GAP',
+  'INSUFFICIENT_EVIDENCE',
+] as const satisfies readonly Verdict[]
+
+/* ── Strength of authority (app/policy_node.py :: Basis) ─────────────── */
+
+export const BASES = ['STATUTORY', 'NATIONAL_PROTOCOL', 'CLINICAL_GUIDANCE'] as const
+export type Basis = (typeof BASES)[number]
+
+/* ── Per-rule outcome (app/policy_node.py :: Status) ─────────────────── */
+
+export const CHECK_STATUSES = [
+  'PASS',
+  'FAIL',
+  'WARN',
+  'NOT_APPLICABLE',
+  'NO_EVIDENCE',
+] as const
+export type CheckStatus = (typeof CHECK_STATUSES)[number]
+
+/* ── Knowledge base ─────────────────────────────────────────────────── */
+
+export const VERIFICATIONS = ['VERIFIED', 'UNVERIFIED', 'PENDING'] as const
+export type Verification = (typeof VERIFICATIONS)[number]
+
+/** A resolved citation as attached by node D. */
+export interface Citation {
+  record_id: string
+  title?: string
+  authority?: string
+  section?: string
+  url?: string
+  content?: string
+  /** Present instead of the text when the record is missing or not citable. */
+  error?: string
+}
+
+export interface KbRecord {
+  id: string
+  title: string
+  authority: string
+  section: string
+  content: string
+  url: string
+  year?: number
+  lang?: string
+  verification: Verification
+  category?: string
+  node?: PipelineNode
+}
+
+export interface KbSearchHit extends KbRecord {
+  similarity: number
+}
+
+export type KbCollection = 'policies' | 'sources' | 'gaps'
+
+export interface KbSearchResponse {
+  query: string
+  collection: KbCollection
+  count: number
+  results: KbSearchHit[]
+}
+
+export interface KbGap {
+  id: string
+  title: string
+  finding: string
+  implication: string
+  recommendation: string
+}
+
+/* ── Health ─────────────────────────────────────────────────────────── */
+
+export interface HealthResponse {
+  status: string
+  notice: string
+  knowledge_base: {
+    policies: number
+    gaps: number
+    source_chunks: number
+  }
+  embedding: {
+    model: string
+    local: boolean
+  }
+  model: {
+    reachable: boolean
+    detail: string
+    note: string
+  }
+}
+
+/* ── Evaluation request (app/main.py :: EvaluationRequest) ───────────── */
+
+export interface Patient {
+  sex: string
+  age: number
+  weight_kg?: number | null
+  serum_creatinine_umol_l?: number | null
+  egfr?: number | null
+  egfr_method?: string | null
+  on_metformin?: boolean
+  aki?: boolean
+  maintenance_dialysis?: boolean
+  medications?: string[]
+  diagnosis?: string | null
+}
+
+export interface Requested {
+  study?: string | null
+  body_region: string
+  kvp?: number | null
+  mas?: number | null
+  ctdivol_mgy?: number | null
+  dlp_mgy_cm?: number | null
+  contrast_agent?: string | null
+  iodine_mg_per_ml?: number | null
+  volume_ml?: number | null
+  flow_rate_ml_s?: number | null
+  prophylaxis_ordered?: boolean
+  metformin_held?: boolean
+}
+
+export interface EvaluationRequest {
+  worklist_id?: string | null
+  patient: Patient
+  requested: Requested
+  /** Name of the consultant accepting the risk. Refused when not overridable. */
+  override_by?: string | null
+  explain?: boolean
+}
+
+/* ── Policy decision (app/policy_node.py :: Decision.to_dict) ───────── */
+
+export interface PolicyCheck {
+  rule: string
+  status: CheckStatus
+  detail: string
+  basis: Basis | null
+  cites: string[]
+}
+
+export interface PolicyPayload {
+  verdict: Verdict
+  blocked: boolean
+  overridable: boolean
+  override_reason: string
+  checks: PolicyCheck[]
+  citations: Citation[]
+  /** Drafted by node M. Absent when `explain: false` was requested. */
+  explanation?: string
+}
+
+export const DEVICE_STATES = ['IDLE', 'ARMED', 'EXECUTED', 'LOCKED'] as const
+export type DeviceState = (typeof DEVICE_STATES)[number]
+
+export interface DeviceResponse {
+  status: number
+  worklist_id?: string
+  device_state?: DeviceState
+  message?: string
+  error?: string
+  overridden_by?: string
+  session_terminated?: boolean
+  decision?: PolicyPayload & {
+    override_refused?: boolean
+    override_refused_reason?: string
+    worklist_id?: string
+  }
+}
+
+export interface EvaluationResponse {
+  verdict: Verdict
+  blocked: boolean
+  device_response: DeviceResponse
+  policy: PolicyPayload
+  privacy?: {
+    identifiers_removed: string[]
+    note: string
+  }
+}
+
+/* ── Data request path (app/main.py :: DataRequest) ──────────────────── */
+
+export interface DataRequestBody {
+  request_id?: string | null
+  actor: string
+  action: string
+  stated_purpose: string
+  record_count?: number
+  destination_outside_kingdom?: boolean
+  care_purpose?: boolean
+  /** Passed deliberately in scenario 3 to demonstrate that it is refused. */
+  override_by?: string | null
+}
+
+export interface DataRequestResponse {
+  verdict: Verdict
+  blocked: boolean
+  device_response: DeviceResponse
+  policy: PolicyPayload
+}
+
+/* ── Audit trail (app/device_api.py :: AuditEntry) ───────────────────── */
+
+export const AUDIT_EVENTS = [
+  'EXECUTED',
+  'EXECUTED_UNDER_OVERRIDE',
+  'BLOCKED',
+  'OVERRIDE_REFUSED',
+  'SECURITY_OVERRIDE',
+  'DATA_ACCESS_GRANTED',
+] as const
+export type AuditEvent = (typeof AUDIT_EVENTS)[number]
+
+export interface AuditEntry {
+  at: string
+  /** Widened past AuditEvent: the server may log events this build predates. */
+  event: AuditEvent | string
+  worklist_id: string
+  verdict: Verdict | string
+  actor: string
+  detail: Record<string, unknown>
+}
+
+/* ── Scenarios ──────────────────────────────────────────────────────── */
+
+export interface ScenarioExpectedCheck {
+  rule: string
+  status: CheckStatus
+  severity?: Basis
+  detail: string
+  cites: string[]
+}
+
+interface ScenarioBase {
+  id: string
+  name: string
+  name_en: string
+  expected_verdict: Verdict
+  expected_checks: ScenarioExpectedCheck[]
+  expected_action: string
+}
+
+/** SC-01 and SC-02 drive the device path. */
+export interface ClinicalScenario extends ScenarioBase {
+  patient: Patient & { synthetic?: boolean; note?: string }
+  requested: Requested & { saline_flush_ml?: number }
+  safe_alternative?: Record<string, string | number>
+  request?: never
+}
+
+/** SC-03 drives the privacy path. */
+export interface DataScenario extends ScenarioBase {
+  request: Pick<DataRequestBody, 'actor' | 'action' | 'stated_purpose'>
+  patient?: never
+  requested?: never
+}
+
+export type Scenario = ClinicalScenario | DataScenario
+
+export function isClinicalScenario(s: Scenario): s is ClinicalScenario {
+  return 'requested' in s && s.requested !== undefined
+}
+
+/* ── ITU AI Readiness framework (kb/framework/dimensions.json) ───────── */
+
+export interface FrameworkFactor {
+  id: string
+  name: string
+  description: string
+}
+
+export interface FrameworkMetric {
+  id: string
+  name: string
+  description: string
+}
+
+export interface FrameworkDimension {
+  id: number
+  name: string
+  short_name: string
+  description: string
+  mapped_factors: string[]
+  metrics: FrameworkMetric[]
+}
+
+export interface FrameworkResponse {
+  framework_version: string
+  framework_source: string
+  factors: FrameworkFactor[]
+  dimensions: FrameworkDimension[]
+}

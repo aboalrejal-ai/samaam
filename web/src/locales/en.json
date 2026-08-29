@@ -1,0 +1,128 @@
+{
+  "brand": {
+    "name": "صِمَام",
+    "latin": "SAMAAM",
+    "tagline": "AI–hardware policy gateway"
+  },
+  "notice": {
+    "synthetic": "بيانات محاكاة لأغراض الهاكاثون فقط",
+    "syntheticGloss": "Synthetic data, hackathon use only"
+  },
+  "nav": {
+    "group": "Gateway",
+    "console": "Console",
+    "consoleDescription": "Technologist console",
+    "data": "Data request",
+    "dataDescription": "Privacy path",
+    "kb": "Knowledge base",
+    "kbDescription": "Semantic retrieval",
+    "gaps": "Gap matrix",
+    "gapsDescription": "Regulatory gaps",
+    "audit": "Audit trail",
+    "auditDescription": "Attributed decisions",
+    "readiness": "Readiness",
+    "readinessDescription": "ITU dimensions",
+    "primitives": "Primitives",
+    "primitivesDescription": "Component gallery"
+  },
+  "shell": {
+    "toggleSidebar": "Toggle sidebar",
+    "language": "Language",
+    "switchToArabic": "Switch to Arabic",
+    "switchToEnglish": "Switch to English",
+    "theme": "Theme",
+    "themeLight": "Switch to dark theme",
+    "themeDark": "Switch to light theme"
+  },
+  "connection": {
+    "connected": "Connected",
+    "offline": "Service unreachable",
+    "checking": "Connecting",
+    "offlineDetail": "Could not reach the Samaam service on port 8000.",
+    "counts": "Knowledge base: {{policies}} policies, {{gaps}} gaps, {{chunks}} source chunks",
+    "policies": "policies",
+    "gaps": "gaps",
+    "chunks": "chunks",
+    "modelReachable": "Explanation model reachable",
+    "modelUnreachable": "Explanation model unreachable — the policy node does not need it"
+  },
+  "pages": {
+    "console": {
+      "title": "Technologist console",
+      "lead": "Enter acquisition parameters and hand the worklist to the scanner."
+    },
+    "data": {
+      "title": "Data request",
+      "lead": "Submit a health-data access or export request for adjudication."
+    },
+    "kb": {
+      "title": "Knowledge base",
+      "lead": "Semantic retrieval over the verified Saudi regulatory corpus."
+    },
+    "gaps": {
+      "title": "Gap matrix",
+      "lead": "Where the regulation is silent, and what that costs."
+    },
+    "audit": {
+      "title": "Audit trail",
+      "lead": "Every decision, attributed and timestamped."
+    },
+    "readiness": {
+      "title": "Readiness dimensions",
+      "lead": "The ITU AI Readiness framework this gateway maps onto."
+    },
+    "primitives": {
+      "title": "Semantic primitives",
+      "lead": "Every primitive in every state. Print this in greyscale: if STATUTORY still reads differently from NATIONAL_PROTOCOL, the shape channel is doing its job."
+    },
+    "notFound": {
+      "title": "No such screen",
+      "lead": "This route is not part of the Samaam gateway.",
+      "back": "Back to the console"
+    },
+    "placeholder": "This screen arrives in a later phase."
+  },
+  "basis": {
+    "STATUTORY": "Statutory violation",
+    "NATIONAL_PROTOCOL": "National protocol departure",
+    "CLINICAL_GUIDANCE": "Professional guidance",
+    "legend": "Basis"
+  },
+  "verdict": {
+    "COMPLIANT": "Released to the device",
+    "VIOLATION": "Execution withheld",
+    "AMBIGUITY": "Provisions conflict in reading",
+    "CONFLICT": "Provisions conflict",
+    "POTENTIAL_GAP": "No provision governs this",
+    "INSUFFICIENT_EVIDENCE": "Evidence does not suffice",
+    "blocked": "Blocked",
+    "released": "Released",
+    "humanInTheLoop": "Referred to a specialist. Not auto-approved."
+  },
+  "check": {
+    "status": {
+      "PASS": "Passed",
+      "FAIL": "Failed",
+      "WARN": "Warning",
+      "NOT_APPLICABLE": "Not applicable",
+      "NO_EVIDENCE": "No evidence"
+    },
+    "cites": "Cites"
+  },
+  "citation": {
+    "open": "Open the source document",
+    "unavailable": "Source unavailable",
+    "noUrl": "No direct link recorded for this record.",
+    "quotedAs": "Quoted as issued"
+  },
+  "verification": {
+    "VERIFIED": "Verified",
+    "UNVERIFIED": "Unverified",
+    "PENDING": "Pending verification"
+  },
+  "measured": {
+    "limit": "Limit",
+    "overLimit": "Over the cited limit",
+    "withinLimit": "Within the cited limit"
+  }
+}
