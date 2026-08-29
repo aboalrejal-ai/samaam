@@ -551,24 +551,51 @@ Organizations falling under statutory registration criteria—including educatio
 
 # الجزء الثالث: الإطار التنظيمي والإكلينيكي للأشعة المقطعية والصبغة اليودية (Health & Radiology)
 
-> مجمَّع من ثلاث عمليات بحث عميق مستقلة (Gemini · ChatGPT · Perplexity)، محفوظة كاملة في `docs/research/` للتتبع.
-> تاريخ التجميع: 2026-08-29 — عدد السجلات: 34
+> مجمَّع من ثلاث عمليات بحث عميق مستقلة (Gemini · ChatGPT · Perplexity) محفوظة في `docs/research/`،
+> ثم **مصحَّح ومُوسَّع بالرجوع إلى الوثائق السعودية الأصلية** المحفوظة في `kb/sources/`.
+> تاريخ التجميع: 2026-08-29 — عدد السجلات: 43
 
 ## ⚖️ قاعدة الاستشهاد الحاكمة
 
-لكل سجل حالة تحقق، وعقدة السياسات (P) ملزمة بها:
-
 | الحالة | المعنى | ماذا يُسمح به |
 | :--- | :--- | :--- |
-| ✅ **VERIFIED** | النص موجود في مصدر أولي محدد | يجوز الاستناد إليه في الحجب |
-| ⚠️ **UNVERIFIED** | الوثيقة معروفة لكن نصها أو أرقامها لم تُسترجع | **يُمنع** الحجب استناداً إليه — يُصنَّف `INSUFFICIENT_EVIDENCE` |
-| 🕓 **HISTORICAL** | إصدار متجاوَز | للتتبع فقط، لا للتطبيق |
+| ✅ **VERIFIED** | النص مقروء من مصدر أولي محدد | يجوز الاستناد إليه في الحجب |
+| ⚠️ **UNVERIFIED** | الوثيقة معروفة ونصها غير مسترجَع | **يُمنع** الحجب — يُصنَّف `INSUFFICIENT_EVIDENCE` |
+| 🕓 **HISTORICAL** | إصدار متجاوَز | للتتبع فقط |
 
-**النتيجة الحاكمة للمشروع كله:** لا يوجد نص سعودي أولي يقرّ عتبات eGFR رقمية للصبغة اليودية. القيم ٣٠ و ٤٥ mL/min/1.73m² مهنية دولية (ACR 2026 و RANZCR)، لا نظامية سعودية. لذلك يعرض صمّام الحجب بوصفه **قاعدة إكلينيكية معتمدة مؤسسياً** مع إظهار مصدرها وإصدارها، ولا يعرضه أبداً بوصفه مخالفة لنظام سعودي. تجاوز هذا التمييز هو بالضبط ما يسمّيه الهاكاثون هلوسة تنظيمية.
+## 🔑 الأساس النظامي لمستويي الحجب
+
+لصمّام سندان مختلفان في القوة، ولا يجوز الخلط بينهما في نص الواجهة:
+
+**١. الجرعة الإشعاعية — إلزام نظامي بمرسوم ملكي.**  
+المرسوم الملكي رقم (٦٠٠٥٧) وتاريخ ٩/١١/١٤٤١هـ، المعتمِد لقرار المجلس الصحي السعودي رقم (٣/٨٨)، يُلزم مقدمي الرعاية الصحية
+بالتقيّد بالمستويات المرجعية التشخيصية الوطنية الصادرة عن الهيئة العامة للغذاء والدواء. تجاوز المستوى المرجعي **مخالفة نظامية**.
+→ التصنيف: `VIOLATION`
+
+**٢. الصبغة اليودية — بروتوكول وطني إرشادي.**  
+بروتوكول وزارة الصحة *Protocols on the Safe Use of Contrast Media in Radiology Departments* (الإصدار ١٫٠، ٢٠٢١)
+يقرّ عتبة `eGFR < 30 mL/min/1.73m²` وفئتي الميتفورمين ونطاقات المخاطر. وهو **بروتوكول وطني سعودي**، لا إرشاد أجنبي —
+لكنه أداة ممارسة إكلينيكية لا نص عقوبة. → التصنيف: `VIOLATION` مع وصف «خروج عن البروتوكول الوطني»، لا «مخالفة نظام».
+
+**تنبيه للمطوّر:** البروتوكول ينص صراحةً على أن المرحلتين الرابعة والخامسة من القصور الكلوي **مانع نسبي لا مطلق**،
+وأنه لا يجوز حجب الصبغة استناداً إلى وظائف الكلى إذا كان التشخيص منقذاً للحياة. لذلك الحجب الدائم غير القابل للتجاوز
+**يخالف البروتوكول نفسه**. الصحيح: حجب مشروط قابل للتجاوز بقرار استشاري موثق في سجل التدقيق.
 
 ---
 
 ## ١. تصنيف الأجهزة الطبية والبرمجيات (SFDA)
+
+### `SFDA-MDLAW-M54` — Medical Devices Law, Royal Decree M/54
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA / Council of Ministers
+- **الموضع:** Legal basis of the MDMA framework
+- **عقدة Y.3172:** `P`
+
+> MDS-REQ1 expressly bases the Medical Device Marketing Authorization framework on the Medical Devices Law issued by Royal Decree M/54 and its Implementing Regulation.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations/68759
+- **السنة:** 2021 · **اللغة:** English
 
 ### `SFDA-MDMA-R10` — Requirements for Medical Devices Marketing Authorization (MDS-REQ1) — Classification Rule 10
 
@@ -608,33 +635,9 @@ Organizations falling under statutory registration criteria—including educatio
 - **المصدر:** https://www.sfda.gov.sa/sites/default/files/2020-03/MDS_G23.pdf
 - **السنة:** 2018 · **اللغة:** English
 
-### `SFDA-MDLAW-M54` — Medical Devices Law, Royal Decree M/54
-
-- **الحالة:** ✅ موثق
-- **الجهة المصدرة:** SFDA / Council of Ministers
-- **الموضع:** Legal basis of the MDMA framework
-- **عقدة Y.3172:** `P`
-
-> MDS-REQ1 expressly bases the Medical Device Marketing Authorization framework on the Medical Devices Law issued by Royal Decree M/54 and its Implementing Regulation.
-
-- **المصدر:** https://www.sfda.gov.sa/en/regulations/68759
-- **السنة:** 2021 · **اللغة:** English
-
 ---
 
 ## ٢. تنظيم الذكاء الاصطناعي في الأجهزة الطبية (SFDA)
-
-### `SFDA-MDS-G010-PURPOSE` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
-
-- **الحالة:** ✅ موثق
-- **الجهة المصدرة:** SFDA
-- **الموضع:** Section 3 — Purpose
-- **عقدة Y.3172:** `P`
-
-> The purpose of the MDS-G010 is to clarify the requirements for obtaining Medical Device Marketing Authorization (MDMA) for AI/ML-based medical devices to place them on the market in KSA.
-
-- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
-- **السنة:** 2022 · **اللغة:** English
 
 ### `SFDA-MDS-G010-CLINEVAL` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
 
@@ -648,14 +651,14 @@ Organizations falling under statutory registration criteria—including educatio
 - **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
 - **السنة:** 2022 · **اللغة:** English
 
-### `SFDA-MDS-G010-RISK` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
+### `SFDA-MDS-G010-PURPOSE` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
 
 - **الحالة:** ✅ موثق
 - **الجهة المصدرة:** SFDA
-- **الموضع:** Risk Management
+- **الموضع:** Section 3 — Purpose
 - **عقدة Y.3172:** `P`
 
-> AI medical devices may pose risks that could jeopardize patient health and safety, increase inequalities and inefficiencies, undermine trust in healthcare, and adversely impact the management of healthcare.
+> The purpose of the MDS-G010 is to clarify the requirements for obtaining Medical Device Marketing Authorization (MDMA) for AI/ML-based medical devices to place them on the market in KSA.
 
 - **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
 - **السنة:** 2022 · **اللغة:** English
@@ -672,23 +675,21 @@ Organizations falling under statutory registration criteria—including educatio
 - **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
 - **السنة:** 2022 · **اللغة:** English
 
----
-
-## ٣. الرقابة البشرية وتفاعل الإنسان والحاسب
-
-### `SFDA-MDS-G027` — Guidance on Digital Health Products (MDS-G027)
+### `SFDA-MDS-G010-RISK` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
 
 - **الحالة:** ✅ موثق
 - **الجهة المصدرة:** SFDA
-- **الموضع:** Human oversight requirements
+- **الموضع:** Risk Management
 - **عقدة Y.3172:** `P`
 
-> Digital health products must define healthcare-professional roles and provide safeguards for human review and intervention.
+> AI medical devices may pose risks that could jeopardize patient health and safety, increase inequalities and inefficiencies, undermine trust in healthcare, and adversely impact the management of healthcare.
 
-- **المصدر:** https://www.sfda.gov.sa/en/regulations
-- **السنة:** 2024 · **اللغة:** English
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
+- **السنة:** 2022 · **اللغة:** English
 
-**ملاحظة:** الأساس النظامي لاشتراط موافقة الاستشاري في صمّام.
+---
+
+## ٣. الرقابة البشرية وتفاعل الإنسان والحاسب
 
 ### `SFDA-MDS-G010-HCI` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
 
@@ -704,35 +705,23 @@ Organizations falling under statutory registration criteria—including educatio
 
 **ملاحظة:** يغطي مباشرةً فرضية الفني المرهق — التأثير غير المبرر لتصميم الواجهة.
 
+### `SFDA-MDS-G027` — Guidance on Digital Health Products (MDS-G027)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Human oversight requirements
+- **عقدة Y.3172:** `P`
+
+> Digital health products must define healthcare-professional roles and provide safeguards for human review and intervention.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations
+- **السنة:** 2024 · **اللغة:** English
+
+**ملاحظة:** الأساس النظامي لاشتراط موافقة الاستشاري في صمّام.
+
 ---
 
 ## ٤. الصبغة اليودية وسلامة وظائف الكلى
-
-### `ACR-2026-EGFR45` — ACR Manual on Contrast Media, 2026 edition
-
-- **الحالة:** ✅ موثق
-- **الجهة المصدرة:** American College of Radiology
-- **الموضع:** Post-Contrast Acute Kidney Injury — renal risk stratification
-- **عقدة Y.3172:** `P`
-
-> For stable renal function, intravenous iodinated contrast is not considered an independent nephrotoxic risk at eGFR >= 45 mL/min/1.73 m2.
-
-- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
-- **السنة:** 2026 · **اللغة:** English
-
-**ملاحظة:** عتبة إكلينيكية مهنية، وليست نصاً نظامياً سعودياً.
-
-### `ACR-2026-EGFR3044` — ACR Manual on Contrast Media, 2026 edition
-
-- **الحالة:** ✅ موثق
-- **الجهة المصدرة:** American College of Radiology
-- **الموضع:** Post-Contrast Acute Kidney Injury — renal risk stratification
-- **عقدة Y.3172:** `P`
-
-> At stable eGFR 30-44 mL/min/1.73 m2, IV iodinated contrast is either not nephrotoxic or only rarely nephrotoxic. Routine prophylaxis is not mandated, but may be considered individually when additional high-risk circumstances exist.
-
-- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
-- **السنة:** 2026 · **اللغة:** English
 
 ### `ACR-2026-EGFR30` — ACR Manual on Contrast Media, 2026 edition
 
@@ -747,6 +736,32 @@ Organizations falling under statutory registration criteria—including educatio
 - **السنة:** 2026 · **اللغة:** English
 
 **ملاحظة:** العتبة المحورية في السيناريو الثاني للديمو.
+
+### `ACR-2026-EGFR3044` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Post-Contrast Acute Kidney Injury — renal risk stratification
+- **عقدة Y.3172:** `P`
+
+> At stable eGFR 30-44 mL/min/1.73 m2, IV iodinated contrast is either not nephrotoxic or only rarely nephrotoxic. Routine prophylaxis is not mandated, but may be considered individually when additional high-risk circumstances exist.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+### `ACR-2026-EGFR45` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Post-Contrast Acute Kidney Injury — renal risk stratification
+- **عقدة Y.3172:** `P`
+
+> For stable renal function, intravenous iodinated contrast is not considered an independent nephrotoxic risk at eGFR >= 45 mL/min/1.73 m2.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+**ملاحظة:** عتبة إكلينيكية مهنية، وليست نصاً نظامياً سعودياً.
 
 ### `ACR-2026-HYDRATION` — ACR Manual on Contrast Media, 2026 edition
 
@@ -784,6 +799,20 @@ Organizations falling under statutory registration criteria—including educatio
 - **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
 - **السنة:** 2026 · **اللغة:** English
 
+### `ESUR-10-RATIO` — ESUR Guidelines on Contrast Agents, version 10.0
+
+- **الحالة:** 🕓 تاريخي
+- **الجهة المصدرة:** European Society of Urogenital Radiology
+- **الموضع:** Contrast volume to renal function ratio
+- **عقدة Y.3172:** `P`
+
+> Version 10.0 (2018) contained an explicit contrast-volume-to-renal-function ratio. Retained here as a historical record only; it must not be implemented as a current ESUR or Saudi statutory rule.
+
+- **المصدر:** https://www.esur.org/esur-guidelines-on-contrast-agents/
+- **السنة:** 2018 · **اللغة:** English
+
+**ملاحظة:** النسبة نفسها (Volume/eGFR و g-Iodine/eGFR) وردت مبتورة في تقرير Gemini — الأرقام بعد إشارة '<' مقصوصة في الصور المصدّرة وغير قابلة للاستعادة.
+
 ### `ESUR-2025` — ESUR Contrast Media Safety Committee Guidelines 2025
 
 - **الحالة:** ⚠️ غير موثق
@@ -798,19 +827,117 @@ Organizations falling under statutory registration criteria—including educatio
 
 **ملاحظة:** لا تُستخدم أرقام ESUR 2018 كأنها 2025.
 
-### `ESUR-10-RATIO` — ESUR Guidelines on Contrast Agents, version 10.0
+### `MOH-CM-CKD45` — Protocols on the Safe Use of Contrast Media in Radiology Departments
 
-- **الحالة:** 🕓 تاريخي
-- **الجهة المصدرة:** European Society of Urogenital Radiology
-- **الموضع:** Contrast volume to renal function ratio
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.2 — Renal dialysis, p. 23
 - **عقدة Y.3172:** `P`
 
-> Version 10.0 (2018) contained an explicit contrast-volume-to-renal-function ratio. Retained here as a historical record only; it must not be implemented as a current ESUR or Saudi statutory rule.
+> Patients with CKD stages 4 or 5 who are not undergoing maintenance dialysis have a relative rather than absolute contraindication to ICM. If contrast media administration is required for a life-threatening diagnosis, then it should not be withheld based on kidney function. If intravenous ICM administration is clinically indicated, then its use should be informed by consideration of the potential risks and benefits as well as alternative imaging strategies.
 
-- **المصدر:** https://www.esur.org/esur-guidelines-on-contrast-agents/
-- **السنة:** 2018 · **اللغة:** English
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
 
-**ملاحظة:** النسبة نفسها (Volume/eGFR و g-Iodine/eGFR) وردت مبتورة في تقرير Gemini — الأرقام بعد إشارة '<' مقصوصة في الصور المصدّرة وغير قابلة للاستعادة.
+**ملاحظة:** حاسم لتصميم صمّام: النص السعودي يقول موانع نسبية لا مطلقة. الحجب الكامل الدائم يخالف البروتوكول — الصحيح حجب مشروط قابل للتجاوز بقرار إكلينيكي موثق.
+
+### `MOH-CM-EGFR-METHOD` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.1 — Clinical Estimation of Renal Functions, p. 21
+- **عقدة Y.3172:** `PP`
+
+> Estimated glomerular filtration rate (eGFR), calculated from the serum creatinine, is the recommended method to estimate renal function before contrast agent administration. In adults >= 18 years the CKD-EPI equation is recommended to calculate eGFR. In children, the revised Schwartz formula is recommended: eGFR = 36.5 x length / sCr.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** الوثيقة تورد معادلة CKD-EPI كاملة — يحسبها صمّام في عقدة PP بدل انتظارها من نظام خارجي.
+
+### `MOH-CM-METFORMIN` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.3 — Metformin, p. 28
+- **عقدة Y.3172:** `P`
+
+> Category I: There is no need to discontinue metformin either before or after administration of ICM in patients without signs of AKI and eGFR > 30 mL/min/1.73m2, and there is no need to reassess renal function. Category II: In patients with AKI or severe CKD (eGFR < 30 mL/min/1.73m2), metformin should be stopped at the time of (or prior to) the exam and suspended for 48 hours following the exam, and should not be reinstituted unless renal function becomes normal.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** تصنيف سعودي رسمي بفئتين — منطق شرطي مباشر قابل للترميز.
+
+### `MOH-CM-NEPHROTOXIC` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.2 — Nephrotoxic medications, p. 24
+- **عقدة Y.3172:** `P`
+
+> In patients with AKI or eGFRs less than 30 mL/min/1.73 m2, it may be prudent to withhold nonessential potentially nephrotoxic medications (e.g., nonsteroidal anti-inflammatory drugs, diuretics, aminoglycosides, amphotericin, platins, zoledronate, methotrexate) if clinically feasible for 24 to 48 hours before and 48 hours after exposure. Monitoring eGFR in patients receiving nephrotoxic medications or undergoing chemotherapy is important before, during, and after treatment.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** 'platins' = مركبات البلاتين الكيماوية. النص السعودي يذكر مرضى العلاج الكيماوي صراحةً — يربط سيناريو الأورام بالبروتوكول مباشرة.
+
+### `MOH-CM-PROPHYLAXIS` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.2 — Prophylaxis, p. 22
+- **عقدة Y.3172:** `P`
+
+> Patients eligible for prophylaxis include those with AKI or an eGFR < 30 mL/min/1.73 m2 who are not subjected to maintenance dialysis. Prophylaxis is not indicated for the general population of patients with stable eGFR >= 30 mL/min/1.73 m2, for patients undergoing chronic dialysis, or for patients at risk for heart failure. This eGFR threshold should not be adjusted solely based on concomitant diabetes mellitus.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** استخراج النص أسقط إشارة '<' قبل 30؛ الجملة التالية ('غير مستطبّة عند eGFR ≥ 30') تحسم المعنى بلا لبس. تحقّق منها بصرياً في ص22 قبل التسليم.
+
+### `MOH-CM-RISK-BANDS` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.2 — Risk Factors, p. 22
+- **عقدة Y.3172:** `P`
+
+> The most important risk factor for CA-AKI is pre-existing severe kidney disease. The risk of CA-AKI increases with each stepwise increase in CKD stage, approximately 5% at eGFR greater than or equal to 60, 10% at eGFR of 45-59, 15% at eGFR of 30-44, and 30% at eGFR less than 30 mL/min/1.73 m2. Additional risk factors include diabetes mellitus, nephrotoxic agents, hypotension, hypovolemia, albuminuria, and impaired kidney perfusion.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** نطاقات مخاطر سعودية رسمية بنسب مئوية — أقوى من مجرد عتبة، لأنها تسمح بعرض درجة الخطر لا الحجب فقط.
+
+### `MOH-CM-SCREENING` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Section 5.2(c) — Screening, p. 23
+- **عقدة Y.3172:** `C`
+
+> Screening based on eGFR should be used to identify patients at potential risk of CI-AKI. Screening based on eGFR is preferred over serum creatinine-based screening. A personal history of kidney disease is the most useful element that demonstrates a requirement for kidney function determination. Diabetes mellitus is an optional factor for screening.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** إلزام وطني بالفحص المسبق — الأساس النظامي لسحب صمّام قيمة eGFR قبل السماح بالتشغيل.
+
+### `MOH-CONTRAST-PROTOCOL` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Version 1.0, 2021 — full document (55 pages)
+- **عقدة Y.3172:** `SRC`
+
+> Protocols on the Safe Use of Contrast Media in Radiology Departments, Version 1.0, 2021. Issued by the Assistant Agency for Supportive Medical Services, General Directorate of Radiology and Applied Services. Targeted users are radiology staff; targeted population is adult and pediatric patients receiving intravascular, oral and intracavitary contrast media. Developed and funded solely by MOH with no healthcare-industry involvement.
+
+- **المصدر:** https://www.moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf
+- **السنة:** 2021 · **اللغة:** Arabic/English
+
+**ملاحظة:** متاحة للعموم — الأبحاث الثلاثة أخطأت حين قررت أنها غير متاحة. محفوظة محلياً في kb/sources/MoH_Contrast_Media_Protocols_2021.pdf
 
 ### `RANZCR-EVIQ-BANDS` — eviQ / RANZCR — Risk of CI-AKI based on eGFR
 
@@ -826,49 +953,21 @@ Organizations falling under statutory registration criteria—including educatio
 
 **ملاحظة:** مصدر مستقل يؤكد نطاقات ACR الثلاثة — مهم لأن مصدرين متفقين أقوى من واحد.
 
-### `MOH-CONTRAST-PROTOCOL` — Protocols on the Safe Use of Contrast Media in Radiology Departments
-
-- **الحالة:** ⚠️ غير موثق
-- **الجهة المصدرة:** Saudi Ministry of Health
-- **الموضع:** Full document (55 pages)
-- **عقدة Y.3172:** `SRC`
-
-> A Saudi MoH document with this exact title, Riyadh 2021, 55 pages, is confirmed by citation. The full PDF is not publicly accessible. Its eGFR thresholds, hydration protocols and metformin rules therefore CANNOT be verified from the Saudi primary source.
-
-- **المصدر:** https://www.moh.gov.sa/en/ministry/mediacenter/publications/pages/protocols.aspx
-- **السنة:** 2021 · **اللغة:** Arabic/English
-
-**ملاحظة:** أهم وثيقة مفقودة في المشروع كله. الحصول عليها يحوّل كل عتبات الصبغة من مهنية دولية إلى نظامية سعودية.
-
 ---
 
-## ٥. تبرير الجرعة الإشعاعية وتحسينها
+## ٥. الجرعة الإشعاعية والمستويات المرجعية الوطنية
 
-### `SFDA-MDS-G008-DRL` — National Diagnostic Reference Levels (MDS-G008), version 2.0
-
-- **الحالة:** ⚠️ غير موثق
-- **الجهة المصدرة:** SFDA
-- **الموضع:** CT dose reference tables
-- **عقدة Y.3172:** `P`
-
-> A Saudi national DRL instrument titled 'National Diagnostic Reference Levels (MDS-G008), v2.0, 26 October 2022' is consistently identified in the regulatory literature. The primary SFDA PDF and its numeric CT tables were NOT recovered by any of the three research passes.
-
-- **المصدر:** https://www.sfda.gov.sa/en/regulations/national-diagnostic-reference-levels
-- **السنة:** 2022 · **اللغة:** English
-
-**ملاحظة:** التقرير الثاني أورد أرقاماً (55.0 mGy / 950 mGy·cm للرأس، 12.0/400 للصدر، 15.0/650 للبطن والحوض، 8.0/250 لـ HRCT) لكن التقريرين الآخرين صرّحا بعدم التمكن من الوصول للـ PDF الأصلي. تُعامل الأرقام كغير موثقة.
-
-### `NRRC-R-01-SCOPE` — Radiation Safety Regulation (NRRC-R-01)
+### `IAEA-GSR3` — IAEA Safety Standards GSR Part 3 / ICRP framework
 
 - **الحالة:** ✅ موثق
-- **الجهة المصدرة:** Nuclear and Radiological Regulatory Commission
-- **الموضع:** General Provisions, Items 3-5
+- **الجهة المصدرة:** IAEA / ICRP
+- **الموضع:** Justification and optimisation of medical exposure
 - **عقدة Y.3172:** `P`
 
-> This regulation shall be applicable to occupational, public and medical exposure in the Kingdom. The safety requirements set forth in this regulation shall apply to any person involved in activities and facilities including practices defined under the Law.
+> NRRC-R-01 formally adopts the international radiation protection framework established by IAEA Safety Standards GSR Part 3 and the ICRP. Justification requires that diagnostic efficacy outweighs stochastic radiation detriment, accounting for available non-ionizing alternatives such as MRI or ultrasound.
 
-- **المصدر:** https://nrrc.gov.sa/
-- **السنة:** 2022 · **اللغة:** English
+- **المصدر:** https://www.iaea.org/publications/8930/radiation-protection-and-safety-of-radiation-sources-international-basic-safety-standards
+- **السنة:** 2014 · **اللغة:** English
 
 ### `NRRC-R-01-CH12` — Radiation Safety Regulation (NRRC-R-01)
 
@@ -884,17 +983,59 @@ Organizations falling under statutory registration criteria—including educatio
 
 **ملاحظة:** الأساس النظامي لمطالبة صمّام بتبرير كل فحص — بما فيه اقتراح بديل غير مؤيّن.
 
-### `IAEA-GSR3` — IAEA Safety Standards GSR Part 3 / ICRP framework
+### `NRRC-R-01-SCOPE` — Radiation Safety Regulation (NRRC-R-01)
 
 - **الحالة:** ✅ موثق
-- **الجهة المصدرة:** IAEA / ICRP
-- **الموضع:** Justification and optimisation of medical exposure
+- **الجهة المصدرة:** Nuclear and Radiological Regulatory Commission
+- **الموضع:** General Provisions, Items 3-5
 - **عقدة Y.3172:** `P`
 
-> NRRC-R-01 formally adopts the international radiation protection framework established by IAEA Safety Standards GSR Part 3 and the ICRP. Justification requires that diagnostic efficacy outweighs stochastic radiation detriment, accounting for available non-ionizing alternatives such as MRI or ultrasound.
+> This regulation shall be applicable to occupational, public and medical exposure in the Kingdom. The safety requirements set forth in this regulation shall apply to any person involved in activities and facilities including practices defined under the Law.
 
-- **المصدر:** https://www.iaea.org/publications/8930/radiation-protection-and-safety-of-radiation-sources-international-basic-safety-standards
-- **السنة:** 2014 · **اللغة:** English
+- **المصدر:** https://nrrc.gov.sa/
+- **السنة:** 2022 · **اللغة:** English
+
+### `SFDA-DRL-BINDING` — National Diagnostic Reference Levels (MDS-G008), version 2.0
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Background, p. 3 — legal basis
+- **عقدة Y.3172:** `P`
+
+> Royal Decree No. (60057) dated 9/11/1441 AH, approving Saudi Health Council Resolution No. (3/88), stated that healthcare providers shall comply with the national diagnostic reference level issued by the SFDA. Article (26) of the Medical Devices Law issued by Royal Decree No. (M/54) stipulates that the SFDA shall monitor the compliance of healthcare providers with technical regulations within healthcare facilities. MDS-REQ3 section (D) item (3) requires all departments operating radiology and medical imaging devices to apply the NDRL published on the SFDA website and keep all relevant records.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-02/NDRL-En.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+**ملاحظة:** ⭐ أقوى سند نظامي في المشروع كله: التزام سعودي مُلزِم بمرسوم ملكي. تجاوز المستوى المرجعي مخالفة نظامية حقيقية — بخلاف عتبات الصبغة الإكلينيكية.
+
+### `SFDA-DRL-REPORTING` — National Diagnostic Reference Levels (MDS-G008), version 2.0
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Requirements, p. 4
+- **عقدة Y.3172:** `D`
+
+> Medical devices and supplies used in medical imaging ought to automatically record radiation doses, protocol data, and patient information such as age, gender, and weight, using defined formats. The radiation doses data must be collected either automatically or manually and sent periodically to the SFDA via email (NDRL@SFDA.GOV.SA), using the forms published on its website, including the Data Collection Sheet for CT Scan.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-02/NDRL-En.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+**ملاحظة:** اشتراط وطني بالتسجيل الآلي للجرعات — صمّام يلبّيه أصلاً بحكم موقعه، ويقدر يولّد استمارة SFDA تلقائياً كميزة امتثال.
+
+### `SFDA-MDS-G008-DRL` — National Diagnostic Reference Levels (MDS-G008), version 2.0
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Annex (2), Table 1, p. 7 — National Diagnostic Reference Levels
+- **عقدة Y.3172:** `P`
+
+> Adult CT (70 +/- 20 kg): Head — CT Brain with and without contrast: CTDIvol 55 mGy, DLP 1026 mGy-cm. Abdomen and pelvis — CT Abdomen & Pelvis with and without contrast: CTDIvol 14 mGy, DLP 706 mGy-cm. Chest — CT Chest with and without contrast: CTDIvol 12 mGy, DLP 430 mGy-cm. Pediatric CT (Head): ages 0-5 years CTDIvol 28 mGy, DLP 482 mGy-cm; ages 6-15 years CTDIvol 42 mGy, DLP 697 mGy-cm.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-02/NDRL-En.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+**ملاحظة:** ⚠️ الأرقام التي أوردها تقرير Gemini كانت خاطئة: ادّعى 950 للرأس (الصحيح 1026)، و15.0/650 للبطن (الصحيح 14/706)، و400 للصدر (الصحيح 430)، وأضاف صفاً لـ HRCT غير موجود أصلاً. هذه القيم من الـ PDF الرسمي مباشرة.
 
 ---
 
@@ -938,6 +1079,18 @@ Organizations falling under statutory registration criteria—including educatio
 
 **ملاحظة:** النص العربي الرسمي من بوابة هيئة الخبراء — أقوى مرجع للعرض أمام لجنة سعودية.
 
+### `PDPL-ART22` — Personal Data Protection Law (PDPL)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Article 22 — Impact assessment
+- **عقدة Y.3172:** `D`
+
+> The Controller shall conduct an impact assessment of Personal Data Processing in relation to any product or service, based on the nature of the activity carried out by the Controller.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
+- **السنة:** 2023 · **اللغة:** English
+
 ### `PDPL-ART23` — Personal Data Protection Law (PDPL)
 
 - **الحالة:** ✅ موثق
@@ -951,18 +1104,6 @@ Organizations falling under statutory registration criteria—including educatio
 - **السنة:** 2023 · **اللغة:** English
 
 **ملاحظة:** الأساس النظامي للسيناريو الثالث — الحظر الصارم عند محاولة تصدير بيانات المرضى.
-
-### `PDPL-ART22` — Personal Data Protection Law (PDPL)
-
-- **الحالة:** ✅ موثق
-- **الجهة المصدرة:** SDAIA
-- **الموضع:** Article 22 — Impact assessment
-- **عقدة Y.3172:** `D`
-
-> The Controller shall conduct an impact assessment of Personal Data Processing in relation to any product or service, based on the nature of the activity carried out by the Controller.
-
-- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
-- **السنة:** 2023 · **اللغة:** English
 
 ### `PDPL-ART29` — Personal Data Protection Law (PDPL)
 
@@ -1046,53 +1187,53 @@ Organizations falling under statutory registration criteria—including educatio
 
 ## 🕳️ مصفوفة الثغرات التنظيمية المكتشفة
 
-هذه الثغرات مستخرجة من البحث لا مخترعة، وكل واحدة مسنودة بغياب موثق لنص.
+كل ثغرة مسنودة بغياب موثق لنص، بعد الرجوع إلى الوثائق الأصلية لا إلى ملخصاتها.
 
-### `GAP-01` — لا توجد عتبة eGFR سعودية نظامية
+### `GAP-01` — عتبات الصبغة سعودية فعلاً — والفجوة انتقلت إلى الإلزام لا الوجود
 
-**ما وُجد:** القيمتان 30 و 45 mL/min/1.73m² موثقتان دولياً (ACR 2026، RANZCR/eviQ) لكن لا يوجد نص سعودي أولي يقرّهما. بروتوكول وزارة الصحة 2021 مؤكد بعنوانه فقط ولم يُتَح نصه.
+**ما وُجد:** بروتوكول وزارة الصحة 2021 يقرّ صراحةً عتبة eGFR < 30 mL/min/1.73m² للوقاية وفئتي الميتفورمين ونطاقات المخاطر (5% / 10% / 15% / 30%). لكن البروتوكول أداة إرشادية للممارسة، ولم يُعثر على نص يجعل الالتزام به مُلزِماً بقوة النظام كما هو الحال في المستويات المرجعية للجرعة.
 
-**الأثر على صمّام:** صمّام لا يجوز أن يعرض الحجب كـ«مخالفة نظام سعودي». يعرضه كـ«قاعدة إكلينيكية معتمدة مؤسسياً — ACR 2026» مع إظهار المصدر والإصدار في سجل القرار.
+**الأثر على صمّام:** صمّام يستشهد ببروتوكول وطني سعودي حقيقي عند الحجب — لا بإرشاد أجنبي. لكنه يصنّف المخالفة كـ«خروج عن البروتوكول الوطني» لا كـ«مخالفة نظامية».
 
-**التوصية لصانع القرار:** إلزام أنظمة دعم القرار بتسجيل مصدر كل عتبة وإصدارها (rule provenance)، وإصدار وزارة الصحة بروتوكولاً وطنياً منشوراً يحسم القيم.
+**التوصية لصانع القرار:** إصدار قرار يربط بروتوكولات وزارة الصحة للأشعة بآلية إلزام ومساءلة، أسوةً بالمرسوم الملكي 60057 الذي ألزم بالمستويات المرجعية.
 
 ### `GAP-02` — المسؤولية عند قبول فني مرهق لتوصية آلية
 
-**ما وُجد:** نظام SFDA يشترط دراسة تفاعل الإنسان والحاسب والتأثير غير المبرر لتصميم الواجهة وآليات الرقابة البشرية، لكنه لا يحدد على من تقع المسؤولية عند وقوع الضرر.
+**ما وُجد:** SFDA يشترط دراسة تفاعل الإنسان والحاسب والتأثير غير المبرر لتصميم الواجهة والرقابة البشرية (MDS-G010)، ويشترط ضمانات المراجعة والتدخل البشري (MDS-G027). ولا يوجد نص يحدد على من تقع المسؤولية عند وقوع الضرر.
 
-**الأثر على صمّام:** أقوى فجوة في المشروع — تربط فكرة فيصل (الاحتراق الوظيفي) بفراغ تشريعي حقيقي موثق.
+**الأثر على صمّام:** أقوى فجوة في المشروع — تربط فكرة فيصل بفراغ تشريعي موثق.
 
 **التوصية لصانع القرار:** نص يوزّع المسؤولية بين المصنّع والمنشأة والفني والاستشاري، ويشترط توقيعاً رقمياً موثقاً قبل تجاوز أي تنبيه أمان.
 
-### `GAP-03` — لا توجد قيم DRL سعودية متاحة للتحقق
+### `GAP-03` — المستويات المرجعية مُلزِمة لكن بلا آلية إنفاذ لحظية
 
-**ما وُجد:** MDS-G008 موثقة كأداة وطنية للمستويات المرجعية التشخيصية، لكن الـ PDF وجداول الـ CT لم تُستَرجع في أي من الأبحاث الثلاثة.
+**ما وُجد:** المرسوم الملكي 60057 وقرار المجلس الصحي 3/88 يلزمان مقدمي الرعاية بالمستويات المرجعية، و MDS-G008 يشترط التسجيل الآلي للجرعات وإرسالها دورياً لـ SFDA بالبريد الإلكتروني.
 
-**الأثر على صمّام:** لا يجوز لصمّام أن يحجب بناءً على تجاوز DRL سعودي، لأننا لا نملك القيم موثقة.
+**الأثر على صمّام:** الإنفاذ لاحق ورجعي — يكتشف التجاوز بعد تعرّض المريض. لا يوجد اشتراط بفحص لحظي قبل التنفيذ.
 
-**التوصية لصانع القرار:** نشر MDS-G008 كبيانات مفتوحة قابلة للقراءة الآلية.
+**التوصية لصانع القرار:** إلزام أنظمة الأشعة بفحص المستوى المرجعي قبل بدء التصوير لا بعده — وهذا بالضبط ما يقدمه صمّام.
 
 ### `GAP-04` — لا سقف تراكمي لجرعة مرضى الأورام
 
-**ما وُجد:** لا يوجد نص سعودي يضع حداً تراكمياً لجرعة الأشعة للمرضى الذين يُصوَّرون تكراراً في المتابعة الأورامية.
+**ما وُجد:** المستويات المرجعية تُحدَّد لكل فحص على حدة، ولا يوجد نص سعودي يضع حداً تراكمياً للمرضى الذين يُصوَّرون تكراراً في المتابعة الأورامية.
 
-**الأثر على صمّام:** مبدأ التبرير يُطبَّق لكل فحص على حدة، ولا يغطي التراكم عبر رحلة العلاج.
+**الأثر على صمّام:** مبدأ التبرير يُطبَّق فحصاً بفحص ولا يرى رحلة المريض كاملة.
 
-**التوصية لصانع القرار:** إضافة اشتراط تتبع الجرعة التراكمية في السجل الصحي الموحد.
+**التوصية لصانع القرار:** إضافة اشتراط تتبع الجرعة التراكمية عبر المنشآت في السجل الصحي الموحد.
 
 ### `GAP-05` — التحكم الآلي بالجهاز منظَّم أكثر من المساءلة الإكلينيكية
 
-**ما وُجد:** القاعدة 10 لدى SFDA تصنّف بوضوح البرمجيات المؤثرة في أجهزة الأشعة كفئة C، لكن لا يوجد نص يفرض تأكيد الطبيب قبل تعديل kVp/mAs أو جرعة الصبغة، ولا يحدد حدود التشغيل الذاتي المسموح بها، ولا يوثّق المسؤولية عند تجاهل التنبيهات.
+**ما وُجد:** القاعدة 10 لدى SFDA تصنّف البرمجيات المؤثرة في أجهزة الأشعة كفئة C بوضوح، لكن لا نص يفرض تأكيد الطبيب قبل تعديل kVp/mAs أو جرعة الصبغة، ولا يحدد حدود التشغيل الذاتي، ولا يوثّق المسؤولية عند تجاهل التنبيهات.
 
-**الأثر على صمّام:** المسار التنظيمي لتسجيل صمّام واضح؛ الغائب هو طبقة الحوكمة التشغيلية.
+**الأثر على صمّام:** مسار تسجيل صمّام واضح؛ الغائب هو طبقة الحوكمة التشغيلية.
 
-**التوصية لصانع القرار:** لائحة تشغيلية تُلزم بتسجيل كل تجاوز (override) وربطه بهوية المعتمِد.
+**التوصية لصانع القرار:** لائحة تُلزم بتسجيل كل تجاوز وربطه بهوية المعتمِد.
 
 ### `GAP-06` — قانون البيانات ليس قانون الأخطاء الطبية
 
-**ما وُجد:** اللائحة التنفيذية لنظام حماية البيانات تعالج شفافية القرارات الآلية، لكنها لا تحدد هل يجوز للطبيب أو الفني تفويض الحكم الإكلينيكي لنظام آلي، ولا من يتحمل التعويض عند الخطأ.
+**ما وُجد:** اللائحة التنفيذية لنظام حماية البيانات تعالج شفافية القرارات الآلية، ولا تحدد هل يجوز تفويض الحكم الإكلينيكي لنظام آلي ولا من يتحمل التعويض.
 
-**الأثر على صمّام:** الاعتماد على PDPL وحده لتبرير سلامة النظام الطبي خطأ منهجي.
+**الأثر على صمّام:** الاعتماد على PDPL وحده لتبرير سلامة نظام طبي خطأ منهجي.
 
 **التوصية لصانع القرار:** تكامل صريح بين نظام حماية البيانات وأنظمة المهن الصحية.
 
