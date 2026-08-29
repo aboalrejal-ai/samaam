@@ -7,9 +7,9 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     # نموذج الاستدلال (M) — أي مزوّد متوافق مع OpenAI
-    llm_base_url: str = "https://api.z.ai/api/paas/v4/"
+    llm_base_url: str = "https://api.z.ai/api/coding/paas/v4"
     llm_api_key: str = ""
-    llm_model: str = "glm-4.6"
+    llm_model: str = "glm-5.3-flash"
     llm_temperature: float = 0.1
 
     # التضمين (PP) — محلي، بلا مفتاح. لا بد أن يكون متعدد اللغات:
