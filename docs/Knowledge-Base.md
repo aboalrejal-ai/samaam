@@ -14,6 +14,11 @@
    - المسوغات النظامية الست لمعالجة البيانات
    - حقوق أصحاب البيانات وضوابط البيانات الصحية الحساسة
    - العقوبات والمسؤولية الجنائية
+3. **[الجزء الثالث: الإطار التنظيمي والإكلينيكي للأشعة المقطعية والصبغة اليودية](#الجزء-الثالث-الإطار-التنظيمي-والإكلينيكي-للأشعة-المقطعية-والصبغة-اليودية-health--radiology)**
+   - تصنيف SFDA للبرمجيات المتحكمة بأجهزة الأشعة (القاعدة 10 — فئة C)
+   - عتبات وظائف الكلى وإدارة الميتفورمين وحدود الصبغة
+   - تبرير الجرعة الإشعاعية وتحسينها (NRRC / IAEA)
+   - مصفوفة الثغرات التنظيمية الست
 
 ---
 
@@ -541,3 +546,553 @@ Organizations falling under statutory registration criteria—including educatio
 25. Saudi  Arabia  Data  Protection  Laws  and  Regulations 2026 - ICLG, https://iclg.com/practice-areas/data-protection-laws-and-regulations/saudi-arabia/
 
 26. Open  Data - وزارة  التعليم, https://www.moe.gov.sa/en/knowledgecenter/dataandstats/Pages/opendata.aspx
+
+---
+
+# الجزء الثالث: الإطار التنظيمي والإكلينيكي للأشعة المقطعية والصبغة اليودية (Health & Radiology)
+
+> مجمَّع من ثلاث عمليات بحث عميق مستقلة (Gemini · ChatGPT · Perplexity)، محفوظة كاملة في `docs/research/` للتتبع.
+> تاريخ التجميع: 2026-08-29 — عدد السجلات: 34
+
+## ⚖️ قاعدة الاستشهاد الحاكمة
+
+لكل سجل حالة تحقق، وعقدة السياسات (P) ملزمة بها:
+
+| الحالة | المعنى | ماذا يُسمح به |
+| :--- | :--- | :--- |
+| ✅ **VERIFIED** | النص موجود في مصدر أولي محدد | يجوز الاستناد إليه في الحجب |
+| ⚠️ **UNVERIFIED** | الوثيقة معروفة لكن نصها أو أرقامها لم تُسترجع | **يُمنع** الحجب استناداً إليه — يُصنَّف `INSUFFICIENT_EVIDENCE` |
+| 🕓 **HISTORICAL** | إصدار متجاوَز | للتتبع فقط، لا للتطبيق |
+
+**النتيجة الحاكمة للمشروع كله:** لا يوجد نص سعودي أولي يقرّ عتبات eGFR رقمية للصبغة اليودية. القيم ٣٠ و ٤٥ mL/min/1.73m² مهنية دولية (ACR 2026 و RANZCR)، لا نظامية سعودية. لذلك يعرض صمّام الحجب بوصفه **قاعدة إكلينيكية معتمدة مؤسسياً** مع إظهار مصدرها وإصدارها، ولا يعرضه أبداً بوصفه مخالفة لنظام سعودي. تجاوز هذا التمييز هو بالضبط ما يسمّيه الهاكاثون هلوسة تنظيمية.
+
+---
+
+## ١. تصنيف الأجهزة الطبية والبرمجيات (SFDA)
+
+### `SFDA-MDMA-R10` — Requirements for Medical Devices Marketing Authorization (MDS-REQ1) — Classification Rule 10
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Rule 10 — active devices for diagnosis
+- **عقدة Y.3172:** `P`
+
+> Devices intended to control, monitor, or directly influence the performance of diagnostic or therapeutic ionizing-radiation equipment are classified as Class C.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations/68759
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** الحكم المباشر على صمّام: البرمجية التي تؤثر في تشغيل جهاز أشعة تشخيصية = فئة C.
+
+### `SFDA-MDMA-R11` — Requirements for Medical Devices Marketing Authorization (MDS-REQ1) — Classification Rule 11
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Rule 11 — decision-support software
+- **عقدة Y.3172:** `P`
+
+> Software intended to provide information used to take decisions for diagnosis or therapeutic purposes is Class B, escalating to Class C or Class D according to the potential consequence of the decision.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations/68759
+- **السنة:** 2021 · **اللغة:** English
+
+### `SFDA-MDS-G23-SAMD` — Guidance on Software as a Medical Device (MDS-G23)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Section 5.1 — Software as a Medical Device
+- **عقدة Y.3172:** `P`
+
+> SaMD is defined as software intended to be used for one or more medical purposes that perform these purposes without being part of a hardware medical device.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2020-03/MDS_G23.pdf
+- **السنة:** 2018 · **اللغة:** English
+
+### `SFDA-MDLAW-M54` — Medical Devices Law, Royal Decree M/54
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA / Council of Ministers
+- **الموضع:** Legal basis of the MDMA framework
+- **عقدة Y.3172:** `P`
+
+> MDS-REQ1 expressly bases the Medical Device Marketing Authorization framework on the Medical Devices Law issued by Royal Decree M/54 and its Implementing Regulation.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations/68759
+- **السنة:** 2021 · **اللغة:** English
+
+---
+
+## ٢. تنظيم الذكاء الاصطناعي في الأجهزة الطبية (SFDA)
+
+### `SFDA-MDS-G010-PURPOSE` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Section 3 — Purpose
+- **عقدة Y.3172:** `P`
+
+> The purpose of the MDS-G010 is to clarify the requirements for obtaining Medical Device Marketing Authorization (MDMA) for AI/ML-based medical devices to place them on the market in KSA.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+### `SFDA-MDS-G010-CLINEVAL` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Section 7 — Clinical Evaluation
+- **عقدة Y.3172:** `P`
+
+> Manufacturers must generate evidence to demonstrate (a) a valid clinical association, (b) analytical/technical validation, and (c) clinical validation of the AI-based medical device.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+### `SFDA-MDS-G010-RISK` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Risk Management
+- **عقدة Y.3172:** `P`
+
+> AI medical devices may pose risks that could jeopardize patient health and safety, increase inequalities and inefficiencies, undermine trust in healthcare, and adversely impact the management of healthcare.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+### `SFDA-MDS-G010-QMS` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Quality Management System
+- **عقدة Y.3172:** `D`
+
+> AI medical devices shall be designed and manufactured in accordance with ISO 13485 (Medical Devices Quality Management System).
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+---
+
+## ٣. الرقابة البشرية وتفاعل الإنسان والحاسب
+
+### `SFDA-MDS-G027` — Guidance on Digital Health Products (MDS-G027)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Human oversight requirements
+- **عقدة Y.3172:** `P`
+
+> Digital health products must define healthcare-professional roles and provide safeguards for human review and intervention.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations
+- **السنة:** 2024 · **اللغة:** English
+
+**ملاحظة:** الأساس النظامي لاشتراط موافقة الاستشاري في صمّام.
+
+### `SFDA-MDS-G010-HCI` — Guidance on AI and ML Technologies Based Medical Devices (MDS-G010)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** Human-computer interaction
+- **عقدة Y.3172:** `P`
+
+> Requires examination of human-computer interaction, user trust and behaviour, possible undue influence by interface design, human oversight, and hand-off concepts for autonomous systems.
+
+- **المصدر:** https://www.sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf
+- **السنة:** 2022 · **اللغة:** English
+
+**ملاحظة:** يغطي مباشرةً فرضية الفني المرهق — التأثير غير المبرر لتصميم الواجهة.
+
+---
+
+## ٤. الصبغة اليودية وسلامة وظائف الكلى
+
+### `ACR-2026-EGFR45` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Post-Contrast Acute Kidney Injury — renal risk stratification
+- **عقدة Y.3172:** `P`
+
+> For stable renal function, intravenous iodinated contrast is not considered an independent nephrotoxic risk at eGFR >= 45 mL/min/1.73 m2.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+**ملاحظة:** عتبة إكلينيكية مهنية، وليست نصاً نظامياً سعودياً.
+
+### `ACR-2026-EGFR3044` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Post-Contrast Acute Kidney Injury — renal risk stratification
+- **عقدة Y.3172:** `P`
+
+> At stable eGFR 30-44 mL/min/1.73 m2, IV iodinated contrast is either not nephrotoxic or only rarely nephrotoxic. Routine prophylaxis is not mandated, but may be considered individually when additional high-risk circumstances exist.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+### `ACR-2026-EGFR30` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Prophylactic volume expansion
+- **عقدة Y.3172:** `P`
+
+> Prophylactic volume expansion is indicated for acute kidney injury or severe chronic kidney disease with eGFR < 30 mL/min/1.73 m2, unless the risk of fluid administration (such as heart failure or hypervolemia) outweighs the benefit. The ACR evidence review states that 30 mL/min/1.73 m2 is the best-supported threshold if a single threshold is used.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+**ملاحظة:** العتبة المحورية في السيناريو الثاني للديمو.
+
+### `ACR-2026-HYDRATION` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Prophylactic fluid regimens
+- **عقدة Y.3172:** `M`
+
+> Isotonic saline is the preferred prophylactic fluid. Typical approaches include fixed-volume regimens or approximately 1-3 mL/kg/hour; longer regimens generally provide more protection but are often operationally impractical.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+### `ACR-2026-METFORMIN-OK` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Metformin management
+- **عقدة Y.3172:** `P`
+
+> With no acute kidney injury and eGFR >= 30 mL/min/1.73 m2, ACR does not require stopping metformin for ordinary IV iodinated contrast, and does not require obligatory post-procedure renal reassessment solely for metformin.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+### `ACR-2026-METFORMIN-STOP` — ACR Manual on Contrast Media, 2026 edition
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** American College of Radiology
+- **الموضع:** Metformin management
+- **عقدة Y.3172:** `P`
+
+> With acute kidney injury, eGFR < 30 mL/min/1.73 m2, or specified arterial catheter procedures carrying renal embolic risk, metformin is stopped at or before the procedure, withheld for 48 hours, and restarted only after renal function is reassessed.
+
+- **المصدر:** https://www.acr.org/Clinical-Resources/Contrast-Manual
+- **السنة:** 2026 · **اللغة:** English
+
+### `ESUR-2025` — ESUR Contrast Media Safety Committee Guidelines 2025
+
+- **الحالة:** ⚠️ غير موثق
+- **الجهة المصدرة:** European Society of Urogenital Radiology
+- **الموضع:** Renal chapter, pp. 15-18
+- **عقدة Y.3172:** `P`
+
+> The current ESUR guideline document was verified as existing and released November 2025; its renal chapter spans pp. 15-18. The numeric renal paragraphs were NOT successfully extracted during primary-source capture.
+
+- **المصدر:** https://www.esur.org/esur-guidelines-on-contrast-agents/
+- **السنة:** 2025 · **اللغة:** English
+
+**ملاحظة:** لا تُستخدم أرقام ESUR 2018 كأنها 2025.
+
+### `ESUR-10-RATIO` — ESUR Guidelines on Contrast Agents, version 10.0
+
+- **الحالة:** 🕓 تاريخي
+- **الجهة المصدرة:** European Society of Urogenital Radiology
+- **الموضع:** Contrast volume to renal function ratio
+- **عقدة Y.3172:** `P`
+
+> Version 10.0 (2018) contained an explicit contrast-volume-to-renal-function ratio. Retained here as a historical record only; it must not be implemented as a current ESUR or Saudi statutory rule.
+
+- **المصدر:** https://www.esur.org/esur-guidelines-on-contrast-agents/
+- **السنة:** 2018 · **اللغة:** English
+
+**ملاحظة:** النسبة نفسها (Volume/eGFR و g-Iodine/eGFR) وردت مبتورة في تقرير Gemini — الأرقام بعد إشارة '<' مقصوصة في الصور المصدّرة وغير قابلة للاستعادة.
+
+### `RANZCR-EVIQ-BANDS` — eviQ / RANZCR — Risk of CI-AKI based on eGFR
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Cancer Institute NSW (citing RANZCR)
+- **الموضع:** Table 1.0
+- **عقدة Y.3172:** `P`
+
+> > 45 mL/min/1.73 m2: risk likely non-existent. 30-45 mL/min/1.73 m2: very likely to be low or non-existent. < 30 mL/min/1.73 m2 (severe renal function impairment): highest risk of CI-AKI.
+
+- **المصدر:** https://www.eviq.org.au/clinical-resources/radiation-oncology/contrast-administration/4299-contrast-media-renal-adverse-events
+- **السنة:** 2023 · **اللغة:** English
+
+**ملاحظة:** مصدر مستقل يؤكد نطاقات ACR الثلاثة — مهم لأن مصدرين متفقين أقوى من واحد.
+
+### `MOH-CONTRAST-PROTOCOL` — Protocols on the Safe Use of Contrast Media in Radiology Departments
+
+- **الحالة:** ⚠️ غير موثق
+- **الجهة المصدرة:** Saudi Ministry of Health
+- **الموضع:** Full document (55 pages)
+- **عقدة Y.3172:** `SRC`
+
+> A Saudi MoH document with this exact title, Riyadh 2021, 55 pages, is confirmed by citation. The full PDF is not publicly accessible. Its eGFR thresholds, hydration protocols and metformin rules therefore CANNOT be verified from the Saudi primary source.
+
+- **المصدر:** https://www.moh.gov.sa/en/ministry/mediacenter/publications/pages/protocols.aspx
+- **السنة:** 2021 · **اللغة:** Arabic/English
+
+**ملاحظة:** أهم وثيقة مفقودة في المشروع كله. الحصول عليها يحوّل كل عتبات الصبغة من مهنية دولية إلى نظامية سعودية.
+
+---
+
+## ٥. تبرير الجرعة الإشعاعية وتحسينها
+
+### `SFDA-MDS-G008-DRL` — National Diagnostic Reference Levels (MDS-G008), version 2.0
+
+- **الحالة:** ⚠️ غير موثق
+- **الجهة المصدرة:** SFDA
+- **الموضع:** CT dose reference tables
+- **عقدة Y.3172:** `P`
+
+> A Saudi national DRL instrument titled 'National Diagnostic Reference Levels (MDS-G008), v2.0, 26 October 2022' is consistently identified in the regulatory literature. The primary SFDA PDF and its numeric CT tables were NOT recovered by any of the three research passes.
+
+- **المصدر:** https://www.sfda.gov.sa/en/regulations/national-diagnostic-reference-levels
+- **السنة:** 2022 · **اللغة:** English
+
+**ملاحظة:** التقرير الثاني أورد أرقاماً (55.0 mGy / 950 mGy·cm للرأس، 12.0/400 للصدر، 15.0/650 للبطن والحوض، 8.0/250 لـ HRCT) لكن التقريرين الآخرين صرّحا بعدم التمكن من الوصول للـ PDF الأصلي. تُعامل الأرقام كغير موثقة.
+
+### `NRRC-R-01-SCOPE` — Radiation Safety Regulation (NRRC-R-01)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Nuclear and Radiological Regulatory Commission
+- **الموضع:** General Provisions, Items 3-5
+- **عقدة Y.3172:** `P`
+
+> This regulation shall be applicable to occupational, public and medical exposure in the Kingdom. The safety requirements set forth in this regulation shall apply to any person involved in activities and facilities including practices defined under the Law.
+
+- **المصدر:** https://nrrc.gov.sa/
+- **السنة:** 2022 · **اللغة:** English
+
+### `NRRC-R-01-CH12` — Radiation Safety Regulation (NRRC-R-01)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** Nuclear and Radiological Regulatory Commission
+- **الموضع:** Chapter 12, Sections 67-72 — Medical Exposure
+- **عقدة Y.3172:** `P`
+
+> Chapter 12 governs Medical Exposure. Section 68 requires justification of medical exposures; Section 72 requires optimization of protection and safety. Dose limits do not apply to medical exposures of patients; control is exercised through justification, optimisation (ALARA) and Diagnostic Reference Levels.
+
+- **المصدر:** https://nrrc.gov.sa/
+- **السنة:** 2022 · **اللغة:** English
+
+**ملاحظة:** الأساس النظامي لمطالبة صمّام بتبرير كل فحص — بما فيه اقتراح بديل غير مؤيّن.
+
+### `IAEA-GSR3` — IAEA Safety Standards GSR Part 3 / ICRP framework
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** IAEA / ICRP
+- **الموضع:** Justification and optimisation of medical exposure
+- **عقدة Y.3172:** `P`
+
+> NRRC-R-01 formally adopts the international radiation protection framework established by IAEA Safety Standards GSR Part 3 and the ICRP. Justification requires that diagnostic efficacy outweighs stochastic radiation detriment, accounting for available non-ionizing alternatives such as MRI or ultrasound.
+
+- **المصدر:** https://www.iaea.org/publications/8930/radiation-protection-and-safety-of-radiation-sources-international-basic-safety-standards
+- **السنة:** 2014 · **اللغة:** English
+
+---
+
+## ٦. حماية البيانات الصحية
+
+### `PDPL-ART1-11` — Personal Data Protection Law (PDPL)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Article 1(11) — Sensitive Data
+- **عقدة Y.3172:** `PP`
+
+> Sensitive Data: Personal Data revealing racial or ethnic origin, or religious, intellectual or political belief, ... biometric or Genetic Data ... Health Data, and data that indicates that one or both of the individual's parents are unknown.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
+- **السنة:** 2023 · **اللغة:** English
+
+### `PDPL-ART1-13` — Personal Data Protection Law (PDPL)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Article 1(13) — Health Data
+- **عقدة Y.3172:** `PP`
+
+> Health Data: Any Personal Data related to an individual's health condition, whether their physical, mental or psychological conditions, or related to Health Services received by that individual.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
+- **السنة:** 2023 · **اللغة:** English
+
+### `PDPL-ART1-13-AR` — نظام حماية البيانات الشخصية
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA / هيئة الخبراء بمجلس الوزراء
+- **الموضع:** المادة الأولى — التعريفات — البيانات الصحية
+- **عقدة Y.3172:** `PP`
+
+> البيانات الصحية: كل بيانات شخصية تتعلق بالحالة الصحية للفرد، سواء حالته البدنية أو العقلية أو النفسية، أو ما يتعلق بالخدمات الصحية التي تلقاها.
+
+- **المصدر:** https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/b7cfae89-828e-4994-b167-adaa00e37188/1
+- **السنة:** 2023 · **اللغة:** Arabic
+
+**ملاحظة:** النص العربي الرسمي من بوابة هيئة الخبراء — أقوى مرجع للعرض أمام لجنة سعودية.
+
+### `PDPL-ART23` — Personal Data Protection Law (PDPL)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Article 23(1-2) — Health Data controls
+- **عقدة Y.3172:** `P`
+
+> Restricting the right to access Health Data, including medical files, to the minimum number of employees or workers ... Restricting Health Data Processing procedures and operations to the minimum extent possible of employees and workers as necessary to provide Health Services.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
+- **السنة:** 2023 · **اللغة:** English
+
+**ملاحظة:** الأساس النظامي للسيناريو الثالث — الحظر الصارم عند محاولة تصدير بيانات المرضى.
+
+### `PDPL-ART22` — Personal Data Protection Law (PDPL)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Article 22 — Impact assessment
+- **عقدة Y.3172:** `D`
+
+> The Controller shall conduct an impact assessment of Personal Data Processing in relation to any product or service, based on the nature of the activity carried out by the Controller.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
+- **السنة:** 2023 · **اللغة:** English
+
+### `PDPL-ART29` — Personal Data Protection Law (PDPL)
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Article 29(2)(B-C) — Cross-border transfer
+- **عقدة Y.3172:** `P`
+
+> There is an adequate level of protection for Personal Data outside the Kingdom ... The Transfer or Disclosure shall be limited to the minimum amount of Personal Data needed.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/Personal%20Data%20English%20V2-23April2023-%20Reviewed-.pdf
+- **السنة:** 2023 · **اللغة:** English
+
+---
+
+## ٧. القرارات الآلية
+
+### `PDPL-IR-AUTO` — Implementing Regulation of the Personal Data Protection Law
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** SDAIA
+- **الموضع:** Automated processing provisions
+- **عقدة Y.3172:** `P`
+
+> The Implementing Regulation requires transparency around solely automated decisions, explicit consent in the specified automated-processing context, and DPIAs for automated or new-technology processing in the stated circumstances.
+
+- **المصدر:** https://sdaia.gov.sa/en/SDAIA/about/Documents/ImplementingRegulationPersonalDataProtectionLaw.pdf
+- **السنة:** 2023 · **اللغة:** English
+
+**ملاحظة:** ينظّم الشفافية لا المسؤولية الطبية — وهذا جوهر الفجوة التي يرصدها المشروع.
+
+---
+
+## ٨. الحوكمة الدولية للذكاء الاصطناعي الصحي
+
+### `WHO-2021-PRINCIPLES` — Ethics and governance of artificial intelligence for health
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** World Health Organization
+- **الموضع:** Six core principles
+- **عقدة Y.3172:** `P`
+
+> The six core principles are: (1) Protect autonomy; (2) Promote human well-being, human safety, and the public interest; (3) Ensure transparency, explainability, and intelligibility; (4) Foster responsibility and accountability; (5) Ensure inclusiveness and equity; (6) Promote AI that is responsive and sustainable.
+
+- **المصدر:** https://www.who.int/publications/i/item/9789240029200
+- **السنة:** 2021 · **اللغة:** English
+
+**ملاحظة:** الوثيقة موجودة محلياً: kb/sources/WHO_Ethics_Governance_AI_Health.pdf
+
+### `WHO-2023-LMM` — Ethics and governance of AI for health: Guidance on large multi-modal models
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** World Health Organization
+- **الموضع:** Principles summary
+- **عقدة Y.3172:** `P`
+
+> The principles are: (1) protect autonomy; (2) promote human well-being, human safety and the public interest; (3) ensure transparency, explainability and intelligibility; (4) foster responsibility and accountability; (5) ensure inclusiveness and equity; and (6) promote AI that is responsive and sustainable.
+
+- **المصدر:** https://iris.who.int/server/api/core/bitstreams/e9e62c65-6045-481e-bd04-20e206bc5039/content
+- **السنة:** 2023 · **اللغة:** English
+
+---
+
+## ٩. المعايير القياسية
+
+### `ITU-Y3172` — ITU-T Y.3172 — Architectural framework for machine learning in future networks
+
+- **الحالة:** ✅ موثق
+- **الجهة المصدرة:** ITU-T
+- **الموضع:** Logical node architecture
+- **عقدة Y.3172:** `P`
+
+> Defines the logical pipeline of machine-learning nodes: Source, Collector, Preprocessor, Model, Policy, Distributor and Sink. The Policy node applies operator-defined constraints to model output before it reaches the sink.
+
+- **المصدر:** https://www.itu.int/rec/T-REC-Y.3172/en
+- **السنة:** 2019 · **اللغة:** English
+
+**ملاحظة:** الوثيقة موجودة محلياً: kb/sources/ITU-T_Y.3172_standard.pdf
+
+---
+
+## 🕳️ مصفوفة الثغرات التنظيمية المكتشفة
+
+هذه الثغرات مستخرجة من البحث لا مخترعة، وكل واحدة مسنودة بغياب موثق لنص.
+
+### `GAP-01` — لا توجد عتبة eGFR سعودية نظامية
+
+**ما وُجد:** القيمتان 30 و 45 mL/min/1.73m² موثقتان دولياً (ACR 2026، RANZCR/eviQ) لكن لا يوجد نص سعودي أولي يقرّهما. بروتوكول وزارة الصحة 2021 مؤكد بعنوانه فقط ولم يُتَح نصه.
+
+**الأثر على صمّام:** صمّام لا يجوز أن يعرض الحجب كـ«مخالفة نظام سعودي». يعرضه كـ«قاعدة إكلينيكية معتمدة مؤسسياً — ACR 2026» مع إظهار المصدر والإصدار في سجل القرار.
+
+**التوصية لصانع القرار:** إلزام أنظمة دعم القرار بتسجيل مصدر كل عتبة وإصدارها (rule provenance)، وإصدار وزارة الصحة بروتوكولاً وطنياً منشوراً يحسم القيم.
+
+### `GAP-02` — المسؤولية عند قبول فني مرهق لتوصية آلية
+
+**ما وُجد:** نظام SFDA يشترط دراسة تفاعل الإنسان والحاسب والتأثير غير المبرر لتصميم الواجهة وآليات الرقابة البشرية، لكنه لا يحدد على من تقع المسؤولية عند وقوع الضرر.
+
+**الأثر على صمّام:** أقوى فجوة في المشروع — تربط فكرة فيصل (الاحتراق الوظيفي) بفراغ تشريعي حقيقي موثق.
+
+**التوصية لصانع القرار:** نص يوزّع المسؤولية بين المصنّع والمنشأة والفني والاستشاري، ويشترط توقيعاً رقمياً موثقاً قبل تجاوز أي تنبيه أمان.
+
+### `GAP-03` — لا توجد قيم DRL سعودية متاحة للتحقق
+
+**ما وُجد:** MDS-G008 موثقة كأداة وطنية للمستويات المرجعية التشخيصية، لكن الـ PDF وجداول الـ CT لم تُستَرجع في أي من الأبحاث الثلاثة.
+
+**الأثر على صمّام:** لا يجوز لصمّام أن يحجب بناءً على تجاوز DRL سعودي، لأننا لا نملك القيم موثقة.
+
+**التوصية لصانع القرار:** نشر MDS-G008 كبيانات مفتوحة قابلة للقراءة الآلية.
+
+### `GAP-04` — لا سقف تراكمي لجرعة مرضى الأورام
+
+**ما وُجد:** لا يوجد نص سعودي يضع حداً تراكمياً لجرعة الأشعة للمرضى الذين يُصوَّرون تكراراً في المتابعة الأورامية.
+
+**الأثر على صمّام:** مبدأ التبرير يُطبَّق لكل فحص على حدة، ولا يغطي التراكم عبر رحلة العلاج.
+
+**التوصية لصانع القرار:** إضافة اشتراط تتبع الجرعة التراكمية في السجل الصحي الموحد.
+
+### `GAP-05` — التحكم الآلي بالجهاز منظَّم أكثر من المساءلة الإكلينيكية
+
+**ما وُجد:** القاعدة 10 لدى SFDA تصنّف بوضوح البرمجيات المؤثرة في أجهزة الأشعة كفئة C، لكن لا يوجد نص يفرض تأكيد الطبيب قبل تعديل kVp/mAs أو جرعة الصبغة، ولا يحدد حدود التشغيل الذاتي المسموح بها، ولا يوثّق المسؤولية عند تجاهل التنبيهات.
+
+**الأثر على صمّام:** المسار التنظيمي لتسجيل صمّام واضح؛ الغائب هو طبقة الحوكمة التشغيلية.
+
+**التوصية لصانع القرار:** لائحة تشغيلية تُلزم بتسجيل كل تجاوز (override) وربطه بهوية المعتمِد.
+
+### `GAP-06` — قانون البيانات ليس قانون الأخطاء الطبية
+
+**ما وُجد:** اللائحة التنفيذية لنظام حماية البيانات تعالج شفافية القرارات الآلية، لكنها لا تحدد هل يجوز للطبيب أو الفني تفويض الحكم الإكلينيكي لنظام آلي، ولا من يتحمل التعويض عند الخطأ.
+
+**الأثر على صمّام:** الاعتماد على PDPL وحده لتبرير سلامة النظام الطبي خطأ منهجي.
+
+**التوصية لصانع القرار:** تكامل صريح بين نظام حماية البيانات وأنظمة المهن الصحية.
+
