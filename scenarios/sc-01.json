@@ -1,0 +1,61 @@
+{
+  "id": "SC-01",
+  "name": "التدفق الطبيعي",
+  "name_en": "Baseline / Compliant Path",
+  "expected_verdict": "COMPLIANT",
+  "patient": {
+    "synthetic": true,
+    "sex": "male",
+    "age": 58,
+    "weight_kg": 82,
+    "diagnosis": "Non-small cell lung cancer, post-treatment surveillance",
+    "serum_creatinine_umol_l": 90,
+    "egfr": 81.4,
+    "egfr_method": "CKD-EPI as mandated by MOH-CM-EGFR-METHOD",
+    "medications": [
+      "carboplatin (completed 4 months ago)"
+    ],
+    "on_metformin": false,
+    "aki": false
+  },
+  "requested": {
+    "study": "CT Chest with contrast",
+    "kvp": 120,
+    "mas": 180,
+    "ctdivol_mgy": 9.5,
+    "dlp_mgy_cm": 365,
+    "contrast_agent": "Iohexol",
+    "iodine_mg_per_ml": 350,
+    "volume_ml": 85,
+    "flow_rate_ml_s": 3.0,
+    "saline_flush_ml": 30
+  },
+  "expected_checks": [
+    {
+      "rule": "national_drl",
+      "status": "PASS",
+      "detail": "CTDIvol 9.5 <= 12 and DLP 365 <= 430 (chest)",
+      "cites": [
+        "SFDA-MDS-G008-DRL",
+        "SFDA-DRL-BINDING"
+      ]
+    },
+    {
+      "rule": "renal_prophylaxis",
+      "status": "PASS",
+      "detail": "eGFR 81.4 >= 30; prophylaxis not indicated",
+      "cites": [
+        "MOH-CM-PROPHYLAXIS"
+      ]
+    },
+    {
+      "rule": "metformin",
+      "status": "NOT_APPLICABLE",
+      "detail": "Patient not on metformin",
+      "cites": [
+        "MOH-CM-METFORMIN"
+      ]
+    }
+  ],
+  "expected_action": "Forward the Modality Worklist entry to the scanner. Attach citations to the audit log."
+}

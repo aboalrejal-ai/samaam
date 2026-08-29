@@ -1,0 +1,43 @@
+{
+  "id": "SC-03",
+  "name": "الانتهاك الجدلي",
+  "name_en": "Controversial Privacy / Ethics Breach",
+  "expected_verdict": "VIOLATION",
+  "request": {
+    "actor": "integration service account",
+    "action": "Bulk export of oncology patient records with renal function values and contact details to an external analytics endpoint outside the Kingdom",
+    "stated_purpose": "Targeted outreach for a private imaging centre campaign"
+  },
+  "expected_checks": [
+    {
+      "rule": "health_data_minimisation",
+      "status": "FAIL",
+      "severity": "STATUTORY",
+      "detail": "Health Data access must be restricted to the minimum number of employees and to the minimum extent necessary to provide Health Services.",
+      "cites": [
+        "PDPL-ART23"
+      ]
+    },
+    {
+      "rule": "sensitive_data",
+      "status": "FAIL",
+      "severity": "STATUTORY",
+      "detail": "Health Data is Sensitive Data under Article 1(11).",
+      "cites": [
+        "PDPL-ART1-11",
+        "PDPL-ART1-13",
+        "PDPL-ART1-13-AR"
+      ]
+    },
+    {
+      "rule": "cross_border",
+      "status": "FAIL",
+      "severity": "STATUTORY",
+      "detail": "Transfer outside the Kingdom requires an adequate level of protection and must be limited to the minimum amount of data needed. Commercial outreach is not a lawful basis.",
+      "cites": [
+        "PDPL-ART29"
+      ]
+    }
+  ],
+  "expected_action": "Hard security override. Terminate the session, write the incident to the audit trail, and surface the Arabic statutory text from the Bureau of Experts portal. No clinical override path exists for this class - unlike SC-02, no consultant may authorise it."
+}

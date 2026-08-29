@@ -1,0 +1,94 @@
+{
+  "id": "SC-02",
+  "name": "الانحراف التشغيلي",
+  "name_en": "Operational Drift / Edge Case",
+  "expected_verdict": "VIOLATION",
+  "patient": {
+    "synthetic": true,
+    "sex": "female",
+    "age": 63,
+    "weight_kg": 68,
+    "diagnosis": "Metastatic colorectal cancer, restaging after FOLFOX",
+    "serum_creatinine_umol_l": 168,
+    "egfr": 27.7,
+    "egfr_method": "CKD-EPI as mandated by MOH-CM-EGFR-METHOD",
+    "medications": [
+      "oxaliplatin (active FOLFOX regimen)",
+      "metformin 1000 mg BD",
+      "ibuprofen PRN"
+    ],
+    "on_metformin": true,
+    "aki": false,
+    "note": "oxaliplatin is a platinum compound. MOH-CM-NEPHROTOXIC names 'platins' explicitly."
+  },
+  "requested": {
+    "study": "CT Abdomen & Pelvis with contrast",
+    "kvp": 120,
+    "mas": 260,
+    "ctdivol_mgy": 18.0,
+    "dlp_mgy_cm": 900,
+    "contrast_agent": "Iohexol",
+    "iodine_mg_per_ml": 350,
+    "volume_ml": 120,
+    "flow_rate_ml_s": 4.0,
+    "saline_flush_ml": 40,
+    "prophylaxis_ordered": false,
+    "metformin_held": false
+  },
+  "expected_checks": [
+    {
+      "rule": "national_drl",
+      "status": "FAIL",
+      "severity": "STATUTORY",
+      "detail": "CTDIvol 18.0 > 14 and DLP 900 > 706 for adult abdomen & pelvis. Binding on providers by Royal Decree 60057 approving Health Council Resolution 3/88.",
+      "cites": [
+        "SFDA-MDS-G008-DRL",
+        "SFDA-DRL-BINDING"
+      ]
+    },
+    {
+      "rule": "renal_prophylaxis",
+      "status": "FAIL",
+      "severity": "NATIONAL_PROTOCOL",
+      "detail": "eGFR 27.7 < 30 and not on maintenance dialysis. Patient is eligible for prophylaxis, none ordered. CA-AKI risk in this band is approximately 30%.",
+      "cites": [
+        "MOH-CM-PROPHYLAXIS",
+        "MOH-CM-RISK-BANDS"
+      ]
+    },
+    {
+      "rule": "metformin",
+      "status": "FAIL",
+      "severity": "NATIONAL_PROTOCOL",
+      "detail": "Category II: eGFR < 30 with metformin. Must be stopped at or before the exam and suspended 48 hours, not reinstituted until renal function normalises.",
+      "cites": [
+        "MOH-CM-METFORMIN"
+      ]
+    },
+    {
+      "rule": "nephrotoxic_meds",
+      "status": "WARN",
+      "detail": "Active platinum chemotherapy plus NSAID at eGFR < 30. Protocol advises withholding non-essential nephrotoxic agents 24-48h before and 48h after.",
+      "cites": [
+        "MOH-CM-NEPHROTOXIC"
+      ]
+    }
+  ],
+  "expected_action": "Withhold the Modality Worklist entry; the device API returns 403 Policy Violation. Present the corrected protocol below. Release requires a named consultant override, recorded in the audit trail. Override remains available because MOH-CM-CKD45 makes stage 4-5 CKD a relative, not absolute, contraindication.",
+  "safe_alternative": {
+    "study": "CT Abdomen & Pelvis, dose-optimised",
+    "kvp": 100,
+    "mas": 170,
+    "ctdivol_mgy": 13.0,
+    "dlp_mgy_cm": 660,
+    "contrast_agent": "Iohexol",
+    "iodine_mg_per_ml": 350,
+    "volume_ml": 85,
+    "flow_rate_ml_s": 3.0,
+    "saline_flush_ml": 40,
+    "prophylaxis": "Isotonic saline prophylaxis per MOH protocol prior to and after the study",
+    "metformin": "Hold metformin at the exam and for 48 hours; reassess renal function before restarting",
+    "consider": "Non-contrast CT or MRI if the clinical question permits",
+    "provenance": "Dose values placed under the national DRL. Contrast volume reduced toward routine practice, NOT presented as a regulatory limit - no Saudi or ACR text sets an eGFR-based volume ceiling."
+  }
+}
