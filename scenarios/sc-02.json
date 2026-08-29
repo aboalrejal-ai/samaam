@@ -6,11 +6,11 @@
   "patient": {
     "synthetic": true,
     "sex": "female",
-    "age": 63,
-    "weight_kg": 68,
-    "diagnosis": "Metastatic colorectal cancer, restaging after FOLFOX",
-    "serum_creatinine_umol_l": 168,
-    "egfr": 27.7,
+    "age": 62,
+    "weight_kg": 70,
+    "diagnosis": "Metastatic colorectal cancer — CT chest/abdomen/pelvis for staging and treatment response",
+    "serum_creatinine_umol_l": 229.8,
+    "egfr": null,
     "egfr_method": "CKD-EPI as mandated by MOH-CM-EGFR-METHOD",
     "medications": [
       "oxaliplatin (active FOLFOX regimen)",
@@ -19,20 +19,20 @@
     ],
     "on_metformin": true,
     "aki": false,
-    "note": "oxaliplatin is a platinum compound. MOH-CM-NEPHROTOXIC names 'platins' explicitly."
+    "note": "Creatinine stated by the reviewing radiologist as 2.6 mg/dL, converted at 88.4. Their hand estimate was eGFR 22; the CKD-EPI equation the MOH protocol prints (p. 21) returns 19.1 from the same creatinine. Samaam reports its own computation rather than a number entered upstream — the difference between estimating equations is exactly why it recomputes. Either value is severe CKD."
   },
   "requested": {
-    "study": "CT Abdomen & Pelvis with contrast",
+    "study": "CT Chest, Abdomen & Pelvis with contrast",
     "body_region": "abdomen_pelvis",
     "kvp": 120,
-    "mas": 260,
+    "mas": 400,
     "ctdivol_mgy": 18.0,
     "dlp_mgy_cm": 900,
     "contrast_agent": "Iohexol",
     "iodine_mg_per_ml": 350,
-    "volume_ml": 120,
-    "flow_rate_ml_s": 4.0,
-    "saline_flush_ml": 40,
+    "volume_ml": 150,
+    "flow_rate_ml_s": 5.0,
+    "saline_flush_ml": 50,
     "prophylaxis_ordered": false,
     "metformin_held": false
   },
@@ -75,7 +75,7 @@
       ]
     }
   ],
-  "expected_action": "Withhold the Modality Worklist entry; the device API returns 403 Policy Violation. Present the corrected protocol below. Release requires a named consultant override, recorded in the audit trail. Override remains available because MOH-CM-CKD45 makes stage 4-5 CKD a relative, not absolute, contraindication.",
+  "expected_action": "AUTHORISE",
   "safe_alternative": {
     "study": "CT Abdomen & Pelvis, dose-optimised",
     "body_region": "abdomen_pelvis",
@@ -91,6 +91,7 @@
     "prophylaxis": "Isotonic saline prophylaxis per MOH protocol prior to and after the study",
     "metformin": "Hold metformin at the exam and for 48 hours; reassess renal function before restarting",
     "consider": "Non-contrast CT or MRI if the clinical question permits",
-    "provenance": "Dose values placed under the national DRL. Contrast volume reduced toward routine practice, NOT presented as a regulatory limit - no Saudi or ACR text sets an eGFR-based volume ceiling."
-  }
+    "provenance": "No single contrast volume is correct for every patient — volume and rate follow the study, the patient's weight, the agent and the scanner protocol. Samaam therefore never blocks on volume. It holds on dose above the national investigation level and on the renal risk category, both of which are cited."
+  },
+  "expected_action_note": "Held for authorisation, not prohibited. Contrast may still be indicated in metastatic disease; the radiologist decides. Samaam stops the protocol from executing unreviewed."
 }

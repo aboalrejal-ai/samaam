@@ -250,5 +250,16 @@
     "ours": "Samaam maps here",
     "version": "Framework version {{v}}",
     "lead": "The official ITU framework, unmodified. The three highlighted dimensions are the ones this gateway carries evidence for."
+  },
+  "action": {
+    "PROCEED": "Proceed",
+    "CONFIRM": "Confirm to continue",
+    "AUTHORISE": "Authorisation required",
+    "PROHIBITED": "Prohibited",
+    "legend": "Action",
+    "PROCEED_lead": "Nothing stands in the way.",
+    "CONFIRM_lead": "A risk factor needs acknowledging before the scan proceeds.",
+    "AUTHORISE_lead": "Held for review. Not a prohibition — a radiologist decides.",
+    "PROHIBITED_lead": "No override path exists."
   }
 }

@@ -1,6 +1,6 @@
 # Samaam — 4-Minute Demo Script
 
-**Read at a calm pace.** **548 spoken words — 3:47 at a normal pace, 4:13 if you read slowly.**
+**Read at a calm pace.** **557 spoken words — 3:50 at a normal pace, 4:17 if you read slowly.**
 
 Time yourself once. If you land over four minutes, drop the **Knowledge base**
 section (0:35–1:05, 78 words) and go straight from the opening to the console.
@@ -59,16 +59,16 @@ nothing — which is an answer."
 
 > **[Click: Console → SC-02 → point at eGFR]**
 
-"A sixty-three year old cancer patient. This number is her kidney function.
- (point at **27.7**)
+"A sixty-two year old cancer patient. This case was written by a radiologist.
 
-Twenty-seven point seven — below thirty, where Saudi protocol requires extra
-precautions.
+This number is her kidney function.
+ (point at **19.1**)
 
-Samaam calculated it itself, using the formula printed in the Ministry protocol,
-page twenty-one.
+Nineteen. Severely reduced. Samaam calculated it itself, using the formula
+printed in the Ministry protocol, page twenty-one.
 
-The technologist sends the settings to the machine."
+Tired, the technologist picks the standard adult protocol. The technologist
+sends it to the machine."
 
 > **[Click: Send to the device]**
 
@@ -76,14 +76,21 @@ The technologist sends the settings to the machine."
 
 The request travels the seven nodes of the ITU standard — and then it stops.
 
-**Four hundred and three. Forbidden.** The scanner never received it.
+**Four hundred and three.** The scanner never received it.
 
-Four findings. The first is red and square: the radiation dose is above the
-national limit, and that limit is binding by Royal Decree. A legal violation.
+But read what it says. **Held for review. Not a prohibition — a radiologist
+decides.**
 
-The next three are amber and rounded — a Ministry protocol, national, but
-guidance, not a penalty. Samaam never mixes those two up, and the shapes differ
-so you can tell them apart even in black and white.
+That wording matters. No kidney number forbids this scan outright. A system that
+says *prohibited* at a lab value is replacing the doctor, and that is the thing
+doctors reject most.
+
+Four findings, and each says what it needs. Red means a named radiologist must
+approve. Amber means the operator confirms and continues.
+
+The red square badge is a legal matter — the radiation dose is above the
+national level. The amber ones depart from a Ministry protocol: national, but
+guidance, not a penalty. Samaam never mixes those two up.
 
 Every finding carries its source, and a link that opens the real document."
 
@@ -93,11 +100,7 @@ Every finding carries its source, and a link that opens the real document."
 
 > **[Click: Override and release → type a name → confirm]**
 
-"The block can be lifted, and it must be. Saudi protocol says this is a
-relative restriction, not an absolute one — if the scan is needed to save a
-life, it must not be refused.
-
-So a consultant can release it, but only by name."
+"So a radiologist reviews it — and releases it by name."
 
 > **[Show: HTTP 200, then point at the rail]**
 
@@ -151,6 +154,7 @@ Samaam. Thank you."
 | :--- | :--- |
 | صِمَام / Samaam | sa-MAAM |
 | eGFR | just say **"kidney function"** — never spell it out |
+| 19.1 | say **"nineteen"** — the decimal adds nothing aloud |
 | CTDIvol, DLP | say **"the radiation dose"** |
 | metformin | MET-for-min — or say **"a diabetes medicine"** |
 | oxaliplatin | **skip it.** Say "her chemotherapy" |

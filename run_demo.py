@@ -46,7 +46,8 @@ def run_one(s: Samaam, sc: dict, override: str | None) -> bool:
 
         for c in pol["checks"]:
             basis = f"{C['d']}[{c['basis']}]{C['0']}" if c["basis"] else ""
-            print(f"  {ICON[c['status']]} {c['rule']:<24} {basis}")
+            act = f"{C['d']}→ {c.get('action','')}{C['0']}"
+            print(f"  {ICON[c['status']]} {c['rule']:<24} {basis} {act}")
             if c["status"] == "FAIL":
                 print(f"     {C['d']}{c['detail'][:148]}{C['0']}")
 
@@ -88,15 +89,19 @@ def run_one(s: Samaam, sc: dict, override: str | None) -> bool:
 
     for c in pol["checks"]:
         basis = f"{C['d']}[{c['basis']}]{C['0']}" if c["basis"] else ""
-        print(f"  {ICON[c['status']]} {c['rule']:<20} {basis}")
+        act = f"{C['d']}→ {c.get('action','')}{C['0']}"
+        print(f"  {ICON[c['status']]} {c['rule']:<20} {basis} {act}")
         if c["status"] in ("FAIL", "WARN", "NO_EVIDENCE"):
             print(f"     {C['d']}{c['detail'][:150]}{C['0']}")
     print()
 
-    colour = C["g"] if not pol["blocked"] else C["r"]
+    ACTION = {"PROCEED": ("🟢", C["g"]), "CONFIRM": ("🟡", C["y"]),
+              "AUTHORISE": ("🔴", C["r"]), "PROHIBITED": ("⛔", C["r"])}
+    icon, colour = ACTION.get(pol.get("action", ""), ("", C["d"]))
     print(f"  {C['B']}الحكم:{C['0']} {colour}{pol['verdict']}{C['0']}"
-          f"    {C['B']}الجهاز:{C['0']} {colour}HTTP {dev['status']}{C['0']}"
-          f"  {C['d']}{dev.get('message', dev.get('error',''))[:52]}{C['0']}")
+          f"    {C['B']}الفعل:{C['0']} {colour}{icon} {pol.get('action','')}{C['0']}"
+          f"    {C['B']}الجهاز:{C['0']} {colour}HTTP {dev['status']}{C['0']}")
+    print(f"  {C['d']}{dev.get('message', dev.get('error',''))[:74]}{C['0']}")
     print(f"  {C['d']}الخصوصية: حُذفت {result['privacy']['identifiers_removed'] or 'لا معرّفات'}{C['0']}")
 
     if pol.get("explanation"):

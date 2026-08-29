@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
 import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
+import { ActionChip } from './ActionChip'
 import { HUMAN_IN_THE_LOOP_VERDICTS, type Verdict } from '@/types/api'
+import type { Action as ActionValue } from '@/types/api'
 
 type Tone = 'released' | 'withheld' | 'unsettled' | 'abstained'
 
@@ -28,6 +30,8 @@ const TONE_CLASS: Record<Tone, string> = {
 
 export interface VerdictBannerProps extends React.ComponentProps<typeof Card> {
   verdict: Verdict
+  /** What the console must do. Shown beside the verdict, never merged with it. */
+  action?: ActionValue
   /** Whether the policy node withheld execution. */
   blocked: boolean
   /** The status the device actually returned. Derived from `blocked` if absent. */
@@ -36,6 +40,7 @@ export interface VerdictBannerProps extends React.ComponentProps<typeof Card> {
 
 export function VerdictBanner({
   verdict,
+  action,
   blocked,
   httpStatus,
   className,
@@ -70,15 +75,18 @@ export function VerdictBanner({
         >
           {verdict}
         </span>
-        <span
-          dir="ltr"
-          className={cn(
-            'font-mono text-sm tabular-nums',
-            blocked ? 'font-semibold' : 'text-muted-foreground',
-          )}
-        >
-          HTTP {status}
-        </span>
+        <div className="flex items-center gap-3">
+          {action && <ActionChip action={action} />}
+          <span
+            dir="ltr"
+            className={cn(
+              'font-mono text-sm tabular-nums',
+              blocked ? 'font-semibold' : 'text-muted-foreground',
+            )}
+          >
+            HTTP {status}
+          </span>
+        </div>
       </div>
 
       {/* The verdict stands even when a consultant released the acquisition,
@@ -89,6 +97,9 @@ export function VerdictBanner({
           ? t('verdict.releasedUnderOverride')
           : t(`verdict.${verdict}`)}
       </p>
+      {action && action !== 'PROCEED' && (
+        <p className="text-sm font-medium text-fg">{t(`action.${action}_lead`)}</p>
+      )}
 
       {referred && (
         <p className="text-xs text-muted-foreground">{t('verdict.humanInTheLoop')}</p>

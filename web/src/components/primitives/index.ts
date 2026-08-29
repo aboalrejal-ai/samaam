@@ -1,3 +1,4 @@
+export { ActionChip } from './ActionChip'
 export { BasisBadge, type BasisBadgeProps } from '@/components/primitives/BasisBadge'
 export { CheckRow, type CheckRowProps } from '@/components/primitives/CheckRow'
 export { CitationCard, type CitationCardProps } from '@/components/primitives/CitationCard'

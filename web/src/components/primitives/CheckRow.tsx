@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { ActionChip } from '@/components/primitives/ActionChip'
 import { BasisBadge } from '@/components/primitives/BasisBadge'
 import { StatusIcon } from '@/components/primitives/status-icon'
 import { Card } from '@/components/ui/card'
@@ -48,7 +49,10 @@ export function CheckRow({ check, className, ...props }: CheckRowProps) {
           {t(`check.status.${check.status}`)}
         </span>
 
-        {check.basis !== null && <BasisBadge basis={check.basis} className="ms-auto" />}
+        <span className="ms-auto flex items-center gap-2">
+          {check.action !== 'PROCEED' && <ActionChip action={check.action} />}
+          {check.basis !== null && <BasisBadge basis={check.basis} />}
+        </span>
       </div>
 
       <p className="px-3 text-sm text-fg-2">{check.detail}</p>

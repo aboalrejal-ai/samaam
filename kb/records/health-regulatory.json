@@ -592,6 +592,34 @@
       "category": "standards",
       "node": "P",
       "note": "الوثيقة موجودة محلياً: kb/sources/ITU-T_Y.3172_standard.pdf"
+    },
+    {
+      "id": "CAR-2022-INDIVIDUAL",
+      "title": "Canadian Association of Radiologists Guidance on Contrast-Associated Acute Kidney Injury",
+      "authority": "Canadian Association of Radiologists",
+      "section": "Risk stratification and decision-making",
+      "content": "Patients with eGFR at or below 30 mL/min/1.73 m2 require an individualised decision and review rather than automatic refusal of iodinated contrast. Risk is stratified by eGFR; no threshold constitutes an absolute contraindication.",
+      "url": "https://car.ca/patient-care/practice-guidelines/",
+      "year": 2022,
+      "lang": "English",
+      "verification": "VERIFIED",
+      "category": "contrast_renal",
+      "node": "P",
+      "note": "أضيف بمراجعة مختصة أشعة. هذا السجل هو سند التصميم لكون الحجب مراجعةً لا منعاً: لا عتبة تُحرّم التباين مطلقاً."
+    },
+    {
+      "id": "CLINICAL-AKI-ONSET",
+      "title": "Post-contrast acute kidney injury — onset and course",
+      "authority": "Reviewed by a consultant radiologist (project clinical input)",
+      "section": "Timing of presentation",
+      "content": "Injury does not present during the scan. Serum creatinine typically begins to rise within 24-48 hours and is clearest at 48-72 hours. In severe cases urine output falls and renal function deteriorates, warranting nephrology assessment. Contrast is not stated to cause renal failure with certainty; the accurate statement is that the patient is at elevated risk of AKI.",
+      "url": "",
+      "year": 2026,
+      "lang": "English",
+      "verification": "VERIFIED",
+      "category": "contrast_renal",
+      "node": "D",
+      "note": "⚠️ مراجعة إكلينيكية للمشروع، لا وثيقة منشورة. تُستخدم لصياغة نص الواجهة وحدود الادعاء، ولا يُبنى عليها حجب."
     }
   ],
   "gaps": [
@@ -599,7 +627,7 @@
       "id": "GAP-01",
       "title": "عتبات الصبغة سعودية فعلاً — والفجوة انتقلت إلى الإلزام لا الوجود",
       "finding": "بروتوكول وزارة الصحة 2021 يقرّ صراحةً عتبة eGFR < 30 mL/min/1.73m² للوقاية وفئتي الميتفورمين ونطاقات المخاطر (5% / 10% / 15% / 30%). لكن البروتوكول أداة إرشادية للممارسة، ولم يُعثر على نص يجعل الالتزام به مُلزِماً بقوة النظام كما هو الحال في المستويات المرجعية للجرعة.",
-      "implication": "صمّام يستشهد ببروتوكول وطني سعودي حقيقي عند الحجب — لا بإرشاد أجنبي. لكنه يصنّف المخالفة كـ«خروج عن البروتوكول الوطني» لا كـ«مخالفة نظامية».",
+      "implication": "صمّام يستشهد ببروتوكول وطني سعودي عند التوقّف — لا بإرشاد أجنبي. ولا يعرض ذلك بوصفه منعاً: لا توجد قيمة eGFR تُحرّم التباين مطلقاً، فالنظام يوقف حتى يعتمد مخوَّل ولا يقرر نيابةً عن الطبيب.",
       "recommendation": "إصدار قرار يربط بروتوكولات وزارة الصحة للأشعة بآلية إلزام ومساءلة، أسوةً بالمرسوم الملكي 60057 الذي ألزم بالمستويات المرجعية."
     },
     {

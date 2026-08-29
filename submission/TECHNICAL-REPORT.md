@@ -37,6 +37,9 @@ the second a legal violation would be a false legal claim, and it is exactly the
 kind of overreach this hackathon asks projects to avoid.
 
 **Team.** [names, disciplines, institution]
+**Clinical review.** Scenario and decision thresholds reviewed by a consultant
+radiologist, whose correction on absolute versus relative contraindication
+changed the enforcement model.
 
 ---
 
@@ -70,18 +73,34 @@ patient.
 Samaam extends the same pre-execution interlock to renal function, active
 chemotherapy, metformin, and the Saudi provisions that govern them.
 
-### Why the block must be overridable
+### Why Samaam holds rather than prohibits
 
-The MoH protocol is explicit that stage 4–5 chronic kidney disease is a
-**relative, not absolute**, contraindication, and that contrast must not be
-withheld from a life-threatening indication on renal grounds. A permanent hard
-stop would violate the protocol it claims to enforce. The literature agrees:
-hard stops draw override rates of **49–96%** and breed unsafe workarounds.
+Reviewed by a consultant radiologist, whose central correction shaped the
+design: **no eGFR value forbids iodinated contrast outright.** The MoH protocol
+makes stage 4–5 disease a *relative* contraindication and forbids withholding
+contrast from a life-threatening indication on renal grounds. CAR 2022 requires
+an individual decision below 30, not automatic refusal. A screen reading
+`PROHIBITED` at a lab number substitutes itself for the clinician — and that,
+she said, is the thing doctors reject hardest.
 
-So Samaam blocks conditionally. A named consultant may release the acquisition,
-and the release is written to the audit trail with their name against the risk
-they accepted. This is the difference between an anonymous click and an owned
-decision — and it is the operational answer to the liability gap in §4.
+The literature agrees on the mechanics: hard stops draw override rates of
+**49–96%** and breed unsafe workarounds.
+
+So Samaam separates the **verdict** from the **action**. The verdict is a
+regulatory classification; the action is what the console does.
+
+| | Action | Cleared by |
+| :--- | :--- | :--- |
+| 🟢 | `PROCEED` | Nothing stands in the way |
+| 🟡 | `CONFIRM` | The operator acknowledges the risk factor |
+| 🔴 | `AUTHORISE` | A **named** radiologist reviews and approves |
+| ⛔ | `PROHIBITED` | Nobody — no clinical override path exists |
+
+A severe renal case is `AUTHORISE`, not prohibited. The screen says *held for
+review*, and the release carries the reviewer's name into the audit trail. The
+system does not replace the radiologist; it prevents a dangerous protocol from
+executing **unreviewed**. That is the operational answer to the liability gap
+in §4.
 
 ---
 
@@ -169,23 +188,35 @@ list with dimensions we cannot demonstrate would weaken the three we can.
 | **2** | Abdomen/pelvis, **eGFR 27.7**, DLP 900, metformin not held | `VIOLATION` | **403** — withheld |
 | **3** | Bulk export of oncology records abroad for marketing | `VIOLATION` | **403** — session terminated |
 
-**Scenario 2 in detail.** Female, 63, 68 kg, metastatic colorectal cancer on
-FOLFOX. Creatinine 168 µmol/L → eGFR **27.7**, computed by CKD-EPI. Four findings:
+**Scenario 2 in detail**, written by the reviewing radiologist. Female, 62,
+70 kg, metastatic colorectal cancer, CT chest/abdomen/pelvis for staging.
+Creatinine 2.6 mg/dL → eGFR **19.1**, computed by Samaam with the equation the
+MoH protocol prints. A fatigued technologist selects the standard adult
+protocol: 150 mL of contrast at 5 mL/s, 120 kVp, 400 mAs.
 
-- `national_drl` — **FAIL, statutory.** CTDIvol 18.0 > 14.0 mGy; DLP 900 > 706 mGy·cm
-- `renal_prophylaxis` — **FAIL, national protocol.** eGFR < 30, no prophylaxis ordered
-- `metformin` — **FAIL, national protocol.** Category II, not held
-- `nephrotoxic_meds` — **WARN.** Oxaliplatin is a platinum compound; the protocol names the class
+| Finding | Action |
+| :--- | :--- |
+| `national_drl` — CTDIvol 18.0 > 14.0; DLP 900 > 706. The national levels are *investigation* levels; exceeding one requires justification before exposure | 🔴 `AUTHORISE` |
+| `renal_prophylaxis` — **HIGH RISK.** eGFR 19.1, prophylaxis indicated and not ordered. *Not a prohibition — contrast may still be indicated* | 🔴 `AUTHORISE` |
+| `metformin` — Category II, not held. Metformin alone is not a reason to withhold contrast | 🟡 `CONFIRM` |
+| `nephrotoxic_meds` — oxaliplatin, a platinum compound the protocol names by class | 🟡 `CONFIRM` |
 
-A consultant override releases it and is logged. On scenario 3 the same
-consultant is **refused**: a clinician may accept clinical risk for their own
-patient, but none holds authority to permit processing the PDPL forbids.
+Overall: 🔴 **held for authorisation.** A named radiologist releases it, logged.
+On scenario 3 the same name is **refused** — a clinician may accept clinical
+risk for their own patient, but none holds authority to permit processing the
+PDPL forbids.
+
+**Note on the eGFR.** The reviewer's hand estimate was 22; the equation the MoH
+protocol prescribes returns 19.1 from the same creatinine. Samaam reports its
+own computation rather than a number entered upstream, which is precisely why
+it recomputes. Both values are severe CKD.
 
 ### Knowledge base
 
-**43 verified records · 6 documented gaps · 1,338 chunks from 7 primary
+**45 verified records · 6 documented gaps · 1,338 chunks from 7 primary
 documents.** Bilingual retrieval — an Arabic question returns the governing
-Saudi record first.
+Saudi record first. Two records were added by clinical review and are labelled
+as such, including the one that establishes there is no absolute threshold.
 
 ### Primary sources
 
@@ -196,6 +227,7 @@ Saudi record first.
 | AI/ML Based Medical Devices, MDS-G010 | SFDA | `sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf` |
 | Personal Data Protection Law (Arabic, official) | Bureau of Experts | `laws.boe.gov.sa/BoeLaws/Laws/LawDetails/b7cfae89-828e-4994-b167-adaa00e37188/1` |
 | Ethics and governance of AI for health | WHO | `who.int/publications/i/item/9789240029200` |
+| Guidance on Contrast-Associated AKI (2022) | Canadian Assoc. of Radiologists | `car.ca/patient-care/practice-guidelines/` |
 | Y.3172 — ML architecture for future networks | ITU-T | `itu.int/rec/T-REC-Y.3172/en` |
 
 **Repository:** `github.com/[org]/samaam` · Apache 2.0 · no keys in source

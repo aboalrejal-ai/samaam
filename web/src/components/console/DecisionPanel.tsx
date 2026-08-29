@@ -25,6 +25,7 @@ export function DecisionPanel({ result, explanation, explaining }: DecisionPanel
     <div className="space-y-4">
       <VerdictBanner
         verdict={policy.verdict}
+        action={policy.action}
         blocked={policy.blocked}
         httpStatus={device.status}
       >

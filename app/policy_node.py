@@ -39,6 +39,31 @@ class Basis(str, Enum):
     CLINICAL_GUIDANCE = "CLINICAL_GUIDANCE"
 
 
+class Action(str, Enum):
+    """ما يفعله النظام — منفصل عن الحكم.
+
+    الحكم تصنيف تنظيمي، والفعل قرار تشغيلي. الفصل بينهما جاء بمراجعة
+    مختصة أشعة: نظام يقول «ممنوع» عند رقم مخبري يستبدل حكم الطبيب،
+    وأول ما يرفضه الأطباء أن تُنتزع منهم القرارات السريرية.
+
+    فصمّام لا يمنع، بل يوقف حتى يراجع مخوَّل — والفرق أن المسؤولية
+    تبقى مع الإنسان بينما لا يمر إجراء خطر دون أن يراه أحد.
+    """
+    PROCEED = "PROCEED"          # 🟢 لا شيء يعترض
+    CONFIRM = "CONFIRM"          # 🟡 عامل خطورة يتطلب إقرار المشغّل
+    AUTHORISE = "AUTHORISE"      # 🔴 يتطلب اعتماد مخوَّل باسمه
+    PROHIBITED = "PROHIBITED"    # ⛔ لا مسار اعتماد — حظر نظامي
+
+
+# ترتيب الشدة: الفعل النهائي هو الأشد بين الفحوص
+_ACTION_RANK = {
+    Action.PROCEED: 0,
+    Action.CONFIRM: 1,
+    Action.AUTHORISE: 2,
+    Action.PROHIBITED: 3,
+}
+
+
 class Status(str, Enum):
     PASS = "PASS"
     FAIL = "FAIL"
@@ -85,6 +110,8 @@ class Check:
     detail: str
     cites: list[str] = field(default_factory=list)
     basis: Basis | None = None
+    action: Action = Action.PROCEED
+    """ماذا يلزم لتجاوز هذا الفحص تحديداً."""
 
     @property
     def blocking(self) -> bool:
@@ -100,19 +127,27 @@ class Decision:
     override_reason: str = ""
 
     @property
+    def action(self) -> Action:
+        """الأشد بين أفعال الفحوص."""
+        return max((c.action for c in self.checks),
+                   key=lambda a: _ACTION_RANK[a], default=Action.PROCEED)
+
+    @property
     def blocked(self) -> bool:
-        return self.verdict is not Verdict.COMPLIANT
+        return self.action is not Action.PROCEED
 
     def to_dict(self) -> dict[str, Any]:
         return {
             "verdict": self.verdict.value,
+            "action": self.action.value,
             "blocked": self.blocked,
             "overridable": self.overridable,
             "override_reason": self.override_reason,
             "checks": [
                 {
                     "rule": c.rule, "status": c.status.value, "detail": c.detail,
-                    "basis": c.basis.value if c.basis else None, "cites": c.cites,
+                    "basis": c.basis.value if c.basis else None,
+                    "action": c.action.value, "cites": c.cites,
                 }
                 for c in self.checks
             ],
@@ -158,14 +193,16 @@ class PolicyNode:
                 "national_drl", Status.NO_EVIDENCE,
                 f"No national diagnostic reference level is published for '{body}'. "
                 "Samaam does not invent a limit where none is verified.",
-                cites,
+                cites, None, Action.CONFIRM,
             )
 
         ctdi, dlp = req.get("ctdivol_mgy"), req.get("dlp_mgy_cm")
         if ctdi is None or dlp is None:
             return Check(
                 "national_drl", Status.NO_EVIDENCE,
-                "Dose parameters (CTDIvol / DLP) absent from the request.", cites,
+                "Dose parameters (CTDIvol / DLP) absent from the request. The dose "
+                "cannot be checked against the national levels without them.",
+                cites, None, Action.AUTHORISE,
             )
 
         over = []
@@ -175,16 +212,21 @@ class PolicyNode:
             over.append(f"DLP {dlp} mGy-cm exceeds the national level of {limits['dlp']} mGy-cm")
 
         if over:
+            # المستويات المرجعية «مستويات تحقيق» بنص MDS-G008 نفسه، لا حدوداً
+            # مطلقة. الالتزام بها مُلزِم بالمرسوم الملكي، والالتزام المترتب على
+            # التجاوز هو التحقيق والتبرير — فالفعل اعتماد موثّق لا منع.
             return Check(
                 "national_drl", Status.FAIL,
-                "; ".join(over) + ". Compliance is binding on healthcare providers under "
-                "Royal Decree 60057 approving Saudi Health Council Resolution 3/88.",
-                cites, Basis.STATUTORY,
+                "; ".join(over) + ". The national levels are investigation levels, and "
+                "compliance with them is binding on healthcare providers under Royal "
+                "Decree 60057 approving Saudi Health Council Resolution 3/88. Exceeding "
+                "one requires documented justification before the exposure.",
+                cites, Basis.STATUTORY, Action.AUTHORISE,
             )
         return Check(
             "national_drl", Status.PASS,
             f"CTDIvol {ctdi} <= {limits['ctdivol']} and DLP {dlp} <= {limits['dlp']}.",
-            cites, Basis.STATUTORY,
+            cites, Basis.STATUTORY, Action.PROCEED,
         )
 
     def _check_prophylaxis(self, req: dict[str, Any], patient: dict[str, Any]) -> Check:
@@ -195,11 +237,12 @@ class PolicyNode:
 
         egfr = patient.get("egfr")
         if egfr is None:
+            # بيانات ناقصة = توقّف حتى يراجع مخوَّل، لا تخمين ولا مرور.
             return Check(
                 "renal_prophylaxis", Status.NO_EVIDENCE,
                 "No eGFR available. The MOH protocol requires eGFR-based screening "
                 "before contrast administration; the decision cannot be made without it.",
-                cites + ["MOH-CM-SCREENING"],
+                cites + ["MOH-CM-SCREENING"], None, Action.AUTHORISE,
             )
 
         risk = ca_aki_risk(egfr)
@@ -223,12 +266,17 @@ class PolicyNode:
                 f"eGFR {egfr:.1f} < {EGFR_PROPHYLAXIS_THRESHOLD} and prophylaxis is ordered.",
                 cites, Basis.NATIONAL_PROTOCOL,
             )
+        # لا توجد عتبة يُمنع عندها التباين مطلقاً. المراجع تصنّف ما دون 30
+        # كفئة عالية الخطورة تستوجب قراراً فردياً — لا حظراً آلياً. فالنظام
+        # يوقف حتى يعتمد استشاري، ولا يقرر نيابةً عنه.
         return Check(
             "renal_prophylaxis", Status.FAIL,
-            f"eGFR {egfr:.1f} < {EGFR_PROPHYLAXIS_THRESHOLD} and not on maintenance dialysis: "
-            f"the patient is eligible for prophylaxis, but none is ordered. "
-            f"CA-AKI risk in this band {risk}.",
-            cites, Basis.NATIONAL_PROTOCOL,
+            f"HIGH RISK. eGFR {egfr:.1f} < {EGFR_PROPHYLAXIS_THRESHOLD} and not on "
+            f"maintenance dialysis: the patient is eligible for prophylaxis under the "
+            f"MOH protocol, and none is ordered. CA-AKI risk in this band {risk}. "
+            f"This is not a prohibition — contrast may still be indicated, and the "
+            f"decision belongs to the radiologist.",
+            cites + ["CAR-2022-INDIVIDUAL"], Basis.NATIONAL_PROTOCOL, Action.AUTHORISE,
         )
 
     def _check_metformin(self, req: dict[str, Any], patient: dict[str, Any]) -> Check:
@@ -256,12 +304,15 @@ class PolicyNode:
                 "Category II and metformin is held as the protocol requires.",
                 cites, Basis.NATIONAL_PROTOCOL,
             )
+        # الإجراء المطلوب إيقاف دواء مؤقتاً، لا إلغاء الفحص — فإقرار المشغّل
+        # بأنه أُوقف يكفي، دون تصعيد إلى استشاري.
         return Check(
             "metformin", Status.FAIL,
             f"Category II (eGFR {egfr:.1f} < {EGFR_PROPHYLAXIS_THRESHOLD} or AKI) but metformin "
             "is not held. It must be stopped at or before the exam and suspended for 48 hours, "
-            "and not reinstituted until renal function normalises.",
-            cites, Basis.NATIONAL_PROTOCOL,
+            "and not reinstituted until renal function normalises. Metformin alone is not a "
+            "reason to withhold contrast.",
+            cites, Basis.NATIONAL_PROTOCOL, Action.CONFIRM,
         )
 
     def _check_nephrotoxic(self, req: dict[str, Any], patient: dict[str, Any]) -> Check:
@@ -284,7 +335,7 @@ class PolicyNode:
             f"Nephrotoxic agents present at eGFR < {EGFR_PROPHYLAXIS_THRESHOLD}: "
             f"{', '.join(found)}. The protocol advises withholding non-essential agents "
             "24-48 hours before and 48 hours after exposure where clinically feasible.",
-            cites, Basis.NATIONAL_PROTOCOL,
+            cites, Basis.NATIONAL_PROTOCOL, Action.CONFIRM,
         )
 
     # ── التقييم ───────────────────────────────────────────────
@@ -305,27 +356,32 @@ class PolicyNode:
             self._check_nephrotoxic(req, patient),
         ]
 
-        if any(c.blocking for c in checks):
-            verdict = Verdict.VIOLATION
-        elif any(c.status is Status.NO_EVIDENCE for c in checks):
-            # الامتناع عن الإفتاء عند نقص الدليل — لا تخمين
+        if any(c.status is Status.NO_EVIDENCE for c in checks):
+            # نقص الدليل يسبق كل شيء: لا يُفتى بما لم يُتحقق منه.
             verdict = Verdict.INSUFFICIENT_EVIDENCE
+        elif any(c.blocking for c in checks):
+            verdict = Verdict.VIOLATION
         else:
             verdict = Verdict.COMPLIANT
 
         decision = Decision(verdict=verdict, checks=checks)
         decision.citations = self._resolve(checks)
 
-        if verdict is Verdict.VIOLATION:
-            # التجاوز مسموح دائماً في المسار الإكلينيكي: البروتوكول يجعل
-            # المرحلتين 4-5 مانعاً نسبياً لا مطلقاً، ويمنع حجب الصبغة عن
-            # تشخيص منقذ للحياة. الحجب الدائم يخالف البروتوكول نفسه.
+        if decision.action is Action.AUTHORISE:
             decision.overridable = True
             decision.override_reason = (
-                "A named consultant may override, recorded in the audit trail. "
-                "MOH-CM-CKD45 makes stage 4-5 CKD a relative, not absolute, "
-                "contraindication and forbids withholding contrast from a "
-                "life-threatening indication on renal grounds."
+                "Held for review, not prohibited. A named radiologist or consultant "
+                "may authorise it, recorded in the audit trail. No eGFR value forbids "
+                "iodinated contrast outright: MOH-CM-CKD45 makes stage 4-5 CKD a "
+                "relative contraindication and forbids withholding contrast from a "
+                "life-threatening indication on renal grounds, and CAR 2022 requires "
+                "an individual decision rather than an automatic refusal."
+            )
+        elif decision.action is Action.CONFIRM:
+            decision.overridable = True
+            decision.override_reason = (
+                "A risk factor needs acknowledging. The operator may confirm and "
+                "proceed; the confirmation is recorded."
             )
         return decision
 
@@ -353,7 +409,7 @@ class PolicyNode:
                 f"Bulk access to Health Data ({n or 'multiple'} records) without a care "
                 "purpose. Access must be restricted to the minimum number of employees and "
                 "the minimum extent necessary to provide Health Services.",
-                ["PDPL-ART23"], Basis.STATUTORY,
+                ["PDPL-ART23"], Basis.STATUTORY, Action.PROHIBITED,
             ))
         else:
             checks.append(Check("health_data_minimisation", Status.PASS,
@@ -366,6 +422,7 @@ class PolicyNode:
                 "Health Data is Sensitive Data. Commercial outreach is not a lawful basis "
                 "for processing it.",
                 ["PDPL-ART1-11", "PDPL-ART1-13", "PDPL-ART1-13-AR"], Basis.STATUTORY,
+                Action.PROHIBITED,
             ))
         else:
             checks.append(Check("lawful_basis", Status.PASS,
@@ -377,7 +434,7 @@ class PolicyNode:
                 "cross_border", Status.FAIL,
                 "Transfer outside the Kingdom requires an adequate level of protection and "
                 "must be limited to the minimum amount of Personal Data needed.",
-                ["PDPL-ART29"], Basis.STATUTORY,
+                ["PDPL-ART29"], Basis.STATUTORY, Action.PROHIBITED,
             ))
         else:
             checks.append(Check("cross_border", Status.NOT_APPLICABLE,

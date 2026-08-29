@@ -33,6 +33,7 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
   FAIL: {
     rule: 'national_drl',
     status: 'FAIL',
+    action: 'AUTHORISE',
     detail:
       'CTDIvol 18.0 mGy exceeds the national level of 14.0 mGy; DLP 900 mGy-cm exceeds the national level of 706 mGy-cm. Compliance is binding on healthcare providers under Royal Decree 60057 approving Saudi Health Council Resolution 3/88.',
     basis: 'STATUTORY',
@@ -41,6 +42,7 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
   WARN: {
     rule: 'nephrotoxic_meds',
     status: 'WARN',
+    action: 'CONFIRM',
     detail:
       'Nephrotoxic agents present at eGFR < 30.0: oxaliplatin (active FOLFOX regimen), ibuprofen PRN. The protocol advises withholding non-essential agents 24-48 hours before and 48 hours after exposure where clinically feasible.',
     basis: 'NATIONAL_PROTOCOL',
@@ -49,6 +51,7 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
   PASS: {
     rule: 'renal_prophylaxis',
     status: 'PASS',
+    action: 'PROCEED',
     detail:
       'eGFR 81.4 >= 30.0. Prophylaxis is not indicated for stable renal function. CA-AKI risk in this band ≈5%.',
     basis: 'NATIONAL_PROTOCOL',
@@ -57,6 +60,7 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
   NO_EVIDENCE: {
     rule: 'renal_prophylaxis',
     status: 'NO_EVIDENCE',
+    action: 'AUTHORISE',
     detail:
       'No eGFR available. The MOH protocol requires eGFR-based screening before contrast administration; the decision cannot be made without it.',
     basis: null,
@@ -65,6 +69,7 @@ const CHECK_FIXTURES: Record<PolicyCheck['status'], PolicyCheck> = {
   NOT_APPLICABLE: {
     rule: 'metformin',
     status: 'NOT_APPLICABLE',
+    action: 'PROCEED',
     detail: 'Patient is not on metformin, or no contrast requested.',
     basis: null,
     cites: ['MOH-CM-METFORMIN'],

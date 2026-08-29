@@ -29,6 +29,20 @@ export const HUMAN_IN_THE_LOOP_VERDICTS = [
   'INSUFFICIENT_EVIDENCE',
 ] as const satisfies readonly Verdict[]
 
+/* ── What the system does (app/policy_node.py :: Action) ─────────────── */
+
+/**
+ * Separate from the verdict on purpose. The verdict is a regulatory
+ * classification; the action is what happens at the console.
+ *
+ * Added after review by a consultant radiologist: no eGFR value forbids
+ * iodinated contrast outright, and a system that says PROHIBITED at a lab
+ * number is substituting itself for the clinician. Samaam holds until an
+ * authorised person reviews; it does not decide in their place.
+ */
+export const ACTIONS = ['PROCEED', 'CONFIRM', 'AUTHORISE', 'PROHIBITED'] as const
+export type Action = (typeof ACTIONS)[number]
+
 /* ── Strength of authority (app/policy_node.py :: Basis) ─────────────── */
 
 export const BASES = ['STATUTORY', 'NATIONAL_PROTOCOL', 'CLINICAL_GUIDANCE'] as const
@@ -175,11 +189,15 @@ export interface PolicyCheck {
   status: CheckStatus
   detail: string
   basis: Basis | null
+  /** What clearing this particular finding requires. */
+  action: Action
   cites: string[]
 }
 
 export interface PolicyPayload {
   verdict: Verdict
+  /** The severest action across all checks. */
+  action: Action
   blocked: boolean
   overridable: boolean
   override_reason: string

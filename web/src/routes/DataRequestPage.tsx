@@ -157,6 +157,7 @@ export default function DataRequestPage() {
             <>
               <VerdictBanner
                 verdict={result.policy.verdict}
+                action={result.policy.action}
                 blocked={result.policy.blocked}
                 httpStatus={result.device_response.status}
               >
