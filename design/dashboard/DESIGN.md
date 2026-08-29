@@ -1,19 +1,19 @@
 # Design System Inspired by Dashboard
 
 > Category: Professional & Corporate
-> Dark-themed cloud-platform aesthetic with modular grids, glass-like panels, and strong data hierarchy for productivity dashboards.
+> Light cloud-platform aesthetic with modular grids, glass-like panels, and strong data hierarchy for productivity dashboards.
 
 ## 1. Visual Theme & Atmosphere
 
-Dark-themed cloud-platform aesthetic with modular grids, glass-like panels, and strong data hierarchy for productivity dashboards.
+Light cloud-platform aesthetic with modular grids, glass-like panels, and strong data hierarchy for productivity dashboards.
 
-- **Visual style:** modern, clean, cloud-platform aesthetic (Heroku/Vercel/GitHub inspired), dark theme, subtle gradients, soft shadows, glass-like panels, rounded components
+- **Visual style:** modern, clean, cloud-platform aesthetic (Heroku/Vercel/GitHub inspired), light theme on a cool blue-grey ground, subtle gradients, soft shadows, glass-like panels, rounded components
 - **Color stance:** primary, neutral, success, warning, danger
 - **Design intent:** Keep outputs recognizable to this style family while preserving usability and readability.
 
 ## 2. Color
 
-- **Primary:** `#0C5CAB` — Token from style foundations.
+- **Primary:** `#0ea5e9` — Token from style foundations.
 - **Secondary:** `#0A4A8A` — Token from style foundations.
 - **Success:** `#10B981` — Token from style foundations.
 - **Warning:** `#F59E0B` — Token from style foundations.
@@ -22,7 +22,7 @@ Dark-themed cloud-platform aesthetic with modular grids, glass-like panels, and 
 - **Text:** `#FAFAFA` — Token from style foundations.
 - **Neutral:** `#09090B` — Derived from the surface token for official format compatibility.
 
-- Favor Primary (#0C5CAB) for CTA emphasis.
+- Favor Primary (#0ea5e9) for CTA emphasis.
 - Use Surface (#09090B) for large backgrounds and cards.
 - Keep body copy on Text (#FAFAFA) for legibility.
 
@@ -47,13 +47,13 @@ Dark-themed cloud-platform aesthetic with modular grids, glass-like panels, and 
 
 ## 6. Components
 
-- Buttons: primary action uses `#0C5CAB`; secondary actions stay neutral.
+- Buttons: primary action uses `#0ea5e9`; secondary actions stay neutral.
 - Inputs: strong focus-visible states, clear labels, and predictable error messaging.
 - Cards/sections: use consistent radii, spacing, and elevation strategy across the page.
 
 ## 7. Motion & Interaction
 
-- Use subtle transitions that emphasize Primary (#0C5CAB) as the interaction signal.
+- Use subtle transitions that emphasize Primary (#0ea5e9) as the interaction signal.
 - Default to short, purposeful transitions (150–250ms) with stable easing.
 - Ensure hover, focus-visible, active, disabled, and loading states are explicit.
 

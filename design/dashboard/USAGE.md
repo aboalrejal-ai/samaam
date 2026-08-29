@@ -12,10 +12,10 @@ Design System 2.0 package guide for Open Design agents and reviewers.
 
 ## Design Highlights
 
-- Visual style: modern, clean, cloud-platform aesthetic (Heroku/Vercel/GitHub inspired), dark theme, subtle gradients, soft shadows, glass-like panels, rounded components
+- Visual style: modern, clean, cloud-platform aesthetic (Heroku/Vercel/GitHub inspired), light theme on a cool blue-grey ground, subtle gradients, soft shadows, glass-like panels, rounded components
 - Color stance: primary, neutral, success, warning, danger
 - Design intent: Keep outputs recognizable to this style family while preserving usability and readability.
-- Primary: `#0C5CAB` — Token from style foundations.
+- Primary: `#0ea5e9` — Token from style foundations.
 
 ## Do
 
