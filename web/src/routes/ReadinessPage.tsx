@@ -76,7 +76,7 @@ export default function ReadinessPage() {
                           </span>
                           <CardTitle className="text-base">{dimension.name}</CardTitle>
                           {ours && (
-                            <Badge className="rounded-pill border-primary bg-transparent text-primary">
+                            <Badge className="rounded-pill border-accent-strong bg-transparent text-accent-strong">
                               {t('readiness.ours')}
                             </Badge>
                           )}

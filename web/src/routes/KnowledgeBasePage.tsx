@@ -132,7 +132,7 @@ export default function KnowledgeBasePage() {
                   target="_blank"
                   rel="noreferrer"
                   dir="ltr"
-                  className="inline-block break-all font-mono text-xs text-primary underline underline-offset-2"
+                  className="inline-block break-all font-mono text-xs text-accent-strong underline underline-offset-2"
                 >
                   {hit.url}
                 </a>

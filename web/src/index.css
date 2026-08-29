@@ -138,6 +138,9 @@
   --color-success-strong: color-mix(in oklab, var(--success), black 35%);
   --color-warn-strong: color-mix(in oklab, var(--warn), black 40%);
   --color-danger-strong: color-mix(in oklab, var(--danger), black 25%);
+  /* The sky measures 2.77:1 on white — fine as a fill behind accent-on,
+     failing as body text. Links and inline emphasis use this instead. */
+  --color-accent-strong: color-mix(in oklab, var(--accent), black 30%);
 
   /* shadcn components reach for rounded-xl and above; the token scale stops
      at lg, so the larger steps hold at lg rather than inventing a radius. */
@@ -155,6 +158,39 @@
    The toggle and the class are wired; the second palette is not this phase. */
 .dark {
   color-scheme: dark;
+
+  /* The design package ships light only, so the dark palette is a second
+     token layer that redefines the same names — every component keeps
+     reading `bg-surface` and `text-fg` and needs no dark: variant.
+
+     The sky is lightened: #0ea5e9 measures under 3:1 on a dark ground, and
+     the status hues would fail the same way, so they lighten too. Contrast
+     has to hold in both themes, not just the one that gets screenshotted. */
+  --bg: #0b1220;
+  --surface: #131c2b;
+  --surface-warm: #18243a;
+  --fg: #e8eef7;
+  --fg-2: #b8c4d4;
+  --muted: #8b9bb0;
+  --meta: #e8eef7;
+  --border: #24334a;
+  --border-soft: #1a2536;
+
+  --accent: #38bdf8;
+  --accent-on: #04131d;
+
+  --success: #34d399;
+  --warn: #fbbf24;
+  --danger: #f87171;
+}
+
+/* On a dark ground the darkened mixes disappear. Lighten instead, keeping
+   the same token names so nothing downstream changes. */
+.dark {
+  --color-success-strong: color-mix(in oklab, var(--success), white 12%);
+  --color-warn-strong: color-mix(in oklab, var(--warn), white 8%);
+  --color-danger-strong: color-mix(in oklab, var(--danger), white 10%);
+  --color-accent-strong: var(--accent);
 }
 
 @layer base {
@@ -188,4 +224,20 @@
   .font-mono {
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Unlayered on purpose, like tokens.css above.
+   Every focusable thing must show where focus is. Inside @layer base this rule
+   lost to the `outline-hidden` utility the generated components carry, so the
+   shell's links took focus invisibly and a keyboard user could not tell where
+   they were. Unlayered, it beats every layer and gives one consistent ring
+   across generated and hand-written controls alike. */
+:focus-visible {
+  /* !important is deliberate and confined to this one rule. The generated
+     components each ship their own focus treatment, so without it the ring
+     differs control to control and some fall back to the browser's thin
+     default. A keyboard user needs one unmistakable indicator everywhere,
+     and this is the only declaration in the project that forces anything. */
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px !important;
 }

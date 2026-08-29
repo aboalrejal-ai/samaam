@@ -133,7 +133,7 @@ export default function ConsolePage() {
         ))}
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[380px_120px_1fr]">
+      <div className="grid gap-6 xl:grid-cols-[minmax(340px,380px)_120px_minmax(0,1fr)]">
         <div className="space-y-4">
           <RequestForm
             patient={patient}
@@ -154,10 +154,12 @@ export default function ConsolePage() {
           )}
         </div>
 
+        {/* Vertical beside the columns; horizontal above the decision when
+            they stack, so the rail is never pushed below what it explains. */}
         <div className="hidden xl:block">
           <PipelineRail transit={transit} scarred={transit.scarred} className="sticky top-6" />
         </div>
-        <div className="xl:hidden">
+        <div className="order-first xl:hidden">
           <PipelineRail transit={transit} scarred={transit.scarred} orientation="horizontal" />
         </div>
 

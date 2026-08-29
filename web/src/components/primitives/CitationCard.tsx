@@ -54,7 +54,7 @@ export function CitationCard({ citation, className, ...props }: CitationCardProp
       {...props}
     >
       <CardHeader className="gap-1 px-3">
-        <p className="text-xs font-medium text-primary">{citation.authority}</p>
+        <p className="text-xs font-medium text-accent-strong">{citation.authority}</p>
         <CardTitle className="text-sm">{citation.title}</CardTitle>
         <p className="text-xs text-muted-foreground">{citation.section}</p>
       </CardHeader>
@@ -77,7 +77,7 @@ export function CitationCard({ citation, className, ...props }: CitationCardProp
             href={citation.url}
             target="_blank"
             rel="noreferrer noopener"
-            className="inline-flex items-center gap-1.5 rounded-sm text-xs font-medium text-primary underline underline-offset-4 hover:text-accent-hover"
+            className="inline-flex items-center gap-1.5 rounded-sm text-xs font-medium text-accent-strong underline underline-offset-4 hover:text-accent-active"
           >
             <ExternalLink aria-hidden className="size-3.5" />
             {t('citation.open')}
