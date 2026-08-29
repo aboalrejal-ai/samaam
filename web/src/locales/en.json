@@ -79,8 +79,7 @@
       "title": "No such screen",
       "lead": "This route is not part of the Samaam gateway.",
       "back": "Back to the console"
-    },
-    "placeholder": "This screen arrives in a later phase."
+    }
   },
   "basis": {
     "STATUTORY": "Statutory violation",
@@ -205,5 +204,51 @@
     "noOverride": "No clinical override path",
     "loadBreach": "Load the exploitation attempt",
     "awaiting": "No request submitted yet."
+  },
+  "kb": {
+    "placeholder": "Ask in Arabic or English — try: when is metformin held?",
+    "collection": "Search in",
+    "collections": {
+      "policies": "Regulatory records",
+      "sources": "Source documents",
+      "gaps": "Policy gaps"
+    },
+    "verifiedOnly": "Verified records only",
+    "results": "{{count}} results",
+    "empty": "Nothing matched. The corpus holds only what has been verified — an empty result is an answer.",
+    "prompt": "Type a question. Retrieval is semantic, so phrasing need not match the text.",
+    "similarity": "match",
+    "hint": "Retrieval, not conversation. No context is carried between queries."
+  },
+  "gaps": {
+    "finding": "What was found",
+    "implication": "What it costs Samaam",
+    "recommendation": "Recommendation to the regulator",
+    "lead": "Each gap rests on a documented absence of text, not on an assumption."
+  },
+  "audit": {
+    "at": "Time",
+    "event": "Event",
+    "worklist": "Worklist",
+    "actor": "Actor",
+    "verdict": "Verdict",
+    "empty": "Nothing logged yet. Send a case from the console and it appears here.",
+    "lead": "What turns an override from an anonymous act into a named decision.",
+    "events": {
+      "EXECUTED": "Released to the device",
+      "EXECUTED_UNDER_OVERRIDE": "Released under override",
+      "BLOCKED": "Withheld by the policy node",
+      "OVERRIDE_REFUSED": "Override refused",
+      "SECURITY_OVERRIDE": "Hard security block",
+      "DATA_ACCESS_GRANTED": "Data access granted"
+    }
+  },
+  "readiness": {
+    "factors": "Factors",
+    "dimensions": "Dimensions",
+    "metrics": "metrics",
+    "ours": "Samaam maps here",
+    "version": "Framework version {{v}}",
+    "lead": "The official ITU framework, unmodified. The three highlighted dimensions are the ones this gateway carries evidence for."
   }
 }

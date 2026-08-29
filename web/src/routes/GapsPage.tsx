@@ -1,10 +1,20 @@
 import { useTranslation } from 'react-i18next'
 import { PageHeader } from '@/components/PageHeader'
-import { PlaceholderNote } from '@/components/PlaceholderNote'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useKbGaps } from '@/lib/queries'
 
-/** Phase 5.4 builds this screen. GET /kb/gaps. */
+/**
+ * Where the regulation is silent.
+ *
+ * Each gap is an absence that was searched for and not found, which is why
+ * every card states the finding before its consequence. Claiming a gap
+ * without having looked is the failure mode the hackathon guide names.
+ */
 export default function GapsPage() {
   const { t } = useTranslation()
+  const { data, isLoading } = useKbGaps()
+
   return (
     <>
       <PageHeader
@@ -12,7 +22,41 @@ export default function GapsPage() {
         lead={t('pages.gaps.lead')}
         endpoint="GET /kb/gaps"
       />
-      <PlaceholderNote />
+      <p className="mb-4 text-sm text-muted-foreground">{t('gaps.lead')}</p>
+
+      {isLoading && (
+        <div className="space-y-3">
+          <Skeleton className="h-40 w-full" />
+          <Skeleton className="h-40 w-full" />
+        </div>
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {data?.map((gap) => (
+          <Card key={gap.id}>
+            <CardHeader className="pb-3">
+              <span dir="ltr" className="font-mono text-xs text-muted-foreground">{gap.id}</span>
+              <CardTitle className="text-base leading-tight">{gap.title}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3 text-sm">
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">{t('gaps.finding')}</p>
+                <p className="pt-0.5 leading-body text-fg-2">{gap.finding}</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-muted-foreground">{t('gaps.implication')}</p>
+                <p className="pt-0.5 leading-body text-fg-2">{gap.implication}</p>
+              </div>
+              <div className="rounded-md border-s-2 border-primary bg-surface-warm px-3 py-2">
+                <p className="text-xs font-medium text-muted-foreground">
+                  {t('gaps.recommendation')}
+                </p>
+                <p className="pt-0.5 leading-body text-fg">{gap.recommendation}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </>
   )
 }

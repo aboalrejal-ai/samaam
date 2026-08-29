@@ -150,10 +150,10 @@ class Samaam:
         if explain:
             payload["explanation"] = self.explain(decision)
 
-        wid = request.get("request_id", "DATA-REQ")
+        wid = request.get("request_id") or "DATA-REQ"
         if decision.blocked:
             self.device._log("SECURITY_OVERRIDE", wid, payload["verdict"],
-                             actor=request.get("actor", "unknown"),
+                             actor=request.get("actor") or "unknown",
                              session_terminated=True,
                              attempted=request.get("action"))
             if override_by:

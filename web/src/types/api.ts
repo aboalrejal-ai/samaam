@@ -62,25 +62,35 @@ export interface Citation {
   error?: string
 }
 
+/**
+ * A record as the service returns it. The key is `record_id`, not `id` — that
+ * is the stable citation handle the policy node blocks by, and it is what the
+ * wire carries. Verified against GET /kb/search and GET /kb/record.
+ */
 export interface KbRecord {
-  id: string
+  record_id: string
   title: string
   authority: string
   section: string
   content: string
   url: string
   year?: number
-  lang?: string
+  /** Spelled `language` on the wire. */
+  language?: string
   verification: Verification
   category?: string
   node?: PipelineNode
+  note?: string
+  /** How the chunk entered the corpus: a curated record, a gap, or PDF text. */
+  kind?: 'record' | 'gap' | 'source_chunk'
 }
 
 export interface KbSearchHit extends KbRecord {
   similarity: number
 }
 
-export type KbCollection = 'policies' | 'sources' | 'gaps'
+export const KB_COLLECTIONS = ['policies', 'sources', 'gaps'] as const
+export type KbCollection = (typeof KB_COLLECTIONS)[number]
 
 export interface KbSearchResponse {
   query: string
@@ -247,7 +257,7 @@ export interface AuditEntry {
   at: string
   /** Widened past AuditEvent: the server may log events this build predates. */
   event: AuditEvent | string
-  worklist_id: string
+  worklist_id: string | null
   verdict: Verdict | string
   actor: string
   detail: Record<string, unknown>
