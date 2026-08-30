@@ -67,6 +67,43 @@ python:3.13-slim  →  torch (نسخة المعالج) + المتطلبات
 
 ---
 
+## Hostinger VPS — عبر Docker Compose
+
+ملف `docker-compose.yml` في جذر المستودع، فأمر واحد يكفي:
+
+```bash
+git clone https://github.com/aboalrejal-ai/samaam.git /opt/samaam && cd /opt/samaam
+docker compose up -d --build
+```
+
+**الرابط:** `http://<IP>:8000`
+
+ولو كان المنفذ `80` فارغاً على السيرفر — أي لا يوجد عليه وكيل عكسي ولا Coolify —
+فاجعله `http://<IP>` بلا لاحقة:
+
+```bash
+SAMAAM_PORT=80 docker compose up -d --build
+```
+
+> **المنفذ الافتراضي `8000` مقصود.** لو كان على السيرفر Coolify فمنفذ `80`
+> مشغول بوكيله، وأخذه يُفشل الإقلاع بلا رسالة واضحة.
+
+المتابعة:
+
+```bash
+docker compose ps          # تظهر الحالة healthy بعد ~٤٠ ثانية
+docker compose logs -f
+docker compose up -d --build   # للتحديث بعد git pull
+```
+
+### إن قالت لوحة Hostinger «No docker compose found»
+
+لأن الأداة تنزّل **ملف الـ YAML وحده** دون بقية المستودع، والملف يبني من
+المصدر (`build: .`) فلا يجد ما يبني منه. الحل هو الاستنساخ أعلاه: `git clone`
+ثم `docker compose up -d --build` من داخل المجلد.
+
+---
+
 ## تشغيلها بـ Docker مباشرة
 
 ```bash
