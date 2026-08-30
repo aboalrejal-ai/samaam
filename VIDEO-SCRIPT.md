@@ -278,7 +278,7 @@ oversight.
 And six regulatory gaps — each a provision we searched for and did not find,
 each with a recommendation to the regulator.
 
-The repository is public and Apache-licensed; all data is synthetic.
+The repository is public and MIT-licensed; all data is synthetic.
 
 That is Samaam. The AI is not trusted — it is constrained. Thank you."
 
@@ -288,7 +288,7 @@ That is Samaam. The AI is not trusted — it is constrained. Thank you."
 وستّ ثغرات تنظيمية — كلٌّ منها نصٌّ بحثنا عنه ولم نجده، ومعها توصية للجهة
 المنظِّمة.
 
-المستودع عامّ برخصة Apache، وكل البيانات محاكاة.
+المستودع عامّ برخصة MIT، وكل البيانات محاكاة.
 
 هذا هو صِمَام. الذكاء الاصطناعي ليس موثوقاً به — بل مُقيَّداً. شكراً لكم.»
 
