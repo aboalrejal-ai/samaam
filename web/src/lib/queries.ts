@@ -3,13 +3,16 @@ import {
   evaluate,
   executeOnDevice,
   getAudit,
+  getConnectors,
   getFramework,
   getHealth,
   getKbGaps,
   getKbRecord,
   getScenarios,
   requestData,
+  pullFhirPatient,
   searchKb,
+  testConnector,
   type KbSearchParams,
 } from '@/lib/api'
 import { queryClient } from '@/lib/query-client'
@@ -20,6 +23,7 @@ export const queryKeys = {
   scenarios: ['scenarios'] as const,
   audit: ['audit'] as const,
   framework: ['framework'] as const,
+  connectors: ['connectors'] as const,
   kbGaps: ['kb', 'gaps'] as const,
   kbRecord: (recordId: string) => ['kb', 'record', recordId] as const,
   kbSearch: (params: KbSearchParams) => ['kb', 'search', params] as const,
@@ -104,5 +108,35 @@ export function useRequestData() {
   return useMutation({
     mutationFn: (body: DataRequestBody) => requestData(body),
     onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.audit }),
+  })
+}
+
+/**
+ * The connector inventory. Polled, because the DICOM card changes on its own:
+ * a scanner querying the worklist registers itself without anyone clicking.
+ */
+export function useConnectors() {
+  return useQuery({
+    queryKey: queryKeys.connectors,
+    queryFn: ({ signal }) => getConnectors({ signal }),
+    refetchInterval: 15_000,
+    retry: false,
+  })
+}
+
+/**
+ * A live probe, deliberately a mutation rather than a query: it opens a real
+ * socket, so it fires when a person asks for it and is never served from cache.
+ */
+export function useConnectorTest() {
+  return useMutation({
+    mutationFn: (connectorId: string) => testConnector(connectorId),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.connectors }),
+  })
+}
+
+export function useFhirPull() {
+  return useMutation({
+    mutationFn: (patientId: string) => pullFhirPatient(patientId),
   })
 }

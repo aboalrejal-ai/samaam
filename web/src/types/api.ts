@@ -376,3 +376,78 @@ export interface FrameworkResponse {
   factors: FrameworkFactor[]
   dimensions: FrameworkDimension[]
 }
+
+/* ── Connectors (app/main.py :: /connectors) ─────────────────────────── */
+
+/**
+ * The C node, made visible. A scanner is not driven through an API — it
+ * asks, over DICOM, and whoever answers controls what the technologist
+ * sees. These cards report live sockets, not saved settings.
+ */
+export interface ConnectorCard {
+  id: 'fhir' | 'mwl' | 'modality' | 'injector'
+  standard: string
+  direction: 'inbound' | 'outbound'
+  endpoint: string | null
+  /** Reaches a real network peer, so the test button means something. */
+  live: boolean
+  testable: boolean
+  state: 'configured' | 'running' | 'stopped' | 'error' | 'discovered' | 'awaiting' | 'local'
+  detail: Record<string, unknown>
+}
+
+/** Real institutions, named as deployment targets. No affiliation claimed. */
+export interface SiteProfile {
+  id: string
+  name: string
+  name_ar: string
+  city: string
+}
+
+export interface ConnectorsResponse {
+  notice: string
+  connectors: ConnectorCard[]
+  site_profiles: SiteProfile[]
+  site_profiles_note: string
+}
+
+export interface ConnectorTestResult {
+  ok: boolean
+  detail: string
+  latency_ms?: number | null
+  fhir_version?: string | null
+  software?: string | null
+  endpoint?: string
+  checked_at?: string
+  sop_classes?: { name: string; uid: string }[]
+}
+
+/** What the hospital sent, kept beside what Samaam derived from it. */
+export interface PulledCreatinine {
+  observation_id: string
+  loinc: string
+  display: string | null
+  value: number | null
+  unit: string | null
+  status: string | null
+  effective: string | null
+  age_days: number | null
+  converted_umol_l?: number
+  conversion_factor?: number
+}
+
+export interface FhirPullResponse {
+  patient: Patient
+  raw: {
+    source: string
+    patient_id: string
+    gender: string | null
+    birth_date: string | null
+    creatinine: PulledCreatinine | null
+    weight: { value?: number; unit?: string } | null
+  }
+  /** Fields present on the FHIR resource that the connector refused to read. */
+  identifiers_withheld: string[]
+  warnings: string[]
+  notice: string
+}

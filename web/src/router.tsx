@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { AppShell } from '@/components/AppShell'
 import AuditPage from '@/routes/AuditPage'
+import ConnectorsPage from '@/routes/ConnectorsPage'
 import ConsolePage from '@/routes/ConsolePage'
 import DataRequestPage from '@/routes/DataRequestPage'
 import DevPrimitivesPage from '@/routes/DevPrimitivesPage'
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: ConsolePage },
       { path: 'data', Component: DataRequestPage },
+      { path: 'connectors', Component: ConnectorsPage },
       { path: 'kb', Component: KnowledgeBasePage },
       { path: 'gaps', Component: GapsPage },
       { path: 'audit', Component: AuditPage },

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router'
 import { PageHeader } from '@/components/PageHeader'
 import { PipelineRail, usePipelineTransit } from '@/components/pipeline'
 import { DeviceSchematic } from '@/components/viz'
@@ -35,6 +36,7 @@ const EMPTY_REQUEST: Requested = {
 
 export default function ConsolePage() {
   const { t } = useTranslation()
+  const location = useLocation()
   const transit = usePipelineTransit()
   const { data: scenarios } = useScenarios()
   const execute = useExecuteOnDevice()
@@ -51,6 +53,21 @@ export default function ConsolePage() {
   const clinical = (scenarios ?? []).filter(
     (s): s is ClinicalScenario => 'patient' in s && s.patient !== undefined,
   )
+
+  // A patient pulled over FHIR arrives in router state rather than storage:
+  // it is one hand-off between two screens, not something to persist. The
+  // request side is left untouched — the hospital sends who the patient is,
+  // never what dose to give them.
+  useEffect(() => {
+    const pulled = (location.state as { pulledPatient?: Patient } | null)?.pulledPatient
+    if (!pulled) return
+    setPatient((prev) => ({ ...prev, ...pulled }))
+    setLoaded(null)
+    setResult(null)
+    setExplanation(null)
+    transit.reset()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.state])
 
   // The rail depicts what reached the device, so it follows the device's own
   // status — not policy.blocked, which stays true after an override and would

@@ -1,4 +1,5 @@
 import {
+  Cable,
   Database,
   Gauge,
   LayoutGrid,
@@ -17,7 +18,7 @@ import {
 export interface RouteEntry {
   path: string
   /** Key under `nav.` in the locale files. */
-  key: 'console' | 'data' | 'kb' | 'gaps' | 'audit' | 'readiness' | 'primitives'
+  key: 'console' | 'data' | 'connectors' | 'kb' | 'gaps' | 'audit' | 'readiness' | 'primitives'
   icon: LucideIcon
   endpoint: string
 }
@@ -25,6 +26,7 @@ export interface RouteEntry {
 export const NAV_ROUTES: readonly RouteEntry[] = [
   { path: '/', key: 'console', icon: ScanLine, endpoint: 'POST /device/execute' },
   { path: '/data', key: 'data', icon: Database, endpoint: 'POST /data/request' },
+  { path: '/connectors', key: 'connectors', icon: Cable, endpoint: 'GET /connectors' },
   { path: '/kb', key: 'kb', icon: Library, endpoint: 'GET /kb/search' },
   { path: '/gaps', key: 'gaps', icon: LayoutGrid, endpoint: 'GET /kb/gaps' },
   { path: '/audit', key: 'audit', icon: ScrollText, endpoint: 'GET /audit' },

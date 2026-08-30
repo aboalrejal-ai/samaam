@@ -81,7 +81,7 @@ the refusal has already been made.
 | Node | In Samaam |
 | :--- | :--- |
 | **SRC** | Saudi regulation texts · synthetic patient record · technologist-entered scanner settings |
-| **C** | API ingest — simulates HL7 FHIR (patient) and DICOM Modality Worklist (device command) |
+| **C** | Two real connectors: an HL7 FHIR R4 client (read-only) and a DICOM Modality Worklist C-FIND server the scanner queries |
 | **PP** | PDPL anonymisation (direct identifiers dropped), chunking, local embedding |
 | **M** | RAG retrieval + LLM drafting of the clinical/regulatory reasoning |
 | **P** | **The Policy Node.** Deterministic guardrail: approve, hold, or block |
@@ -106,6 +106,44 @@ most. So Samaam holds for a **named** authorisation instead, and logs the name.
 Findings also carry their **basis** — `STATUTORY` (Royal Decree 60057) ·
 `NATIONAL_PROTOCOL` (MoH) · `CLINICAL_GUIDANCE`. A statute and a protocol are
 never presented as the same kind of thing.
+
+---
+
+## How it attaches to the scanner
+
+No CT scanner exposes an API to be driven through. It **asks** — over DICOM, at
+the start of a shift — for the work scheduled on it, and whoever answers that
+question decides what appears on the technologist's screen.
+
+```
+Hospital system  ──FHIR──▶  ✋ Samaam  ◀──DICOM C-FIND──  CT scanner
+   (creatinine)              (evaluates)                  (asks for its worklist)
+```
+
+So Samaam **is** the worklist server. Every entry is evaluated before it is
+served: a blocked study is never returned, so it does not appear on the console
+at all — and both outcomes are written to the audit trail against the querying
+AE title. **The device is not modified, updated, or replaced.**
+
+It is a live DICOM node, not a description of one:
+
+```console
+$ python -m pynetdicom echoscu <host> 11112 -aec SAMAAM
+I: Received Echo Response (Status: 0x0000 - Success)
+
+$ python -m pynetdicom findscu <host> 11112 -aec SAMAAM -W -k "(0010,0010)="
+I: (0010,0020) LO [SC-01]                    # the compliant chest CT
+I: Find SCP Result: 0x0000 (Success)         # SC-02 was withheld, and logged
+```
+
+**The honest limit:** this blocks the sanctioned path, it does not cut power. A
+technologist retains manual, unscheduled entry — and that is correct, not a
+weakness. **NEMA XR 25 (CT Dose Check)**, in every scanner since 2010, is itself
+an alert requiring acknowledgement rather than a lock, because locking a scanner
+on a critical patient can kill them.
+
+The `/connectors` screen shows both connectors live, tests them on demand, and
+pulls a patient from the FHIR server straight into the console.
 
 ---
 
@@ -194,6 +232,8 @@ See [`DEPLOY.md`](DEPLOY.md).
 | `POST /data/request` | The privacy path — hard block, no override |
 | `POST /explain` | Prose for a decision already made. Deliberately separate |
 | `GET /kb/search` · `/kb/record/{id}` · `/kb/gaps` | The corpus |
+| `GET /connectors` · `POST /connectors/{id}/test` | The C node — live probes, not saved settings |
+| `POST /connectors/fhir/pull` | Reads a patient and their latest creatinine over FHIR |
 | `GET /audit` · `/framework` · `/scenarios` · `/health` | Trail, ITU dimensions, cases, status |
 
 ---

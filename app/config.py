@@ -24,6 +24,17 @@ class Settings(BaseSettings):
     framework_file: Path = kb_dir / "framework" / "dimensions.json"
     scenarios_dir: Path = base_dir / "scenarios"
 
+    # موصّل نظام المستشفى (عقدة C) — HL7 FHIR R4، قراءة فقط.
+    # الافتراضي خادم HAPI العام: بياناته اختبارية وتُمسح دورياً، فلا مريض
+    # حقيقي يمرّ من هنا. في مستشفى فعلي يُستبدل بعنوان الشبكة الداخلية.
+    fhir_base_url: str = "https://hapi.fhir.org/baseR4"
+    fhir_timeout: float = 15.0
+
+    # خادم قائمة العمل (عقدة C أيضاً) — DICOM MWL. الجهاز يسأل، ونحن نجيب.
+    mwl_enabled: bool = True
+    mwl_ae_title: str = "SAMAAM"
+    mwl_port: int = 11112
+
     # التقطيع والاسترجاع
     chunk_size: int = 900
     chunk_overlap: int = 120

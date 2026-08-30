@@ -79,6 +79,15 @@ class MockCTScanner:
              **detail: Any) -> None:
         self.audit.append(AuditEntry(event, wid, verdict, actor=actor, detail=detail))
 
+    def note(self, event: str, worklist_id: str, verdict: str, *,
+             actor: str = "system", **detail: Any) -> None:
+        """قيد تدقيق من موصّل خارجي — ولا يغيّر حالة الجهاز.
+
+        قائمة العمل تُستعلم قبل أن يبدأ فحص، فالجهاز لم يُؤمر بعدُ بشيء.
+        الحجب هناك منعُ ظهور على الشاشة، لا إيقافُ تنفيذٍ جارٍ.
+        """
+        self._log(event, worklist_id, verdict, actor=actor, **detail)
+
     # ── البوابة ───────────────────────────────────────────────
     def submit(
         self,

@@ -49,7 +49,8 @@ RUN useradd --system --create-home samaam \
  && chown -R samaam:samaam /opt/samaam/kb/chroma
 USER samaam
 
-EXPOSE 8000
+# 8000 للواجهة والـ API، و11112 لخادم قائمة العمل الذي يسأله الجهاز.
+EXPOSE 8000 11112
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=3 \
   CMD python -c "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/health').read()"

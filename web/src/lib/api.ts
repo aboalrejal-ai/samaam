@@ -13,6 +13,9 @@
 
 import type {
   AuditEntry,
+  ConnectorTestResult,
+  ConnectorsResponse,
+  FhirPullResponse,
   DataRequestBody,
   DataRequestResponse,
   EvaluationRequest,
@@ -240,6 +243,41 @@ export function getKbGaps(options?: RequestOptions): Promise<KbGap[]> {
 
 export function getAudit(options?: RequestOptions): Promise<AuditEntry[]> {
   return get<AuditEntry[]>('/audit', undefined, options)
+}
+
+export function getConnectors(options?: RequestOptions): Promise<ConnectorsResponse> {
+  return get<ConnectorsResponse>('/connectors', undefined, options)
+}
+
+/** Opens a real socket on every call. Never cached — a stale green is a lie. */
+export function testConnector(
+  connectorId: string,
+  options?: RequestOptions,
+): Promise<ConnectorTestResult> {
+  return send(`/connectors/${connectorId}/test`, {
+    method: 'POST',
+    signal: options?.signal,
+  }).then(async (response) => {
+    const body = await readJson(response)
+    if (!response.ok) throw new SamaamApiError(response.status, body)
+    return body as ConnectorTestResult
+  })
+}
+
+export function pullFhirPatient(
+  patientId: string,
+  options?: RequestOptions,
+): Promise<FhirPullResponse> {
+  return send('/connectors/fhir/pull', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ patient_id: patientId }),
+    signal: options?.signal,
+  }).then(async (response) => {
+    const body = await readJson(response)
+    if (!response.ok) throw new SamaamApiError(response.status, body)
+    return body as FhirPullResponse
+  })
 }
 
 export function getFramework(options?: RequestOptions): Promise<FrameworkResponse> {

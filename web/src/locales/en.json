@@ -23,7 +23,9 @@
     "readiness": "Readiness",
     "readinessDescription": "ITU dimensions",
     "primitives": "Primitives",
-    "primitivesDescription": "Component gallery"
+    "primitivesDescription": "Component gallery",
+    "connectors": "Connectors",
+    "connectorsDescription": "Standards integration"
   },
   "shell": {
     "toggleSidebar": "Toggle sidebar",
@@ -79,6 +81,10 @@
       "title": "No such screen",
       "lead": "This route is not part of the Samaam gateway.",
       "back": "Back to the console"
+    },
+    "connectors": {
+      "title": "Connectors",
+      "lead": "How a request reaches Samaam, and how a decision reaches the scanner."
     }
   },
   "basis": {
@@ -333,6 +339,56 @@
       "outside": "Outside the Kingdom",
       "inside": "Inside the Kingdom",
       "none": "None"
+    }
+  },
+  "connectors": {
+    "premise": "No CT scanner exposes an API to be driven through. It asks — over DICOM, at the start of a shift — for the work scheduled on it, and whoever answers decides what appears on the technologist’s screen. Samaam is that answer. The device is not modified, updated, or replaced.",
+    "endpoint": "Endpoint",
+    "noEndpoint": "Not configured",
+    "test": "Test connection",
+    "testing": "Testing",
+    "reachable": "Reachable",
+    "unreachable": "Unreachable",
+    "offline": "Could not reach the Samaam service.",
+    "cards": {
+      "fhir": "Hospital system",
+      "mwl": "Modality worklist",
+      "modality": "CT scanner",
+      "injector": "Contrast injector"
+    },
+    "notes": {
+      "fhir": "Read-only. Pulls the patient and their latest serum creatinine. The name, contact and address fields are never read.",
+      "mwl": "Samaam answers the scanner’s C-FIND itself. Every entry is evaluated first: a blocked study is not served, so it never appears in the worklist — and both outcomes are written to the audit trail.",
+      "modality": "Filled in by the first query that reaches the server, not typed by hand.",
+      "injector": "Volume, flow rate and iodine load are enforced by the policy node."
+    },
+    "states": {
+      "running": "Running",
+      "configured": "Configured",
+      "stopped": "Stopped",
+      "error": "Error",
+      "discovered": "Discovered",
+      "awaiting": "Awaiting query",
+      "local": "Local"
+    },
+    "pull": {
+      "title": "Pull a patient",
+      "lead": "A live FHIR read from the configured server. Nothing is written back.",
+      "field": "FHIR patient id",
+      "submit": "Pull",
+      "pulling": "Pulling",
+      "failed": "The pull failed. Test the connection above.",
+      "asSent": "As the hospital sent it",
+      "asComputed": "As Samaam computed it",
+      "daysOld": "{{count}} days old",
+      "demographics": "Sex {{sex}} · age {{age}} · eGFR is computed downstream, never imported.",
+      "withheld": "Present on the FHIR record and deliberately not read: {{fields}}.",
+      "openInConsole": "Open in the console"
+    },
+    "sites": {
+      "title": "Deployment profiles",
+      "note": "Real institutions, listed as deployment targets only. Endpoints and AE titles live on hospital networks and are not public, so they are filled in on installation. No affiliation or integration is claimed.",
+      "pending": "Endpoint configured on site"
     }
   }
 }

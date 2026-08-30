@@ -17,24 +17,45 @@
 from __future__ import annotations
 
 import json
+from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.config import settings
+from app.connectors import fhir
+from app.connectors.mwl import WorklistServer
 from app.kb import GAPS, POLICIES, SOURCES, KnowledgeBase
 from app.pipeline import Samaam
 
 SYNTHETIC_NOTICE = "بيانات محاكاة لأغراض الهاكاثون فقط — Synthetic data, hackathon use only"
 
+samaam = Samaam()
+kb = samaam.kb
+worklist = WorklistServer(samaam)
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI) -> Any:
+    """يُقلع خادم قائمة العمل مع الخدمة، ويُطفأ معها.
+
+    الإقلاع داخل try في WorklistServer.start: منفذ مأخوذ أو صلاحية ناقصة
+    تُسجَّل وتُعرض في شاشة الموصّلات، ولا تمنع الـ API من العمل.
+    """
+    worklist.start()
+    yield
+    worklist.stop()
+
+
 app = FastAPI(
     title="Samaam — AI-Hardware Policy Gateway",
     description="ITU-T Y.3172 policy gateway for oncology radiology. " + SYNTHETIC_NOTICE,
     version="0.1.0",
+    lifespan=lifespan,
 )
 app.add_middleware(
     CORSMiddleware,
@@ -42,10 +63,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-samaam = Samaam()
-kb = samaam.kb
-
 
 class Patient(BaseModel):
     sex: str
@@ -248,6 +265,130 @@ def framework() -> dict[str, Any]:
     return json.loads(settings.framework_file.read_text())
 
 
+# ── الموصّلات (عقدة C) ──────────────────────────────────────────────
+# مستشفيات حقيقية بأسمائها ومدنها، وحقول اتصالها فارغة عمداً: عناوين FHIR
+# وأسماء الأجهزة داخل شبكات المستشفيات ولا تُنشر، واختراعها هو بالضبط
+# الهلوسة التي بُني هذا النظام ليمنعها. لا انتساب ولا تكامل قائم.
+SITE_PROFILES = [
+    {"id": "kfshrc-riyadh", "name": "King Faisal Specialist Hospital & Research Centre",
+     "name_ar": "مستشفى الملك فيصل التخصصي ومركز الأبحاث", "city": "Riyadh"},
+    {"id": "kfmc-riyadh", "name": "King Fahad Medical City",
+     "name_ar": "مدينة الملك فهد الطبية", "city": "Riyadh"},
+    {"id": "kauh-jeddah", "name": "King Abdulaziz University Hospital",
+     "name_ar": "مستشفى جامعة الملك عبدالعزيز", "city": "Jeddah"},
+    {"id": "kfhu-khobar", "name": "King Fahd Hospital of the University",
+     "name_ar": "مستشفى الملك فهد الجامعي", "city": "Al Khobar"},
+]
+
+
+class PullRequest(BaseModel):
+    patient_id: str = Field(min_length=1, max_length=64)
+
+
+def _connector_cards() -> list[dict[str, Any]]:
+    mwl = worklist.status()
+    return [
+        {
+            "id": "fhir",
+            "standard": "HL7 FHIR R4",
+            "direction": "inbound",
+            "endpoint": settings.fhir_base_url.rstrip("/"),
+            "live": True,
+            "testable": True,
+            "state": "configured",
+            "detail": {
+                "resources": ["Patient", "Observation"],
+                "loinc": {"creatinine": fhir.LOINC_CREATININE,
+                          "body_weight": fhir.LOINC_BODY_WEIGHT},
+                "conversion": f"mg/dL x {fhir.MG_DL_TO_UMOL_L} -> umol/L",
+                "read_only": True,
+                "identifiers_never_read": list(fhir.WITHHELD_FIELDS),
+            },
+        },
+        {
+            "id": "mwl",
+            "standard": "DICOM Modality Worklist (C-FIND)",
+            "direction": "outbound",
+            "endpoint": f"{settings.mwl_ae_title}@:{settings.mwl_port}",
+            "live": True,
+            "testable": True,
+            "state": "running" if mwl["running"] else ("error" if mwl["error"] else "stopped"),
+            "detail": mwl,
+        },
+        {
+            "id": "modality",
+            "standard": "DICOM — calling AE",
+            "direction": "inbound",
+            # لا يُكتب يدوياً: يُكتشف من أول استعلام يصل الخادم.
+            "endpoint": mwl["callers"][0]["ae_title"] if mwl["callers"] else None,
+            "live": False,
+            "testable": False,
+            "state": "discovered" if mwl["callers"] else "awaiting",
+            "detail": {"callers": mwl["callers"],
+                       "note": "Populated by the first C-FIND that reaches the server."},
+        },
+        {
+            "id": "injector",
+            "standard": "Injector protocol limits (local)",
+            "direction": "outbound",
+            "endpoint": None,
+            "live": False,
+            "testable": False,
+            "state": "local",
+            "detail": {"model": samaam.device.model,
+                       "enforced_by": "policy_node — volume, flow rate, iodine load"},
+        },
+    ]
+
+
+@app.get("/connectors")
+def connectors() -> dict[str, Any]:
+    return {
+        "notice": SYNTHETIC_NOTICE,
+        "connectors": _connector_cards(),
+        "site_profiles": SITE_PROFILES,
+        "site_profiles_note": (
+            "Real institutions, listed as deployment targets only. Endpoints and AE "
+            "titles live on hospital networks and are not public; they are filled in "
+            "on installation. No affiliation or integration is claimed."
+        ),
+    }
+
+
+@app.post("/connectors/{connector_id}/test")
+def connector_test(connector_id: str) -> dict[str, Any]:
+    """فحص اتصال حيّ. يُنفَّذ عند الطلب ولا يُخزَّن ولا يُخمَّن."""
+    if connector_id == "fhir":
+        return fhir.probe().to_dict()
+    if connector_id == "mwl":
+        status = worklist.status()
+        return {
+            "ok": status["running"],
+            "detail": status["error"] or (
+                f"Listening on {status['ae_title']}@:{status['port']} — "
+                f"{status['queries']} queries, {status['served']} served, "
+                f"{status['withheld']} withheld"
+                if status["running"] else "Server is not running."
+            ),
+            "endpoint": f"{status['ae_title']}@:{status['port']}",
+            "sop_classes": status["sop_classes"],
+        }
+    raise HTTPException(404, f"No testable connector '{connector_id}'.")
+
+
+@app.post("/connectors/fhir/pull")
+def connector_fhir_pull(body: PullRequest) -> dict[str, Any]:
+    """يسحب مريضاً حقيقياً من خادم FHIR، بالشكل الذي يفهمه الكونسول."""
+    try:
+        pulled = fhir.fetch_patient(body.patient_id)
+    except LookupError as exc:
+        raise HTTPException(404, str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(502, f"FHIR request failed: {type(exc).__name__}: {exc}") from exc
+    return {**pulled.to_dict(), "notice": SYNTHETIC_NOTICE}
+
+
+
 # ── تقديم الواجهة من الخدمة نفسها (عقدة SINK) ──────────────────────
 # في النشر تُقدَّم الواجهة المبنية من هذه الخدمة، لا من استضافة منفصلة:
 # فتصير الواجهة والـ API على أصل واحد — بلا CORS، وبلا خلط http/https،
@@ -262,6 +403,29 @@ WEB_DIST = (settings.base_dir / "web" / "dist").resolve()
 if (WEB_DIST / "index.html").is_file():
     if (WEB_DIST / "assets").is_dir():
         app.mount("/assets", StaticFiles(directory=WEB_DIST / "assets"), name="assets")
+
+    # الواجهة والـ API يتشاركان مسارات بعينها: /audit و/connectors صفحتان
+    # ونقطتا نهاية في آنٍ واحد، ونقاط النهاية مسجَّلة أولاً فتفوز. النتيجة أن
+    # تحديث صفحة سجل التدقيق كان يعرض JSON خاماً بدل التطبيق — وهو عطل قائم
+    # من قبل هذه الشاشة، لا يظهر بالتنقّل داخل الواجهة بل بأول إعادة تحميل.
+    #
+    # الفرق بين الطلبين ليس في المسار بل في نيّة الطالب: المتصفح ينتقل بـ
+    # Accept: text/html، بينما عميل الواجهة يطلب application/json صراحةً في
+    # كل نداء. فالتفاوض على المحتوى هو الفصل الصحيح هنا.
+    _SPA_EXEMPT = {"/docs", "/redoc", "/openapi.json", "/docs/oauth2-redirect"}
+
+    @app.middleware("http")
+    async def serve_spa_navigations(request: Request, call_next: Any) -> Any:
+        accept = request.headers.get("accept", "")
+        if (
+            request.method == "GET"
+            and "text/html" in accept
+            and request.url.path not in _SPA_EXEMPT
+            and not request.url.path.startswith("/assets/")
+            and "." not in request.url.path.rsplit("/", 1)[-1]
+        ):
+            return FileResponse(WEB_DIST / "index.html")
+        return await call_next(request)
 
     @app.get("/{path:path}", include_in_schema=False)
     def spa(path: str) -> FileResponse:

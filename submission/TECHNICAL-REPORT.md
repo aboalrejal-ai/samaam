@@ -116,12 +116,12 @@ in §4.
 | Node | Role in the standard | Implementation in Samaam |
 | :--- | :--- | :--- |
 | **SRC** | Raw sources | Saudi regulation PDFs, synthetic patient record, technologist-entered settings |
-| **C** | Collection | REST ingest simulating a DICOM Modality Worklist |
+| **C** | Collection | A DICOM Modality Worklist C-FIND server the scanner queries, and a read-only HL7 FHIR R4 client |
 | **PP** | Preprocessing | Direct identifiers dropped per PDPL Art. 23; **eGFR computed with CKD-EPI exactly as the MoH protocol prints it**; local multilingual embeddings |
 | **M** | Model / RAG | Retrieval over the verified corpus; drafts the explanation |
 | **P** | **Policy Node** | **Deterministic rule engine. No model. Four rules, each citing its record by explicit id** |
 | **D** | Distribution | Attaches citations with authority, section and URL; writes the audit entry |
-| **SINK** | Application | Operator console, and the mock CT + injector that returns 403 |
+| **SINK** | Application | Operator console, and the mock CT + injector that returns 403. A withheld study is never served to the worklist, so it never reaches the console |
 
 ### The Policy Node
 
