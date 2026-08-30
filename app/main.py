@@ -21,6 +21,8 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.config import settings
@@ -244,3 +246,27 @@ def audit() -> list[dict[str, Any]]:
 def framework() -> dict[str, Any]:
     """أبعاد ITU AI Readiness 2.0 — من ملف المنظمين الرسمي."""
     return json.loads(settings.framework_file.read_text())
+
+
+# ── تقديم الواجهة من الخدمة نفسها (عقدة SINK) ──────────────────────
+# في النشر تُقدَّم الواجهة المبنية من هذه الخدمة، لا من استضافة منفصلة:
+# فتصير الواجهة والـ API على أصل واحد — بلا CORS، وبلا خلط http/https،
+# وبلا الحاجة إلى ضبط VITE_API_BASE_URL أصلاً.
+#
+# يُسجَّل هذا آخر شيء عمداً: FastAPI يطابق المسارات بالترتيب، فكل نقاط
+# النهاية أعلاه تفوز، والباقي يسقط على index.html كما يقتضي توجيه SPA.
+# وإن لم يكن هناك بناء (تطوير محلي بـ vite dev) فلا يُسجَّل شيء.
+
+WEB_DIST = (settings.base_dir / "web" / "dist").resolve()
+
+if (WEB_DIST / "index.html").is_file():
+    if (WEB_DIST / "assets").is_dir():
+        app.mount("/assets", StaticFiles(directory=WEB_DIST / "assets"), name="assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def spa(path: str) -> FileResponse:
+        candidate = (WEB_DIST / path).resolve()
+        # الشرط الأخير يمنع الخروج من مجلد البناء عبر مسار مُلفَّق.
+        if path and candidate.is_file() and WEB_DIST in candidate.parents:
+            return FileResponse(candidate)
+        return FileResponse(WEB_DIST / "index.html")

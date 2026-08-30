@@ -15,3 +15,6 @@ kb/chroma/
 
 # OS
 .DS_Store
+
+# Frontend build output (rebuilt on the server)
+web/dist/

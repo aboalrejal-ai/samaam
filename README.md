@@ -181,6 +181,10 @@ cd web && npm install && npm run dev                  # the UI, on :5173
 The LLM key is **optional**. Without it, retrieval and every block still work —
 only the prose explanation goes missing, which is the point of the split.
 
+**Deploying?** The service also serves the built frontend, so a single process
+on a single port is the whole deployment — no CORS, no separate static host.
+See [`DEPLOY.md`](DEPLOY.md).
+
 ### API
 
 | | |
