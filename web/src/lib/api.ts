@@ -27,7 +27,18 @@ import type {
   PolicyPayload,
 } from '@/types/api'
 
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:8000'
+/**
+ * Where the service lives.
+ *
+ * In production the service serves this bundle itself, so the origin the page
+ * was loaded from is the right answer whatever the host, port or scheme —
+ * hardcoding a localhost default here pointed every deployed visitor's browser
+ * at their own machine. In `vite dev` the two are genuinely split (5173 and
+ * 8000), so that case keeps the absolute address.
+ */
+export const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ??
+  (import.meta.env.DEV ? 'http://localhost:8000' : window.location.origin)
 
 /** The Samaam service could not be reached at all. */
 export class SamaamOfflineError extends Error {

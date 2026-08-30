@@ -38,7 +38,7 @@
     "connected": "Connected",
     "offline": "Service unreachable",
     "checking": "Connecting",
-    "offlineDetail": "Could not reach the Samaam service on port 8000.",
+    "offlineDetail": "Could not reach the Samaam service.",
     "counts": "Knowledge base: {{policies}} policies, {{gaps}} gaps, {{chunks}} source chunks",
     "policies": "policies",
     "gaps": "gaps",
@@ -191,7 +191,7 @@
     "overrideConfirm": "Approve and accept responsibility",
     "overrideCancel": "Cancel",
     "overrideRecorded": "Released under override by {{name}}",
-    "deviceOffline": "Could not reach the Samaam service on port 8000."
+    "deviceOffline": "Could not reach the Samaam service."
   },
   "data": {
     "request": "Access request",
@@ -230,7 +230,7 @@
     "allRecords": "All records",
     "verifiedNote": "Unverified records exist but are never cited in a block.",
     "submit": "Search",
-    "errorOffline": "Could not reach the Samaam service on port 8000.",
+    "errorOffline": "Could not reach the Samaam service.",
     "errorService": "The service could not complete this search.",
     "sidebar": {
       "back": "Back to navigation",
