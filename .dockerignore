@@ -1,0 +1,24 @@
+# ما لا تحتاجه الصورة — يبقى في المستودع، ولا يدخل البناء
+.git
+.github
+.claude
+.venv
+venv
+web/node_modules
+web/dist
+kb/chroma
+__pycache__
+**/__pycache__
+*.pyc
+.env
+.env.local
+.DS_Store
+
+# وثائق وتسليمات — لا علاقة لها بالتشغيل
+docs/
+design/
+reference/
+submission/
+changelog/
+*.md
+!requirements.txt
