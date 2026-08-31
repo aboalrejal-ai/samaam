@@ -36,10 +36,18 @@ provision. Samaam labels them differently, in shape as well as colour. Calling
 the second a legal violation would be a false legal claim, and it is exactly the
 kind of overreach this hackathon asks projects to avoid.
 
-**Team.** [names, disciplines, institution]
+**Team.** Noura Abdullah Al-Sahli — Radiological Sciences, Year 4, King Saud
+University · Haneen Saleh Al-Harbi — Radiological Sciences, Year 4, King Saud
+University · Badour Jarad Al-Sahli — Human Resources, Year 4, Majmaah University
+· Mohammed Nadher Aboalrejal — Software engineering, independent.
+
 **Clinical review.** Scenario and decision thresholds reviewed by a consultant
 radiologist, whose correction on absolute versus relative contraindication
 changed the enforcement model.
+
+**Repository** github.com/aboalrejal-ai/samaam · **Live system**
+samaam.aboalrejal.cloud · **Demo video** ⟨link⟩ · **Contact**
+aboalrejal.ai@gmail.com
 
 ---
 
