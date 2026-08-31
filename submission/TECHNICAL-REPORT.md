@@ -28,13 +28,9 @@ language model drafts the explanation *after* the decision is taken; it is never
 in the path. The verdict lands in **29 milliseconds** and the prose follows.
 Pull the model out entirely and the gateway still blocks correctly.
 
-**Two authorities, never conflated.** Exceeding the national CT dose reference
-level breaches a binding instrument — Royal Decree 60057 approving Saudi Health
-Council Resolution 3/88. Missing renal prophylaxis departs from a Ministry of
-Health protocol, which is national but is a practice instrument, not a penalty
-provision. Samaam labels them differently, in shape as well as colour. Calling
-the second a legal violation would be a false legal claim, and it is exactly the
-kind of overreach this hackathon asks projects to avoid.
+**Two authorities, never conflated.** A dose above the national reference level
+breaches a binding instrument — Royal Decree 60057. Missing prophylaxis departs
+from a MoH protocol. Samaam never calls the second a legal violation.
 
 **Team**
 
@@ -103,12 +99,9 @@ The literature agrees on the mechanics: hard stops draw override rates of
 So Samaam separates the **verdict** from the **action**. The verdict is a
 regulatory classification; the action is what the console does.
 
-| | Action | Cleared by |
-| :--- | :--- | :--- |
-| 🟢 | `PROCEED` | Nothing stands in the way |
-| 🟡 | `CONFIRM` | The operator acknowledges the risk factor |
-| 🔴 | `AUTHORISE` | A **named** radiologist reviews and approves |
-| ⛔ | `PROHIBITED` | Nobody — no clinical override path exists |
+🟢 `PROCEED` — nothing stands in the way · 🟡 `CONFIRM` — the operator
+acknowledges the risk factor · 🔴 `AUTHORISE` — a **named** radiologist reviews
+and approves · ⛔ `PROHIBITED` — no clinical override path exists.
 
 A severe renal case is `AUTHORISE`, not prohibited. The screen says *held for
 review*, and the release carries the reviewer's name into the audit trail. The
@@ -220,11 +213,6 @@ On scenario 3 the same name is **refused** — a clinician may accept clinical
 risk for their own patient, but none holds authority to permit processing the
 PDPL forbids.
 
-**Note on the eGFR.** The reviewer's hand estimate was 22; the equation the MoH
-protocol prescribes returns 19.1 from the same creatinine. Samaam reports its
-own computation rather than a number entered upstream, which is precisely why
-it recomputes. Both values are severe CKD.
-
 ### Knowledge base
 
 **45 verified records · 6 documented gaps · 1,338 chunks from 7 primary
@@ -244,7 +232,6 @@ as such, including the one that establishes there is no absolute threshold.
 | Guidance on Contrast-Associated AKI (2022) | Canadian Assoc. of Radiologists | https://car.ca/patient-care/practice-guidelines/ |
 | Y.3172 — ML architecture for future networks | ITU-T | https://itu.int/rec/T-REC-Y.3172/en |
 
-**Repository:** https://github.com/aboalrejal-ai/samaam — MIT licence, no API keys
-in source. **Knowledge base:** https://github.com/aboalrejal-ai/samaam/tree/main/kb
-— `records/health-regulatory.json` holds all 45 records with their citations and
-source links; `sources/` holds the primary documents themselves.
+**Licence** MIT, no API keys in source. The knowledge base ships as
+`kb/records/health-regulatory.json` — all 45 records with their citations — and
+`kb/sources/` holds the primary documents themselves.
