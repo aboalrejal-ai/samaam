@@ -6,7 +6,7 @@
 
 ---
 
-## Page 1 · Executive Summary
+## Executive Summary
 
 **The problem.** A radiology technologist on a night shift enters acquisition
 parameters for a contrast-enhanced CT. The patient is an oncology case whose
@@ -36,23 +36,28 @@ provision. Samaam labels them differently, in shape as well as colour. Calling
 the second a legal violation would be a false legal claim, and it is exactly the
 kind of overreach this hackathon asks projects to avoid.
 
-**Team.** Mohammed Nadher Aboalrejal — AI systems and automation, independent ·
-Badour Jarad Al-Sahli — Human Resources, Year 4, Majmaah University · Noura
-Abdullah Al-Sahli — Radiological Sciences, Year 4, King Saud University ·
-Haneen Saleh Al-Harbi — Radiological Sciences, Year 4, King Saud University.
+**Team**
+
+- **Mohammed Nadher Aboalrejal** — AI systems and automation — independent
+- **Badour Jarad Al-Sahli** — Human Resources, Year 4 — Majmaah University
+- **Noura Abdullah Al-Sahli** — Radiological Sciences, Year 4 — King Saud University
+- **Haneen Saleh Al-Harbi** — Radiological Sciences, Year 4 — King Saud University
 
 **Clinical review.** Scenario and decision thresholds reviewed by a consultant
 radiologist, whose correction on absolute versus relative contraindication
 changed the enforcement model.
 
-- **Repository** — github.com/aboalrejal-ai/samaam
-- **Live system** — samaam.aboalrejal.cloud
-- **Demo video** — ⟨link⟩
+**Submission**
+
+- **Repository** — https://github.com/aboalrejal-ai/samaam
+- **Knowledge base** — https://github.com/aboalrejal-ai/samaam/tree/main/kb
+- **Live system** — https://samaam.aboalrejal.cloud
+- **Demo video** — ⟨paste link⟩
 - **Contact** — aboalrejal.ai@gmail.com
 
 ---
 
-## Page 2 · Problem, and Why Existing Tools Do Not Solve It
+## Problem, and Why Existing Tools Do Not Solve It
 
 ### The clinical case
 
@@ -113,7 +118,7 @@ in §4.
 
 ---
 
-## Page 3 · Architecture — ITU-T Y.3172
+## Architecture — ITU-T Y.3172
 
 ```
    SRC ──→ C ──→ PP ──→ M ──→ P ──→ D ──→ SINK
@@ -158,7 +163,7 @@ only the optional explanation needs the internet.
 
 ---
 
-## Page 4 · Policy Gaps and ITU AI Readiness 2.0
+## Policy Gaps and ITU AI Readiness 2.0
 
 ### Regulatory gaps found — by absence, verified
 
@@ -187,7 +192,7 @@ list with dimensions we cannot demonstrate would weaken the three we can.
 
 ---
 
-## Page 5 · Evaluation and References
+## Evaluation and References
 
 ### Scenario results — reproducible with `python run_demo.py`
 
@@ -231,12 +236,15 @@ as such, including the one that establishes there is no absolute threshold.
 
 | Document | Authority | Link |
 | :--- | :--- | :--- |
-| Protocols on the Safe Use of Contrast Media in Radiology Departments (2021) | MoH | `moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf` |
-| National Diagnostic Reference Levels, MDS-G008 v2.0 | SFDA | `sfda.gov.sa/sites/default/files/2023-02/NDRL-En.pdf` |
-| AI/ML Based Medical Devices, MDS-G010 | SFDA | `sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf` |
-| Personal Data Protection Law (Arabic, official) | Bureau of Experts | `laws.boe.gov.sa/BoeLaws/Laws/LawDetails/b7cfae89-828e-4994-b167-adaa00e37188/1` |
-| Ethics and governance of AI for health | WHO | `who.int/publications/i/item/9789240029200` |
-| Guidance on Contrast-Associated AKI (2022) | Canadian Assoc. of Radiologists | `car.ca/patient-care/practice-guidelines/` |
-| Y.3172 — ML architecture for future networks | ITU-T | `itu.int/rec/T-REC-Y.3172/en` |
+| Protocols on the Safe Use of Contrast Media in Radiology Departments (2021) | MoH | https://moh.gov.sa/en/Ministry/MediaCenter/Publications/Documents/Protocols-of-CM.pdf |
+| National Diagnostic Reference Levels, MDS-G008 v2.0 | SFDA | https://sfda.gov.sa/sites/default/files/2023-02/NDRL-En.pdf |
+| AI/ML Based Medical Devices, MDS-G010 | SFDA | https://sfda.gov.sa/sites/default/files/2023-01/MDS-G010ML.pdf |
+| Personal Data Protection Law (Arabic, official) | Bureau of Experts | https://laws.boe.gov.sa/BoeLaws/Laws/LawDetails/b7cfae89-828e-4994-b167-adaa00e37188/1 |
+| Ethics and governance of AI for health | WHO | https://who.int/publications/i/item/9789240029200 |
+| Guidance on Contrast-Associated AKI (2022) | Canadian Assoc. of Radiologists | https://car.ca/patient-care/practice-guidelines/ |
+| Y.3172 — ML architecture for future networks | ITU-T | https://itu.int/rec/T-REC-Y.3172/en |
 
-**Repository:** `github.com/[org]/samaam` · Apache 2.0 · no keys in source
+**Repository:** https://github.com/aboalrejal-ai/samaam — MIT licence, no API keys
+in source. **Knowledge base:** https://github.com/aboalrejal-ai/samaam/tree/main/kb
+— `records/health-regulatory.json` holds all 45 records with their citations and
+source links; `sources/` holds the primary documents themselves.
