@@ -107,7 +107,7 @@ A severe renal case is `AUTHORISE`, not prohibited. The screen says *held for
 review*, and the release carries the reviewer's name into the audit trail. The
 system does not replace the radiologist; it prevents a dangerous protocol from
 executing **unreviewed**. That is the operational answer to the liability gap
-in §4.
+below.
 
 ---
 
@@ -117,7 +117,7 @@ in §4.
    SRC ──→ C ──→ PP ──→ M ──→ P ──→ D ──→ SINK
                                ▲
                     Knowledge Base (ChromaDB)
-                    43 records · 1,338 source chunks
+                    45 records · 1,338 source chunks
 ```
 
 | Node | Role in the standard | Implementation in Samaam |
@@ -215,7 +215,7 @@ PDPL forbids.
 
 ### Knowledge base
 
-**45 verified records · 6 documented gaps · 1,338 chunks from 7 primary
+**45 records, 43 of them verified · 6 documented gaps · 1,338 chunks from 7 primary
 documents.** Bilingual retrieval — an Arabic question returns the governing
 Saudi record first. Two records were added by clinical review and are labelled
 as such, including the one that establishes there is no absolute threshold.
